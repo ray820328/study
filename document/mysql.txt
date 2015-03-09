@@ -1,0 +1,63 @@
+常用
+GRANT ALL PRIVILEGES ON *.* TO root@localhost IDENTIFIED BY 'admin' WITH GRANT OPTION; 
+GRANT ALL PRIVILEGES ON *.* TO root@"%" IDENTIFIED BY 'admin' WITH GRANT OPTION;
+
+mysqldump --opt game_data --user=root --password=admin --default-character-set=utf8 > game_data_s0.sql
+mysqldump --opt game_config --user=root --password=admin --default-character-set=utf8 > game_config_s0.sql
+
+mysqldump --opt game_data --host=192.168.1.105 --user=root --password=admin --default-character-set=utf8 > game_data_105.sql
+mysqldump --opt game_data --host=192.168.1.200 --user=root --password=admin --default-character-set=utf8 > game_data.sql
+mysqldump --opt game_config --host=192.168.1.200 --user=root --password=admin --default-character-set=utf8 > game_config.sql
+mysqldump --opt game_admin --host=192.168.1.200 --user=root --password=admin --default-character-set=utf8 > game_admin.sql
+mysql -uroot -padmin game_data < game_data.sql
+mysql -uroot -padmin game_config < game_config.sql
+mysql -uroot -padmin game_admin < game_admin.sql
+mysql -uroot -padmin game_admin < F:/server/db/t_menuinfo.sql
+
+mysql -uroot -padmin game_data_product < game_data_s1_1_9.sql
+
+mysqldump --opt game_admin t_menuinfo --host=192.168.1.105 --user=root --password=admin --default-character-set=utf8 > t_menuinfo.sql
+mysql -uroot -padmin game_admin < t_menuinfo.sql
+
+
+增加字段
+alter table t_fighting add activeFightingCards varchar(200) after activeUserId;
+删除字段
+ALTER TABLE table_NAME DROP COLUMN column_NAME
+修改字段类型
+alter table user MODIFY new1 VARCHAR(10); 　//修改一个字段的类型
+alter table user CHANGE new1 new4 int;　 //修改一个字段的名称，此时一定要重新指定该字段的类型
+
+
+编码设置
+SET NAMES gbk
+相当于
+SET character_set_client = x;
+SET character_set_results = x;
+SET character_set_connection = x;
+
+
+查询统计
+统计每日充值
+select * from (select count(distinct n_uid) n_playerAmount, count(n_id) n_recordAmount, sum(n_consumeMoney) n_totalRecharge, from_unixtime(n_time, '%Y-%m-%d') n_dateStr from t_moneyloginfo where n_consumeType=1 and n_moneyType=103 and n_cmd=-50027 and n_time >= 1417425325 and n_time < 1418202925 group by n_dateStr) a order by n_dateStr desc limit 0,100;
+
+select count(distinct n_uid) n_playerAmount, count(n_id) n_recordAmount, from_unixtime(n_time, '%Y-%m-%d') n_dateStr from t_loginloginfo where (n_type=1 or n_type=2) group by n_dateStr;
+
+select distinct n_uid, from_unixtime(n_time, '%Y-%m-%d') n_dateStr from t_loginloginfo where (n_type=1 or n_type=2) group by n_dateStr,n_uid;
+
+复杂更新
+update t_pattern_rotation set fabricId=(select id from t_fabric where code='Review04') where id=234966;
+delete us from t_friend us, t_user u where us.userId=u.id and u.guideStep<11;
+
+缓存设置
+http://blog.chinaunix.net/uid-11121450-id-98140.html
+SET GLOBAL key_buffer_size=200*1024*1024;
+#SET GLOBAL table_cache=1200;
+SET GLOBAL thread_cache_size=60;
+SET GLOBAL query_cache_size=200*1024*1024;
+SET GLOBAL query_cache_limit=200*1024*1024;
+SET GLOBAL table_definition_cache=1200;
+SET GLOBAL thread_cache_size=60;
+SET GLOBAL myisam_data_pointer_size=60;
+SET GLOBAL delayed_queue_size=2000;
+SET GLOBAL preload_buffer_size=65536;

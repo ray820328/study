@@ -1,0 +1,5 @@
+
+mysql数据库ER设计
+ENGINE = %s : list = BDB | HEAP | ISAM | InnoDB | MERGE | MRG_MYISAM | MYISAM, default = MYISAM
+DEFAULT CHARACTER SET = %s : list = utf8 | gbk, default = utf8
+COLLATE = %s : list = utf8_bin | utf8_general_ci | gbk_bin | gbk_chinese_ci, default = utf8_bin

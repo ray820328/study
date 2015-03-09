@@ -1,0 +1,54 @@
+1，访问app配置
+<Context path="" docBase="/data/home/app100683455/codes/tank/web" debug="" reloadable="true"/>
+<Context path="/tank" docBase="/data/home/app100683455/codes/tank/web" debug="" reloadable="true"/>
+
+2，https配置
+keytool -v -genkey -alias tomcat -keyalg RSA -keystore d:/tomcat.keystore  -validity 36500
+"-validity 36500”含义是证书有效期，36500表示100年，默认值是90天
+
+
+<Connector port="8080" maxHttpHeaderSize="8192"
+               maxThreads="50" minSpareThreads="5" maxSpareThreads="25"
+               enableLookups="false" redirectPort="8443" acceptCount="100"
+               connectionTimeout="20000" disableUploadTimeout="true"/>
+
+<Connector port="443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+     SSLEnabled="true" maxThreads="50" scheme="https" secure="true" 
+     clientAuth="false" keystoreFile="D:/ENV/tomcat/conf/tomcat.keystore" 
+     keystorePass="44443333" sslProtocol="TLS" />
+
+应用程序HTTP自动跳转到HTTPS
+在应用程序中web.xml中加入：
+<security-constraint> 
+       <web-resource-collection > 
+              <web-resource-name >SSL</web-resource-name> 
+              <url-pattern>/*</url-pattern> 
+       </web-resource-collection>
+                             
+       <user-data-constraint> 
+              <transport-guarantee>CONFIDENTIAL</transport-guarantee> 
+       </user-data-constraint> 
+</security-constraint>
+
+
+3，centos安装
+tomcat6下载: apache-tomcat-6.0.36.tar.gz
+  http://tomcat.apache.org
+  
+  cp jakarta-tomcat.tar.gz /usr/local/tomcat //拷贝到此目录下
+  tar -zxvf apache-tomcat-6.0.36.tar.gz  或 tar apache-tomcat-6.0.36.tar.gz//解压
+  cd /usr/local/tomcat/apache-tomcat-6.0.36/bin
+  
+  运行tomcat:
+  ./catalina.sh start
+  停止tomcat:
+  ./shutdown.sh stop 或者 ./catalina.sh stop
+  #lynx http://localhost:8080
+
+# vi ~/.bash_profile 加入 tomcat 环境参数
+TOMCAT_HOME=/usr/local/tomcat
+export PATH JAVA_HOME CLASSPATH TOMCAT_HOME
+保存退出，然后执行 source ~/.bash_profile ， 让环境变量生效
+]# source ~/.bash_profile
+
+/usr/local/tomcat/bin/startup.sh

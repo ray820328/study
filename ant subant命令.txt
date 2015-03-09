@@ -1,0 +1,765 @@
+http://it.chinawin.net/softwaredev/article-e49d.html
+
+第一部分 基本结构
+
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="HelloWorld" default="run" basedir=".">
+
+<property name="src" value="src" />
+
+<property name="dest" value="classes" />
+
+<property name="jardir" value="resultlib" />
+
+<property name="hello_jar" value="hello.jar" />
+
+<target name="init">
+
+<mkdir dir="${dest}" />
+
+</target>
+
+<target name="compile" depends="init">
+
+<javac srcdir="${src}" destdir="${dest}" />
+
+</target>
+
+<target name="build" depends="compile">
+
+<mkdir dir="${jardir}" />
+
+<jar jarfile="${hello_jar}" basedir="${dest}" />
+
+</target>
+
+<target name="run" depends="build">
+
+<java classname="com.sharetop.antdemo.HelloWorld" classpath="${hello_jar}" />
+
+</target>
+
+</project>
+
+说明: 标准的XML文档, 根结点为project, 前面可以设置公有变量property, project中可含多个target, 每个target中可包括多个task.
+
+------------------------------------
+
+第二部分 应用程序基本结构
+
+目录 文件
+
+bin 公共的二进制文件, 以及运行脚本
+
+build 临时创建的文件, 如类文件等
+
+dist 目标输出文件, 如生成Jar文件等
+
+doc/javadocs 文档
+
+lib 需要导入的Java包, 即编辑过程中需要的包
+
+src java源文件
+
+web jsp, html等
+
+------------------------------------
+
+第三部分 核心TASK
+
+1. copy
+
+拷贝单个文件
+
+   <copy file="myfile.txt" tofile="mycopy.txt"/>
+
+拷贝单个文件到目录
+
+   <copy file="myfile.txt" todir="../some/other/dir"/>
+
+拷贝目录
+
+   <copy todir="../new/dir">
+
+     <fileset dir="src_dir"/>
+
+   </copy>
+
+拷贝目录下指定文件(两种方式均可)
+
+   <copy todir="../dest/dir">
+
+     <fileset dir="src_dir">
+
+       <exclude name="**/*.java"/>
+
+     </fileset>
+
+   </copy>
+
+   <copy todir="../dest/dir">
+
+     <fileset dir="src_dir" excludes="**/*.java"/>
+
+   </copy>
+
+2. copydir
+
+拷贝目录
+
+<copydir src="${src}/resources"
+
+           dest="${dist}"
+
+/>
+
+拷贝目录下指定内容
+
+<copydir src="${src}/resources"
+
+    dest="${dist}"
+
+    includes="**/*.java"
+
+    excludes="**/Test.java"
+
+/>
+
+<copydir src="${src}/resources"
+
+    dest="${dist}"
+
+    includes="**/*.java"
+
+    excludes="mypackage/test/**"/>
+
+3. copyfile
+
+拷贝单个文件
+
+<copyfile src="test.java" dest="subdir/test.java"/>
+
+<copyfile src="${src}/index.html" dest="${dist}/help/index.html"/>
+
+4. cvs
+
+从CVS服务器得到指定package的项目, 将之下载到dest指定目录下
+
+<cvs cvsRoot=":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
+
+         package="ant"
+
+         dest="${ws.dir}"
+
+/>
+
+5. delete
+
+<delete file="/lib/ant.jar"/>
+
+<delete dir="lib"/>
+
+删除当前目录和所有子目录下的bak文件
+
+<delete>
+
+<fileset dir="." includes="**/*.bak"/>
+
+</delete>
+
+删除build下所有文件及子目录, 包括build目录本身也删除
+
+<delete includeEmptyDirs="true">
+
+<fileset dir="build"/>
+
+</delete>
+
+deletes all files and subdirectories of build, including build itself.
+
+6. deltree
+
+<deltree dir="dist"/>
+
+deletes the directory dist, including its files and subdirectories.
+
+<deltree dir="${dist}"/>
+
+deletes the directory ${dist}, including its files and subdirectories.
+
+7. ear
+
+<ear destfile="${build.dir}/myapp.ear" appxml="${src.dir}/metadata/application.xml">
+
+<fileset dir="${build.dir}" includes="*.jar,*.war"/>
+
+</ear>
+
+8. echo
+
+<echo message="Hello, world"/>
+
+<echo>This is a longer message stretching over
+
+two lines.
+
+</echo>
+
+<echo>
+
+This is a longer message stretching over
+
+three lines; the first line is a blank
+
+</echo>
+
+只有当debug模式时才输出
+
+<echo message="Deleting drive C:" level="debug"/>
+
+9. exec
+
+执行某程序
+
+<property name="browser" location="C:/Programme/Internet Explorer/iexplore.exe"/>
+
+<property name="file" location="ant/docs/manual/index.html"/>
+
+<exec executable="${browser}" spawn="true">
+
+     <arg value="${file}"/>
+
+</exec>
+
+10. import
+
+<import file="../common-targets.xml" />
+
+Imports targets from the common-targets.xml file that is in a parent directory.
+
+<import file="${deploy-platform}.xml" />
+
+Imports the project defined by the property deploy-platform
+
+11. input
+
+执行过程中请用户输入y/n, 根据输入做出不同操作
+
+<input
+
+message="All data is going to be deleted from DB continue (y/n)?"
+
+validargs="y,n"
+
+addproperty="do.delete"
+
+/>
+
+<condition property="do.abort">
+
+<equals arg1="n" arg2="${do.delete}"/>
+
+</condition>
+
+<fail if="do.abort">Build aborted by user.</fail>
+
+12. jar
+
+<jar destfile="${dist}/lib/app.jar" basedir="${build}/classes"/>
+
+<jar destfile="${dist}/lib/app.jar"
+
+        basedir="${build}/classes"
+
+        excludes="**/Test.class"
+
+/>
+
+<jar destfile="${dist}/lib/app.jar"
+
+        basedir="${build}/classes"
+
+        includes="mypackage/test/**"
+
+        excludes="**/Test.class"
+
+/>
+
+<jar destfile="${dist}/lib/app.jar">
+
+     <fileset dir="${build}/classes"
+
+       excludes="**/Test.class"
+
+/>
+
+<fileset dir="${src}/resources"/>
+
+</jar>
+
+13. java
+
+<java classname="test.Main">
+
+         <arg value="-h"/>
+
+         <classpath>
+
+           <pathelement location="dist/test.jar"/>
+
+           <pathelement path="${java.class.path}"/>
+
+         </classpath>
+
+        </java>
+
+14. javac
+
+<javac srcdir="${src}"
+
+   destdir="${build}"
+
+   classpath="xyz.jar"
+
+   debug="on"
+
+/>
+
+compiles all .java files under the ${src} directory, and stores the .class files in the ${build} directory. The classpath used includes xyz.jar, and compiling with debug information is on.
+
+   <javac srcdir="${src}"
+
+   destdir="${build}"
+
+   fork="true"
+
+   />
+
+compiles all .java files under the ${src} directory, and stores the .class files in the ${build} directory. This will fork off the javac compiler using the default javac executable.
+
+<javac srcdir="${src}"
+
+   destdir="${build}"
+
+   fork="java$$javac.exe"
+
+/>
+
+compiles all .java files under the ${src} directory, and stores the .class files in the ${build} directory. This will fork off the javac compiler, using the executable named java$javac.exe. Note that the $ sign needs to be escaped by a second one.
+
+<javac srcdir="${src}"
+
+   destdir="${build}"
+
+   includes="mypackage/p1/**,mypackage/p2/**"
+
+   excludes="mypackage/p1/testpackage/**"
+
+   classpath="xyz.jar"
+
+   debug="on"
+
+/>
+
+compiles .java files under the ${src} directory, and stores the .class files in the ${build} directory. The classpath used includes xyz.jar, and debug information is on. Only files under mypackage/p1 and mypackage/p2 are used. All files in and below the mypackage/p1/testpackage directory are excluded from compilation.
+
+<javac srcdir="${src}:${src2}"
+
+   destdir="${build}"
+
+   includes="mypackage/p1/**,mypackage/p2/**"
+
+   excludes="mypackage/p1/testpackage/**"
+
+   classpath="xyz.jar"
+
+   debug="on"
+
+/>
+
+is the same as the previous example, with the addition of a second source path, defined by the property src2. This can also be represented using nested <src> elements as follows:
+
+<javac destdir="${build}"
+
+   classpath="xyz.jar"
+
+   debug="on">
+
+     <src path="${src}"/>
+
+     <src path="${src2}"/>
+
+     <include name="mypackage/p1/**"/>
+
+     <include name="mypackage/p2/**"/>
+
+     <exclude name="mypackage/p1/testpackage/**"/>
+
+</javac>
+
+If you want to run the javac compiler of a different JDK, you should tell Ant, where to find the compiler and which version of JDK you will be using so it can choose the correct command line switches. The following example executes a JDK 1.1 javac in a new process and uses the correct command line switches even when Ant is running in a Java VM of a different version:
+
+<javac srcdir="${src}"
+
+   destdir="${build}"
+
+   fork="yes"
+
+   executable="/opt/java/jdk1.1/bin/javac"
+
+   compiler="javac1.1"
+
+/>
+
+指定了版本号
+
+15. javadoc
+
+<javadoc
+
+    destdir="docs/api"
+
+    author="true"
+
+    version="true"
+
+    use="true"
+
+    windowtitle="Test API">
+
+<fileset dir="src" defaultexcludes="yes">
+
+<include name="com/dummy/test/**" />
+
+<exclude name="com/dummy/test/doc-files/**"/>
+
+</fileset>
+
+<doctitle><![CDATA[<h1>Test</h1>]]></doctitle>
+
+<bottom><![CDATA[<i>Copyright &#169; 2000 Dummy Corp. All Rights Reserved.</i>]]></bottom>
+
+<tag name="todo" scope="all" description="To do:" />
+
+<group title="Group 1 Packages" packages="com.dummy.test.a*"/>
+
+<group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/>
+
+<link offline="true" href="http://java.sun.com/products/jdk/1.2/docs/api/" packagelistLoc="C:\tmp"/>
+
+<link href="config@myisp.com to all@xyz.com with a subject of Test Build. Replies to this email will go to me@myisp.com. Any zip files from the dist directory are attached. The task will attempt to use JavaMail and fall back to UU encoding or no encoding in that order depending on what support classes are available. ${buildname} will be replaced with the buildname property's value.
+
+17. mkdir
+
+<mkdir dir="${dist}"/>
+
+creates a directory ${dist}.
+
+<mkdir dir="${dist}/lib"/>
+
+creates a directory ${dist}/lib.
+
+18. move
+
+move与copy类似, 不同的是, 不留原稿
+
+Move a single file (rename a file)
+
+<move file="file.orig" tofile="file.moved"/>
+
+Move a single file to a directory
+
+<move file="file.orig" todir="dir/to/move/to"/>
+
+Move a directory to a new directory
+
+<move todir="new/dir/to/move/to">
+
+     <fileset dir="src/dir"/>
+
+</move>
+
+Move a set of files to a new directory
+
+<move todir="some/new/dir">
+
+     <fileset dir="my/src/dir">
+
+       <include name="**/*.jar"/>
+
+       <exclude name="**/ant.jar"/>
+
+     </fileset>
+
+</move>
+
+Append ".bak" to the names of all files in a directory.
+
+<move todir="my/src/dir" includeemptydirs="false">
+
+     <fileset dir="my/src/dir">
+
+       <exclude name="**/*.bak"/>
+
+     </fileset>
+
+     <mapper type="glob" from="*" to="*.bak"/>
+
+</move>
+
+19. property
+
+<property name="foo.dist" value="dist"/>
+
+sets the property foo.dist to the value "dist".
+
+<property file="foo.properties"/>
+
+reads a set of properties from a file called "foo.properties".
+
+从文件中获取, 把属性做成一个单独的文件
+
+<property url="http://www.mysite.com/bla/props/foo.properties".
+
+20. rename
+
+<rename src="foo.jar" dest="${name}-${version}.jar"/>
+
+21. replace
+
+<replace
+
+file="configure.sh"
+
+value="defaultvalue"
+
+propertyFile="source/name.properties">
+
+<replacefilter
+
+token="@token1@"/>
+
+<replacefilter
+
+token="@token2@"
+
+value="value2"/>
+
+<replacefilter
+
+token="@token3@"
+
+property="property.key"/>
+
+</replace>
+
+In file configure.sh, replace all instances of "@token1@" with "defaultvalue", all instances of "@token2@" with "value2", and all instances of "@token3@" with the value of the property "property.key", as it appears in property file src/name.properties.
+
+22. sleep
+
+<sleep milliseconds="10"/>
+
+Sleep for about 10 mS.
+
+<sleep seconds="2"/>
+
+Sleep for about 2 seconds.
+
+<sleep hours="1" minutes="-59" seconds="-58"/>
+
+Sleep for one hour less 59:58, or two seconds again
+
+<sleep/>
+
+Sleep for no time at all. This may yield the CPU time to another thread or process.
+
+23. sql
+
+<sql
+
+     driver="org.database.jdbcDriver"
+
+     url="jdbc:database-url"
+
+     userid="sa"
+
+     password="pass"
+
+     src="data.sql"
+
+/>
+
+Connects to the database given in url as the sa user using the org.database.jdbcDriver and executes the SQL statements contained within the file data.sql
+
+<sql
+
+     driver="org.database.jdbcDriver"
+
+     url="jdbc:database-url"
+
+     userid="sa"
+
+     password="pass"
+
+     >
+
+insert into table some_table values(1,2,3,4);
+
+truncate table some_other_table;
+
+</sql>
+
+<sql
+
+     driver="org.database.jdbcDriver"
+
+     url="jdbc:database-url"
+
+     userid="sa"
+
+     password="pass"
+
+     ><![CDATA[
+
+update some_table set column1 = column1 + 1 where column2 < 42;
+
+]]></sql>
+
+<sql
+
+     driver="org.database.jdbcDriver"
+
+     url="jdbc:database-url"
+
+     userid="sa"
+
+     password="pass"
+
+     src="data.sql"
+
+     print="yes"
+
+     output="outputfile.txt"
+
+     >
+
+<classpath>
+
+<pathelement location="/some/jdbc.jar"/>
+
+</classpath>
+
+</sql>
+
+24. subant
+
+<subant target="compile" genericantfile="/opt/project/build1.xml">
+
+             <dirset dir="." includes="projects*"/>
+
+        </subant>
+
+<project name="subant" default="subant1">
+
+        <property name="build.dir" value="subant.build"/>
+
+        <target name="subant1">
+
+            <subant target="">
+
+              <property name="build.dir" value="subant1.build"/>
+
+              <property name="not.overloaded" value="not.overloaded"/>
+
+              <fileset dir="." includes="*/build.xml"/>
+
+            </subant>
+
+        </target>
+
+        </project>
+
+25. unjar/untar/unwar/unzip
+
+<unzip src="${tomcat_src}/tools-src.zip" dest="${tools.home}"/>
+
+<gunzip src="tools.tar.gz"/>
+
+<untar src="tools.tar" dest="${tools.home}"/>
+
+<unzip src="${tomcat_src}/tools-src.zip"
+
+        dest="${tools.home}">
+
+     <patternset>
+
+<include name="**/*.java"/>
+
+<exclude name="**/Test*.java"/>
+
+     </patternset>
+
+</unzip>
+
+<unzip dest="${tools.home}">
+
+     <patternset>
+
+<include name="**/*.java"/>
+
+<exclude name="**/Test*.java"/>
+
+     </patternset>
+
+     <fileset dir=".">
+
+<include name="**/*.zip"/>
+
+<exclude name="**/tmp*.zip"/>
+
+     </fileset>
+
+</unzip>
+
+26. war
+
+Assume the following structure in the project's base directory:
+
+thirdparty/libs/jdbc1.jar
+
+thirdparty/libs/jdbc2.jar
+
+build/main/com/myco/myapp/Servlet.class
+
+src/metadata/myapp.xml
+
+src/html/myapp/index.html
+
+src/jsp/myapp/front.jsp
+
+src/graphics/images/gifs/small/logo.gif
+
+src/graphics/images/gifs/large/logo.gif
+
+then the war file myapp.war created with
+
+<war destfile="myapp.war" webxml="src/metadata/myapp.xml">
+
+   <fileset dir="src/html/myapp"/>
+
+   <fileset dir="src/jsp/myapp"/>
+
+   <lib dir="thirdparty/libs">
+
+     <exclude name="jdbc1.jar"/>
+
+   </lib>
+
+   <classes dir="build/main"/>
+
+   <zipfileset dir="src/graphics/images/gifs"
+
+        prefix="images"/>
+
+</war>
