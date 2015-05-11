@@ -1,6 +1,11 @@
 jQuery Select操作大集合
 http://developer.51cto.com/art/201204/332706.htm
 
+mongodb驱动+crud demo
+https://github.com/mongodb/node-mongodb-native
+
 mongoose - 让node.js高效操作mongodb
 http://www.cnblogs.com/aaronjs/p/4489354.html
 
+Node.js 操作mongoDB 来更新某个Object的某个数组字段
+http://www.html-js.com/qa/182
