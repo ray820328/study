@@ -4,6 +4,9 @@ http://developer.51cto.com/art/201204/332706.htm
 mongodb驱动+crud demo
 https://github.com/mongodb/node-mongodb-native
 
+mongodb官方crud
+https://mongodb.github.io/node-mongodb-native/markdown-docs/insert.html
+
 mongoose - 让node.js高效操作mongodb
 http://www.cnblogs.com/aaronjs/p/4489354.html
 
