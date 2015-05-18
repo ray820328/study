@@ -15,3 +15,6 @@ http://www.cnblogs.com/aaronjs/p/4489354.html
 
 Node.js 操作mongoDB 来更新某个Object的某个数组字段
 http://www.html-js.com/qa/182
+
+Node.js软肋之回调大坑
+http://www.infoq.com/cn/articles/nodejs-callback-hell
