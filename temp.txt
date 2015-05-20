@@ -12,3 +12,28 @@ CSDN | 2012-11-19 15:16
 2、提交的时候仅提交Assets 和 ProjectSettings 两个目录下所有东西，忽略掉其他所有目录和文件
 3、提交的时候.metafile也要提交
 4、修改了prefab或者场景，一定记得要File -> Save Scene再提交，否则会丢东西
+
+------------------------------------
+典型内存泄露
+var express = require('express');
+
+function external(cb) {
+    process.nextTick(function () {
+        throw new Error();
+        cb.call(null, 'sunny');
+    })
+}
+
+var app = express();
+app.get('/weather', function (req, res) {
+    external(function (data) {
+        res.end('Weather of Beijing is ' + data);
+    })
+})
+app.listen(8018);
+
+function noop(){}
+process.on('uncaughtException', noop)
+
+
+------------------------------------
