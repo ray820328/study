@@ -3,7 +3,8 @@
 网络流量对外对内实时
 iftop
 
-cat log.*|grep error > file
+cat log.*|grep error _A x > file
+-B x
 
 ------------------------------------
 release版本管理
