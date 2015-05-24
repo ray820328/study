@@ -14,9 +14,22 @@ Jenkins
 Redmine
 
 ------------------------------------
-process.nextTick 是将异步回调放到当前帧的末尾、io回调之前，如果nextTick过多，会导致io回调不断延后,最后callback堆积太多.
-setImmediate 是将异步回调放到下一帧,不影响io回调,不会造成callback 堆积.
+process.nextTick 是将异步回调放到当前帧的末尾、io回调之前，如果nextTick过多，会导致io回调不断延后,
+最后callback堆积太多.setImmediate 是将异步回调放到下一帧,不影响io回调,不会造成callback 堆积.
 
+Node的异步I/O:
+-事件循环-观察者-请求对象-执行回调
+非I/O的异步回调API:
+1、定时器 setTimeout
+2、process.nextTick()
+3、setImediate()
+setImediate 与 process.nextTick()的异同点:
+   相同点： 用法 和 功能几乎都一样
+   不同点： 1、process.nextTick()的优先级要高些，原因是 事件循环对观察者的检查是有先后顺序的。
+ 　　　     　　2、具体实现上，process.nextTick()的回调函数保存在一个数组中，setImmediate()的结果是保存在链表中的。
+            3、在行为上，process.nextTick()在每轮循环中会将数组中的回调函数全部执行完，
+            而setImmediate()在每轮循环中执行链表的第一个回调函数.
+               
 ------------------------------------
 避免uncaughtException错误引起node.js进程崩溃 + nodejs domain
 http://yijiebuyi.com/blog/cacbcf0838469a377054f6fab5836252.html
