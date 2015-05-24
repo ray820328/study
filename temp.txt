@@ -22,6 +22,9 @@ setImmediate 是将异步回调放到下一帧,不影响io回调,不会造成cal
 http://yijiebuyi.com/blog/cacbcf0838469a377054f6fab5836252.html
 http://yijiebuyi.com/blog/6172e8bc535a75469beaf4cf85e9435f.html
 
+pomelo改进启动选项,打印日志
+https://github.com/NetEase/pomelo/blob/master/lib/master/starter.js#L179
+
 ------------------------------------
 ##Pomelo实现的一些细节
   ---
