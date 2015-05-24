@@ -17,6 +17,8 @@ Redmine
 process.nextTick 是将异步回调放到当前帧的末尾、io回调之前，如果nextTick过多，会导致io回调不断延后,
 最后callback堆积太多.setImmediate 是将异步回调放到下一帧,不影响io回调,不会造成callback 堆积.
 
+<<深入浅出nodeJS>>读书笔记--<二>
+http://www.cnblogs.com/veeking/p/3965454.html
 Node的异步I/O:
 -事件循环-观察者-请求对象-执行回调
 非I/O的异步回调API:
