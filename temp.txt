@@ -18,9 +18,25 @@ process.nextTick 是将异步回调放到当前帧的末尾、io回调之前，�
 setImmediate 是将异步回调放到下一帧,不影响io回调,不会造成callback 堆积.
 
 ------------------------------------
+##Pomelo实现的一些细节
+  ---
+  
+  1.	在handler中的方法一定要调用回调函数，不然rpc请求会失败。
+  +	在remote中的方法一定要调用回调函数，并且第一个参数是err，没有错误时给null就行，有错误时new一个Error。
+  +	不需要回调函数的时候可以传一个null，但是在实现中还是要调用。
+  +	在handler返回数据给前端的时候，JSON数据项数超过三有可能迷之崩溃，解决方案是把数据多封装一层。
+  +	handler传输的参数很有限，在前端调用时最好只传一个数据参数，后端接受的时候会有三个参数，依次是data，session，next
+  +	在路由等时候，session和msg中存的是字符串，虽然打印出来和JSON一模一样，JSON.parse。
+  +	gate服务器和connector服务器不同，在前端重新init给connector服务器之后，gate服务器就不能再收到来自前端的请求了，
+  因为这时候所有的消息都直接发送给connector，并且admin－server也不会帮忙路由消息给gate服务器
+  +	修改服务器信息只要修改config下面的server.json即可，添加服务器需要到config下面的adminServer.json添加token。
+
+------------------------------------
 如何用 svn 管理 unity3d 项目
 CSDN | 2012-11-19 15:16
-因为svn用惯了， asset server还是收费的，所以这个版本还是使用svn来管理unity3d的工程，刚开始的时候各种问题，丢失场景啊，丢失纹理贴图等等。被折腾了好久，我终于抽时间去官网上看了下，并且按照官网设置，用了几个月，感觉很稳定，所以存档记录，并分享给大家。
+因为svn用惯了， asset server还是收费的，所以这个版本还是使用svn来管理unity3d的工程，
+刚开始的时候各种问题，丢失场景啊，丢失纹理贴图等等。
+被折腾了好久，我终于抽时间去官网上看了下，并且按照官网设置，用了几个月，感觉很稳定，所以存档记录，并分享给大家。
 1、在Uniyt里面， Edit->project settings->editor 里面选择metafile(Visible Meta Files)
 2、提交的时候仅提交Assets 和 ProjectSettings 两个目录下所有东西，忽略掉其他所有目录和文件
 3、提交的时候.metafile也要提交
@@ -65,10 +81,12 @@ false == null       // false
 null == undefined   // true
 
 ' \t\r\n ' == 0     // true
-The lack of transitivity is alarming. My advice is to never use the evil twins. Instead, always use === and !==. All of the comparisons just shown produce false with the === operator.
+The lack of transitivity is alarming. My advice is to never use the evil twins. Instead, always use === and !==. 
+All of the comparisons just shown produce false with the === operator.
 Update:
 
-A good point was brought up by @Casebash in the comments and in @Phillipe Laybaert's answer concerning reference types. For reference types == and === act consistently with one another (except in a special case).
+A good point was brought up by @Casebash in the comments and in @Phillipe Laybaert's answer concerning reference types. 
+For reference types == and === act consistently with one another (except in a special case).
 
 var a = [1,2,3];
 var b = [1,2,3];
