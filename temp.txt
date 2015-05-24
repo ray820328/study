@@ -18,6 +18,11 @@ process.nextTick 是将异步回调放到当前帧的末尾、io回调之前，�
 setImmediate 是将异步回调放到下一帧,不影响io回调,不会造成callback 堆积.
 
 ------------------------------------
+避免uncaughtException错误引起node.js进程崩溃 + nodejs domain
+http://yijiebuyi.com/blog/cacbcf0838469a377054f6fab5836252.html
+http://yijiebuyi.com/blog/6172e8bc535a75469beaf4cf85e9435f.html
+
+------------------------------------
 ##Pomelo实现的一些细节
   ---
   
