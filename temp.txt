@@ -65,6 +65,9 @@ CSDN | 2012-11-19 15:16
 3、提交的时候.metafile也要提交
 4、修改了prefab或者场景，一定记得要File -> Save Scene再提交，否则会丢东西
 
+unity项目内存+性能分析
+http://blog.csdn.net/awnuxcvbn/article/details/44617207
+
 ------------------------------------
 典型内存泄露
 var express = require('express');
