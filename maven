@@ -1,0 +1,55 @@
+
+jar xvf apache-maven-3.0--bin.zip
+tar -xvzf apache-maven-3.0-bin.tar.gz
+
+mvn help:system
+
+conf/settings.xml文件到~/.m2/settings.xml
+
+代理（如果需要）
+ping repo1.maven.org
+<settings>
+…  
+<proxies>
+    <proxy>
+      <id>my-proxy</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <host>218.14.227.197</host>
+      <port>3128</port>
+      <!--
+      <username>***</username>
+      <password>***</password>
+      <nonProxyHosts>repository.mycom.com|*.google.com</nonProxyHosts>
+      -->
+    </proxy>
+  </proxies>
+  …
+</settings>
+
+eclipse插件
+http://m2eclipse.sonatype.org/sites/m2e
+
+可能会在使用m2eclipse时遇到类似这样的错误：
+
+09-10-6 上午01时14分49秒: Eclipse is running in a JRE, but a JDK is required
+Some Maven plugins may not work when importing projects or updating source folders.
+
+这是因为Eclipse默认是运行在JRE上的，而m2eclipse的一些功能要求使用JDK，
+解决方法是配置Eclipse安装目录的eclipse.ini文件，添加vm配置指向JDK，如：
+--launcher.XXMaxPermSize
+256m
+-vm
+D:\ENV\jdk\bin\javaw.exe
+-vmargs
+-Dosgi.requiredJavaVersion=1.7
+-Xms128m
+-Xmx256m
+
+环境变量
+MAVEN_HOME
+D:/ENV/maven33
+MAVEN_OPTS
+-Xms128m -Xmx512m
+
+
