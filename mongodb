@@ -1,0 +1,57 @@
+mongo --port 27019
+db.player.find({y: /^biggm/i}, {y:1, o:1});
+db.player.find({y: /biggm/i, "o.n": /服部茧/}, {y:1, o:1});
+以上会使用index，or不会使用index
+db.player.find({$or: [{y: /^biggm/i}, {"o.n": /服部茧/}]}, {y:1, o:1});
+db.player.find({$or: [{y: '00atR'}, {"o.n": '00atR'}]}, {y:1, o:1}).explain();
+db.player.find({$or: [{y: /^00a/}, {"o.n": /^00a/}]}, {y:1, o:1});
+db.player.find({y: '00atR'}, {y: 1, o: 1});
+db.player.find({y: {$ne: 0}}, {y: 1, o: 1}).size();
+db.player.find({"y":{"$in":[null], $exists:false}}, {y: 1, o: 1}).size();
+db.player.find({"y":{$exists:false}}).size();
+$exists，指明这个键要不要存在
+
+db.platform.find({uid: '125447'});
+
+db.gm.find({y: /^biggm/i}, {y:1, o:1});
+db.rankInfo.find({"value.RobotId": {$exists: false}}).sort({"value.level":-1, "value.vip":-1}).explain();
+
+http://www.cnblogs.com/zhoujinyi/p/3566773.html
+激活Profiler记录慢操作：
+0：关闭，不收集任何数据。
+1：收集慢查询数据，默认是100毫秒。
+2：收集所有数据
+mongo> use game;
+mongo> db.setProfilingLevel(1);
+db.setProfilingLevel(1, 200);
+或在配置文件里添加：
+profile = 1
+slowms = 300
+
+#返回最近的10条记录
+db.system.profile.find().limit(10).sort({ ts : -1 }).pretty();
+#返回所有的操作，除command类型的
+db.system.profile.find( { op: { $ne : 'command' } } ).pretty();
+#返回大于n毫秒慢的操作，按最近日期，最大时间排序
+db.system.profile.find( { millis : { $gt : 100 } } ).sort( { ts: -1, millis: -1 } ).limit(1).pretty();
+db.system.profile.find({ts : {$gt : new ISODate("2011-07-12T03:00:00Z") ,
+                               $lt : new ISODate("2011-07-12T03:40:00Z")
+                              }},{ user : 0 }).sort( { millis : -1 } );
+
+索引
+有需要排序的栏位，要建索引，否则mongodb会在内存中排序
+db.player.find({name: "Denis"}).explain();
+db.player.ensureIndex({y: 1});  
+db.player.ensureIndex({y: 1, "o.n" : 1});
+db.player.ensureIndex({y: 1, "o.n" : 1}, {unique: true});
+db.player.getIndexes();
+db.player.dropIndex({y: 1, "o.n" : 1});
+db.player.dropIndexes();
+
+-------------------------------------------------------------
+MongoDB操作相关
+cd /tooles/game_server1/
+mongodump -d game -o game_
+mongorestore -d game -dir game
+mongorestore -h127.0.0.1:27017 -d game --directoryperdb game
+
