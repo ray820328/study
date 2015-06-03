@@ -1,3 +1,11 @@
+如何查看锁的状态
+db.serverStatus()
+db.currentOp()
+mongotop
+mongostat
+the MongoDB Monitoring Service (MMS)
+
+
 mongo --port 27019
 db.player.find({y: /^biggm/i}, {y:1, o:1});
 db.player.find({y: /biggm/i, "o.n": /服部茧/}, {y:1, o:1});
