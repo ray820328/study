@@ -5,6 +5,8 @@ mongotop
 mongostat
 the MongoDB Monitoring Service (MMS)
 
+启动新引擎(3.0)并开启文件压缩
+start cmd /c .\bin\mongod -storageEngine wiredTiger -dbpath=.\data -logpath=.\log\mongodb.log --syncdelay=1 --wiredTigerCacheSizeGB=4 --wiredTigerCollectionBlockCompressor=zlib
 
 mongo --port 27019
 db.player.find({y: /^biggm/i}, {y:1, o:1});
