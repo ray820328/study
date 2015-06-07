@@ -1,3 +1,6 @@
+http://outofmemory.cn/code-snippet/80/16-ibatis-changyong-SQL-statement-code
+
+http://zhuyuehua.iteye.com/blog/1721715
 
 ------------------------------------
 网络流量对外对内实时
