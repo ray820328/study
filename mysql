@@ -1,3 +1,8 @@
+set character_set_connection = 'utf8';
+set character_set_results = 'utf8';
+set character_set_client = 'utf8';
+set names gbk
+
 Mysql5.0以上的版本可以支持将执行比较慢的SQL语句记录下来。
 mysql> show variables like 'long%'; 注：这个long_query_time是用来定义慢于多少秒的才算“慢查询”
 +-----------------+-----------+
