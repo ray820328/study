@@ -1,0 +1,18 @@
+> db.serverStatus().connections;
+{ "current" : 3, "available" : 816 }
+
+mongodb最大的连接数是819，在启动里面加参数 --maxConns=3000重启mongodb服务后最大连接数还是819。最后通过排查发现是linux系统的限制，Linux系统默认一个进程最大文件打开数目为1024。需要修改此限制
+因为已经将mongodb添加到开机启动里面，所以需要在rc.local文件下面加ulimit -n 的限制 
+
+vi /etc/rc.local
+
+ulimit -n 20000
+ rm /usr/mongodb/log/mongodb.log
+ /usr/mongodb/bin/mongod --dbpath=/usr/mongodb/data/ --logpath=/usr/mongodb/log/mongodb.log  --master --oplogSize 200
+
+然后重启机器再次查看mongodb的最大连接数发现变了
+[root@DB192168129044 bin]# ./mongo
+MongoDB shell version: 2.2.0
+connecting to: test
+> db.serverStatus().connections;
+{ "current" : 1, "available" : 15999 }
