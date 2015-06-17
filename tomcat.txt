@@ -1,0 +1,12 @@
+
+bin\catalina.bat
+set JAVA_OPTS=%JAVA_OPTS% -Xms256m -Xmx2048m -XX:PermSize=48m -XX:MaxPermSize=128m
+
+echo Using CATALINA_BASE:   "%CATALINA_BASE%"
+
+<Connector port="80" maxHttpHeaderSize="2048"
+               maxThreads="150" minSpareThreads="10" maxSpareThreads="20"
+               enableLookups="false" redirectPort="8443" acceptCount="1000"
+               connectionTimeout="20000" disableUploadTimeout="true"/>
+               
+<Context path="/admin" docBase="D:/ENV/eclipse/workspace/game_admin_cmge/build" debug="" reloadable="true"/>
