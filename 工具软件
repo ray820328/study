@@ -6,3 +6,6 @@ Redmine
 
 服务器状态监控
 http://cacti.net/
+
+maven仓库管理
+sonatype nexus
