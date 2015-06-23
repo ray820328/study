@@ -10,3 +10,11 @@ echo Using CATALINA_BASE:   "%CATALINA_BASE%"
                connectionTimeout="20000" disableUploadTimeout="true"/>
                
 <Context path="/admin" docBase="D:/ENV/eclipse/workspace/game_admin_cmge/build" debug="" reloadable="true"/>
+
+  <role rolename="tomcat"/>
+  <role rolename="role1"/>
+  <role rolename="manager-gui"/>
+  <user username="tomcat" password="admin" roles="tomcat"/>
+  <user username="admin" password="admin" roles="tomcat,role1,manager-gui"/>
+  <user username="role1" password="admin" roles="role1"/>
+
