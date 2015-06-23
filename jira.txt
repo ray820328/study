@@ -1,0 +1,18 @@
+
+
+Description=JIRA: Commercial,
+CreationDate=2015-06-23,
+jira.LicenseEdition=ENTERPRISE,
+Evaluation=false,
+jira.LicenseTypeName=COMMERCIAL,
+jira.active=true,
+licenseVersion=2,
+MaintenanceExpiryDate=2029-10-24,
+Organisation=JIRA,
+SEN=SEN-L5996596,
+ServerID=BR9L-5ECK-6UX4-M8MW,
+jira.NumberOfUsers=-1,
+LicenseID=LIDSEN-L5996596,
+LicenseExpiryDate=2029-10-24,
+PurchaseDate=2015-06-23
+
