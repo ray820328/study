@@ -1,3 +1,8 @@
+CATALINA_BASE
+CATALINA_HOME
+D:\ENV\tomcat7
+
+%CATALINA_HOME%\bin;
 
 bin\catalina.bat
 set JAVA_OPTS=%JAVA_OPTS% -Xms256m -Xmx2048m -XX:PermSize=48m -XX:MaxPermSize=128m
