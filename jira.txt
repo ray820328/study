@@ -24,3 +24,6 @@ https://my.atlassian.com/products/index?sen=6001942&evalId=6001942&survey=bamboo
 Bamboo(server)
 BLBG-NX2T-FUPW-4SCE
 EVEN
+
+集成Bamboo与jira
+http://127.0.0.1:8085/
