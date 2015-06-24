@@ -1,4 +1,4 @@
-
+https://my.atlassian.com/product
 
 Description=JIRA: Commercial,
 CreationDate=2015-06-23,
@@ -16,3 +16,8 @@ LicenseID=LIDSEN-L5996596,
 LicenseExpiryDate=2029-10-24,
 PurchaseDate=2015-06-23
 
+
+https://my.atlassian.com/products/index?sen=6001942&evalId=6001942&survey=bamboo&eval=true#license_6001942
+Bamboo(server)
+BLBG-NX2T-FUPW-4SCE
+EVEN
