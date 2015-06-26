@@ -1,3 +1,6 @@
+CI工具集合之atlassian
+jira + bamboo + fisheye + Confluence(wiki知识管理库)
+
 release版本管理
 Jenkins
 
@@ -6,6 +9,9 @@ Redmine
 
 服务器状态监控
 http://cacti.net/
+
+持续集成CI工具
+CruiseControl
 
 maven仓库管理
 sonatype nexus
