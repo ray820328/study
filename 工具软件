@@ -13,6 +13,9 @@ http://cacti.net/
 持续集成CI工具
 CruiseControl
 
+java svn打包，回滚管理环境
+Hudson
+
 maven仓库管理
 sonatype nexus
 
