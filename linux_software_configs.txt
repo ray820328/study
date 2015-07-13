@@ -16,3 +16,9 @@ MongoDB shell version: 2.2.0
 connecting to: test
 > db.serverStatus().connections;
 { "current" : 1, "available" : 15999 }
+
+
+cat /etc/centos-release
+
+#yum list installed | grep jdk
+#yum -y remove java-1.6.0-openjdk.x86_64
