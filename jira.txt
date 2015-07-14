@@ -27,3 +27,64 @@ EVEN
 
 集成Bamboo与jira
 http://127.0.0.1:8085/
+
+
+-----------------------JIRA安装配置-------------------------
+CREATE DATABASE jira  DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+setup.home
+/opt/atlassian/jira/atlassian-jira/WEB-INF/lib
+jira.home
+/var/atlassian/application-data/jira
+B8NL-J3NW-ESED-GJ0N
+admin
+admin1234
+ServerID	B8NL-J3NW-ESED-GJ0N
+SEN 	SEN-L6110463
+
+Description=JIRA: Commercial,
+CreationDate=2015-06-23,
+jira.LicenseEdition=ENTERPRISE,
+Evaluation=false,
+jira.LicenseTypeName=COMMERCIAL,
+jira.active=true,
+licenseVersion=2,
+MaintenanceExpiryDate=2029-10-24,
+Organisation=JIRA,
+SEN=SEN-L6110463,
+ServerID=B8NL-J3NW-ESED-GJ0N,
+jira.NumberOfUsers=-1,
+LicenseID=LIDSEN-L6110463,
+LicenseExpiryDate=2029-10-24,
+PurchaseDate=2015-07-14
+
+破解已完成
+汉化更新已完成
+权限设置已完成
+svn插件集成已完成
+默认工作流修改已完成
+
+JIRA
+管理 -> 问题 -> 状态属性
+添加 Releasing [打包状态]
+复制jira工作流，改名work，编辑加入state[Releasing]节点，所有节点有相互连通的transition
+工作流解决方案 -> 关联 -> 发布
+增加一个scheme，然后在Operations中的Workflows链接中关联 workflow
+工程 -> 管理 -> 工作流 -> 切换工作流
+
+
+<>log起始版本号，增量文件的基础，建议必须是以版本号的完整文件库，
+最好不能大于打包issue对应的最大版本号，否则如果有文件未被issue对应的文件覆盖可能导致错误；
+<>log结束版本号
+，先check工程，仅初始化的时候执行一次
+，文件名，路径不能空格
+，更改issue状态，导出issues
+，comment不带issue id，不会入包
+，svn check根目录到文件夹
+，确保增量工程的基础版本对应（svn版本号大于）
+
+
+注意
+log起始版本号与结束版本号间隔尽量小，控制log文件大小；
+如果起始版本号大于issue关联的最小版本号，则最小版本号到起始版本号之间的更改不会包含进来；
+如果结束版本号小于issue关联的最大版本号，则结束版本号到最大版本号之间的更改不会包含进来；
+删除文件，目录会生成bat文件，手动核对后运行；
