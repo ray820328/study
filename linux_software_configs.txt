@@ -22,3 +22,11 @@ cat /etc/centos-release
 
 #yum list installed | grep jdk
 #yum -y remove java-1.6.0-openjdk.x86_64
+
+1 删除Mysql
+yum remove  mysql mysql-server mysql-libs mysql-server;
+find / -name mysql 将找到的相关东西delete掉；
+rpm -qa|grep mysql(查询出来的东东yum remove掉)
+
+2 安装Mysql
+yum install  mysql mysql-server mysql-libs mysql-server;
