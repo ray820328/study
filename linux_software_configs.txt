@@ -23,6 +23,7 @@ cat /etc/centos-release
 #yum list installed | grep jdk
 #yum -y remove java-1.6.0-openjdk.x86_64
 
+-------------------------------------------安装mysql--------------------------------------------------
 1 删除Mysql
 yum remove  mysql mysql-server mysql-libs mysql-server;
 find / -name mysql 将找到的相关东西delete掉；
@@ -33,5 +34,13 @@ yum install  mysql mysql-server mysql-libs mysql-server;
 启动
 /etc/init.d/mysqld start   
 ## OR ##  
-service mysqld start   
+service mysqld start|stop  
 chkconfig --levels 235 mysqld on
+
+升级mysql
+cd /etc/yum.repos.d
+wget http://rpms.famillecollet.com/enterprise/remi.repo
+Install/Update the mysql version
+yum --enablerepo=remi install mysql-server
+OR
+yum --enablerepo=remi update mysql-server
