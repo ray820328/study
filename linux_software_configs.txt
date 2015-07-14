@@ -25,12 +25,12 @@ cat /etc/centos-release
 
 -------------------------------------------安装mysql--------------------------------------------------
 1 删除Mysql
-yum remove  mysql mysql-server mysql-libs mysql-server;
+yum remove mysql mysql-server mysql-libs mysql-server
 find / -name mysql 将找到的相关东西delete掉；
 rpm -qa|grep mysql(查询出来的东东yum remove掉)
 
 2 安装Mysql
-yum install  mysql mysql-server mysql-libs mysql-server;
+yum install  mysql mysql-server mysql-libs mysql-server
 启动
 /etc/init.d/mysqld start   
 ## OR ##  
@@ -44,3 +44,5 @@ Install/Update the mysql version
 yum --enablerepo=remi install mysql-server
 OR
 yum --enablerepo=remi update mysql-server
+新设置密码
+mysqladmin -u root password [newpassword]
