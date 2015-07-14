@@ -57,7 +57,7 @@ LicenseID=LIDSEN-L6110463,
 LicenseExpiryDate=2029-10-24,
 PurchaseDate=2015-07-14
 
-破解已完成
+破解已完成[语言包6.4必须仅放置在plugins里面，名称保持和其他国家语言一致]
 汉化更新已完成
 权限设置已完成
 svn插件集成已完成
