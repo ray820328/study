@@ -1,2 +1,5 @@
 
 zip -r wwwroot.zip wwwroot
+磁盘大小
+df -h
+
