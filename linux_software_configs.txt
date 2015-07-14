@@ -30,3 +30,8 @@ rpm -qa|grep mysql(查询出来的东东yum remove掉)
 
 2 安装Mysql
 yum install  mysql mysql-server mysql-libs mysql-server;
+启动
+/etc/init.d/mysqld start   
+## OR ##  
+service mysqld start   
+chkconfig --levels 235 mysqld on
