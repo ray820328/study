@@ -5,3 +5,17 @@ df -h
 
 防火墙
 service iptables stop
+
+系统设置，如打开文件数
+ulimit -a
+open files 打开的文件句柄数
+max user processes 用户最大运行进程数
+
+对于服务器可以采用如下方法修改file-max:
+（1）重启机器后恢复为默认值
+echo 100000 > /proc/sys/fs/file-max
+或者
+sysctl -w "fs.file-max=100000"
+（2）修改配置文件/etc/sysctl.conf, 在最后加上一行：
+fs.file-max = 100000
+然后重启机器后生效。以后永久生效。
