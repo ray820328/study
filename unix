@@ -19,3 +19,15 @@ sysctl -w "fs.file-max=100000"
 （2）修改配置文件/etc/sysctl.conf, 在最后加上一行：
 fs.file-max = 100000
 然后重启机器后生效。以后永久生效。
+
+---------------------------------------------------------------
+centos6安装python2.7
+tar zxvf Python-2.7.9.tgz
+./configure
+make
+make install
+
+mv /usr/bin/python /usr/bin/python2.6
+ln -s /usr/local/bin/python2.7 /usr/bin/python2.6
+/usr/bin/python -V
+---------------------------------------------------------------
