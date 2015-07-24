@@ -46,6 +46,7 @@ make
 make install
 
 mv /usr/bin/python /usr/bin/python2.6
+千万不要做，否则yum以及其他一些依赖python的环境会失效
 ln -s /usr/local/bin/python2.7 /usr/bin/python2.6
 /usr/bin/python -V
 ---------------------------------------------------------------
