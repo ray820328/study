@@ -101,6 +101,14 @@ namenode上显示为（本次为单机配置）：
 21691 Jps
 其中，QuorumPeerMain是zookeeper进程，启动正常。
 
+tickTime=2000
+dataDir=/var/zookeeper/
+clientPort=2181
+initLimit=5
+syncLimit=2
+server.1=zoo1:2888:3888
+server.2=zoo2:2888:3888
+server.3=zoo3:2888:3888
 ---------------------------------------------------------------
 
 
