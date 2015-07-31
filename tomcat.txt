@@ -11,6 +11,9 @@ set CATALINA_OPTS=%CATALINA_OPTS% -Dorg.apache.jasper.runtime.BodyContentImpl.LI
 
 echo Using CATALINA_BASE:   "%CATALINA_BASE%"
 
+catalina.sh文件中，找到cygwin=false，在这一行的前面加入参数
+JAVA_OPTS="-server -Xms1024m -Xmx1024m -XX:PermSize=64m -XX:MaxPermSize=128m"
+
 <Connector port="80" maxHttpHeaderSize="2048"
                maxThreads="150" minSpareThreads="10" maxSpareThreads="20"
                enableLookups="false" redirectPort="8443" acceptCount="1000"
