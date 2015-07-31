@@ -28,6 +28,16 @@ EVEN
 集成Bamboo与jira
 http://127.0.0.1:8085/
 
+启动内存参数设置修改
+ 1. NT 服务修改JVM内存大小  
+·  修改%JIRA_HOME%/bin/service.bat文件中的：  
+· "%EXECUTABLE%" //US//%SERVICE_NAME% ++JvmOptions "-Djava.io.tmpdir=%CATALINA_BASE%\temp" --JvmMs 256 --JvmMx 512 --Startup auto  
+· service.bat remove 将原有的NT 服务删除(如果JIRA服务处于启动状态先停止服务)  
+·  service.bat  install 安装新的NT服务  
+·  启动新的服务即生效了  
+·  2. 非NT服务修改JVM内存大小  
+·  修改%JIRA_HOME%/bin下面的 setenv.bat文件，修改JAVA_OPTS这个环境变量  
+·  set JAVA_OPTS=%JAVA_OPTS% -Xms256m -Xmx512m -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true  
 
 -----------------------JIRA安装配置-------------------------
 CREATE DATABASE jira  DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
