@@ -26,6 +26,9 @@ fs.file-max = 100000
 ln -s file1 file1soft
 rm -rf file1soft
 
+端口服务状态查看
+netstat – ano
+
 ------------------------------Yum(未成功)---------------------------------
 CentOS下重新安装yum (2013-02-17 22:14:55)转载▼
 标签： linux centos 安装yum yum	分类： Linux
