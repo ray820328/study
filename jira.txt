@@ -1,3 +1,8 @@
+even.work@gmail.com
+Ray.Yi
+Ray03
+
+
 create database jiradb character set 'UTF8';
 http://downloads.atlassian.com/software/jira/downloads/jira-jars-tomcat-distribution-6.0.5-tomcat-7x.zip
 
