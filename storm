@@ -1,4 +1,38 @@
 kafka-storm整合实例
 https://github.com/miguno/kafka-storm-starter
 
+--------------------------zookeeper安装配置-------------------------
+cp -R zookeeper-3.3.3 /usr/local/zookeeper
+
+supervisor.slots.ports:
+ - 6700
+ - 6701
+
+vim /etc/profile末尾添加
+export ZOOKEEPER_HOME=/usr/local/zookeeper/
+export PATH=$ZOOKEEPER_HOME/bin:$PATH
+启动zk
+zkServer.sh start
+查看状态
+zkServer.sh status
+
+7. 通过Zookeeper客户端测试服务是否可用：
+bin/zkCli.sh -server 192.168.1.101:2181
+bin/zkServer.sh status
+echo stat | nc 192.168.0.101 2181
+注意事项：
+由于Zookeeper是快速失败（fail-fast)的，且遇到任何错误情况，进程均会退出，
+因此，最好能通过监控程序将Zookeeper管理起来，保证Zookeeper退出后能被自动重启。详情参考这里。
+http://zookeeper.apache.org/doc/r3.3.3/zookeeperAdmin.html#sc_supervision
+Zookeeper运行过程中会在dataDir目录下生成很多日志和快照文件，
+而Zookeeper运行进程并不负责定期清理合并这些文件，导致占用大量磁盘空间，
+因此，需要通过cron等方式定期清除没用的日志和快照文件。详情参考这里。
+http://zookeeper.apache.org/doc/r3.3.3/zookeeperAdmin.html#sc_maintenance
+具体命令格式如下：java -cp zookeeper.jar:log4j.jar:conf org.apache.zookeeper.server.PurgeTxnLog -n
+Zookeeper启动出现错误java.net.NoRouteToHostException: No route to host，可关闭linux防火墙service iptables stop
+出现Cannot open channel to 2 at election address /192.168.1.101:3888 java.net.ConnectException: Connection refused 错误，
+但该错误属于正常情况，这是Zookeeper在查找集群中的follower和leader
+
+
+
 
