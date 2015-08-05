@@ -7,6 +7,12 @@ df -h
 
 防火墙
 service iptables stop
+iptables -V
+/etc/init.d/iptables status
+vi /etc/sysconfig/iptables 
+-A INPUT -m state –state NEW -m tcp -p tcp –dport 80 -j ACCEPT
+永久性关闭防火墙 
+chkconfig --level 35 iptables off /etc/init.d/iptables stop iptables
 
 系统设置，如打开文件数
 ulimit -a
