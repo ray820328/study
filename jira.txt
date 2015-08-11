@@ -2,6 +2,7 @@ https://id.atlassian.com/login
 even.work@gmail.com
 Ray.Yi
 Ray03
+54374571@qq.com
 
 
 create database jiradb character set 'UTF8';
