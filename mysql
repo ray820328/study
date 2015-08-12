@@ -5,6 +5,27 @@ set character_set_results = 'utf8';
 set character_set_client = 'utf8';
 set names gbk
 
+--------------------------------------centos6安装mysql5.5-----------------------------------
+yum list installed | grep -i mysql
+yum remove mysql mysql-*
+rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+
+yum --enablerepo=remi,remi-test install mysql mysql-server
+
+yum list installed | grep -i mysql
+
+/etc/init.d/mysqld start ## use restart after update
+OR
+service mysqld start ## use restart after update
+
+chkconfig --levels 235 mysqld on
+
+Last
+mysql_upgrade -u root -p
+Now my MySql version is 5.5.32
+-------------------------------------------------------------------------
+
 Mysql5.0以上的版本可以支持将执行比较慢的SQL语句记录下来。
 mysql> show variables like 'long%'; 注：这个long_query_time是用来定义慢于多少秒的才算“慢查询”
 +-----------------+-----------+
