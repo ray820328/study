@@ -14,6 +14,9 @@ vi /etc/sysconfig/iptables
 永久性关闭防火墙 
 chkconfig --level 35 iptables off /etc/init.d/iptables stop iptables
 
+chkconfig iptables --list
+chkconfig iptables off
+
 系统设置，如打开文件数
 ulimit -a
 open files 打开的文件句柄数
@@ -36,11 +39,19 @@ rm -rf file1soft
 netstat – ano
 
 编辑网卡配置文件，命令： vim /etc/sysconfig/network-scripts/ifcfg-eth0
-更改ONBOOT=yes
-更改BOOTPROTO为：
-BOOTPROTO=dhcp
+DEVICE=eth0
+HWADDR=44:8A:5B:7D:2F:4A
+TYPE=Ethernet
+UUID=2ba3d053-88f3-41b3-a3ea-66c5c8e7f248
+ONBOOT=yes
+NM_CONTROLLED=no
+#BOOTPROTO=dhcp
+IPADDR=10.10.84.16
+NETMASK=255.255.255.0
+GATEWAY=10.10.84.254
+DNS1=202.96.128.86
+DNS2=210.21.196.6
 
-其他的如IPADDR、NETMASK等#号注释掉，保存退出
 重启网络连接，命令： service network restart
 
 ------------------------------Yum(未成功)---------------------------------
