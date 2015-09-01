@@ -1,3 +1,12 @@
+cp apache-tomcat-7.0.50.tar.gz /usr/local/tomcat //拷贝到此目录下
+  tar -zxvf apache-tomcat-7.0.50.tar.gz  或 tar apache-tomcat-6.0.36.tar.gz//解压
+  cd /usr/local/tomcat/apache-tomcat-7.0.50/bin
+  
+  运行tomcat:
+  ./catalina.sh start
+  停止tomcat:
+  ./shutdown.sh stop 或者 ./catalina.sh stop
+
 CATALINA_BASE
 CATALINA_HOME
 D:\ENV\tomcat7
