@@ -37,3 +37,26 @@ JAVA_OPTS="-server -Xms1024m -Xmx1024m -XX:PermSize=64m -XX:MaxPermSize=128m"
   <user username="admin" password="admin" roles="tomcat,role1,manager-gui"/>
   <user username="role1" password="admin" roles="role1"/>
 
+执行Access Log任务的类，默认是org.apache.catalina.valves.AccessLogValve;也可以使用org.apache.catalina.valves.FastCommonAccessLogValve，但这时候只支持common和combined patterns。
+%a - 远程IP地址
+%A - 本地IP地址
+%b - 发送的字节数(Bytes sent), 不包括HTTP headers的字节，如果为0则展示'-'
+%B - 发送的字节数(Bytes sent), 不包括HTTP headers的字节
+%h - 远程主机名称(如果resolveHosts为false则展示IP)
+%H - 请求协议
+%l - 远程用户名，始终为'-'(Remote logical username from identd)
+%m - 请求的方法(GET, POST等)
+%p - 接受请求的本地端口
+%q - 查询字符串，如果存在，有一个前置的'?'
+%r - 请求的第一行(包括请求方法和请求的URI)
+%s - response的HTTP状态码(200,404等)
+%S - 用户的session ID
+%t - 日期和时间，Common Log Format格式
+%u - 被认证的远程用户, 不存在则展示'-'
+%U - 请求URL路径
+%v - 本地服务名
+%D - 处理请求的时间，单位为毫秒
+%T - 处理请求的时间，单位为秒
+%I - 当前请求的线程名(can compare later with stacktraces)
+
+
