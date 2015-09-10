@@ -1,5 +1,7 @@
 版本信息
 lsb_release -a
+cat /proc/version
+centos cat /etc/redhat-release
 
 zip -r wwwroot.zip wwwroot
 磁盘大小
