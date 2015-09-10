@@ -17,6 +17,10 @@ chkconfig --level 35 iptables off /etc/init.d/iptables stop iptables
 chkconfig iptables --list
 chkconfig iptables off
 
+字符编码
+export LC_ALL=zh_CN.en_US.UTF-8 
+source /etc/profile
+
 系统设置，如打开文件数
 ulimit -a
 open files 打开的文件句柄数
