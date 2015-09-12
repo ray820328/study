@@ -45,6 +45,10 @@ sysctl -w "fs.file-max=100000"
 fs.file-max = 100000
 然后重启机器后生效。以后永久生效。
 
+打开的连接数fd
+netstat -ano|grep 80|grep -V EST|wc -l
+netstat -ano|grep 80|grep -V EST|less
+
 建立软连接
 ln -s file1 file1soft
 rm -rf file1soft
