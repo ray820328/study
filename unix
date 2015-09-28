@@ -31,6 +31,10 @@ source /etc/sysconfig/i18n
 export LC_ALL=zh_CN.en_US.UTF-8 
 source /etc/profile
 
+查看端口被占用的详细信息
+netstat -lnput | grep 80
+#ps -aux | grep 17599
+
 系统设置，如打开文件数
 ulimit -a
 open files 打开的文件句柄数
