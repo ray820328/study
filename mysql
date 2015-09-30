@@ -33,7 +33,32 @@ delete from `mysql`.`user` where user='';
 flush privileges;
 
 -------------------------------------------------------------------------
+忘记root密码
+1、先结束mysqld进程
+#killall mysqld
 
+不加载grant_tables而进入mysql
+#mysqld_safe --skip-grant-tables &
+
+进入mysql
+mysql> use mysql
+Database changed
+
+mysql> select * from user;
+Empty set (0.00 sec)
+
+mysql> insert into user set user='root',ssl_cipher='',x509_issuer='',x509_subject='';               
+(增加root用户的表）
+Query OK, 1 row affected, 3 warnings (0.00 sec)
+(这时可能会提示某字段如ssl_cipher无默认值,　只要加上,ssl_cipher=''; 其字段如有提示依次添加就OK了)
+update user set Host='localhost',select_priv='y', insert_priv='y',update_priv='y', Alter_priv='y',delete_priv='y',create_priv='y',drop_priv='y',reload_priv='y',shutdown_priv='y',Process_priv='y',file_priv='y',grant_priv='y',References_priv='y',index_priv='y',create_user_priv='y',show_db_priv='y',super_priv='y',create_tmp_table_priv='y',Lock_tables_priv='y',execute_priv='y',repl_slave_priv='y',repl_client_priv='y',create_view_priv='y',show_view_priv='y',create_routine_priv='y',alter_routine_priv='y',create_user_priv='y' where user='root';                            
+(这里面是修改root用户的权限)
+mysql> quit;
+
+2、带权限正常启动mysql
+#service mysqld start
+
+-------------------------------------------------------------------------
 
 Mysql5.0以上的版本可以支持将执行比较慢的SQL语句记录下来。
 mysql> show variables like 'long%'; 注：这个long_query_time是用来定义慢于多少秒的才算“慢查询”
