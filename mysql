@@ -24,7 +24,16 @@ chkconfig --levels 235 mysqld on
 Last
 mysql_upgrade -u root -p
 Now my MySql version is 5.5.32
+
 -------------------------------------------------------------------------
+
+GRANT ALL PRIVILEGES ON *.* TO root@localhost IDENTIFIED BY 'admin' WITH GRANT OPTION; 
+GRANT ALL PRIVILEGES ON *.* TO root@"%" IDENTIFIED BY 'admin' WITH GRANT OPTION;
+delete from `mysql`.`user` where user='';
+flush privileges;
+
+-------------------------------------------------------------------------
+
 
 Mysql5.0以上的版本可以支持将执行比较慢的SQL语句记录下来。
 mysql> show variables like 'long%'; 注：这个long_query_time是用来定义慢于多少秒的才算“慢查询”
