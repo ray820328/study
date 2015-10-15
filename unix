@@ -3,6 +3,15 @@ lsb_release -a
 cat /proc/version
 centos cat /etc/redhat-release
 
+挂载硬盘
+fdisk -l
+fdisk /dev/vdb
+n->p->1->回车->回车【意思就是新建一个主分区，大小是整个sdd磁盘】
+最后执行w，写入磁盘
+mkfs.ext4 /dev/vdb
+mkdir /mnt/vdb
+mount /dev/vdb /mnt/vdb
+
 zip -r wwwroot.zip wwwroot
 磁盘大小
 df -h
