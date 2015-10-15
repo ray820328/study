@@ -9,8 +9,8 @@ fdisk /dev/vdb
 n->p->1->回车->回车【意思就是新建一个主分区，大小是整个sdd磁盘】
 最后执行w，写入磁盘
 mkfs.ext4 /dev/vdb
-mkdir /mnt/vdb
-mount /dev/vdb /mnt/vdb
+mkdir /disk1
+mount /dev/vdb /disk1
 
 zip -r wwwroot.zip wwwroot
 磁盘大小
