@@ -46,6 +46,31 @@ http://127.0.0.1:8085/
 ·  修改%JIRA_HOME%/bin下面的 setenv.bat文件，修改JAVA_OPTS这个环境变量  
 ·  set JAVA_OPTS=%JAVA_OPTS% -Xms256m -Xmx512m -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true  
 
+---------------------数据库配置----------------------
+/var/atlassian/application-data/jira/dbconfig.xml
+<jira-database-config>
+  <name>defaultDS</name>
+  <delegator-name>default</delegator-name>
+  <database-type>mysql</database-type>
+  <jdbc-datasource>
+    <url>jdbc:mysql://127.0.0.1:3306/jira?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB</url>
+    <driver-class>com.mysql.jdbc.Driver</driver-class>
+    <username>root</username>
+    <password>admin</password>
+    <pool-min-size>20</pool-min-size>
+    <pool-max-size>20</pool-max-size>
+    <pool-max-wait>30000</pool-max-wait>
+    <validation-query>select 1</validation-query>
+    <min-evictable-idle-time-millis>60000</min-evictable-idle-time-millis>
+    <time-between-eviction-runs-millis>300000</time-between-eviction-runs-millis>
+    <pool-max-idle>20</pool-max-idle>
+    <pool-remove-abandoned>true</pool-remove-abandoned>
+    <pool-remove-abandoned-timeout>300</pool-remove-abandoned-timeout>
+    <pool-test-while-idle>true</pool-test-while-idle>
+    <validation-query-timeout>3</validation-query-timeout>
+  </jdbc-datasource>
+</jira-database-config>
+
 -----------------------JIRA安装配置-------------------------
 CREATE DATABASE jira  DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 setup.home
