@@ -5,6 +5,8 @@ set character_set_results = 'utf8';
 set character_set_client = 'utf8';
 set names gbk
 
+/etc/my.cnf
+/etc/rc.d/init.d/mysqld
 MYOPTIONS="$MYOPTIONS --skip-grant-tables --skip-networking"
 --------------------------------------centos6安装mysql5.5-----------------------------------
 yum list installed | grep -i mysql
