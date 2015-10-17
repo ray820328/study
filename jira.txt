@@ -46,6 +46,19 @@ http://127.0.0.1:8085/
 ·  修改%JIRA_HOME%/bin下面的 setenv.bat文件，修改JAVA_OPTS这个环境变量  
 ·  set JAVA_OPTS=%JAVA_OPTS% -Xms256m -Xmx512m -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true  
 
+---------------------启动相关----------------------
+jira启动【10.10.84.16】
+1，kill运行的
+ps -ef|grep java
+kill /opt/atl...对应的进程
+2，启动
+先启动mysql【10.10.84.18】
+ /usr/libexec/mysqld --skip-grant &
+ 或者/etc/init.d/mysqld start
+/opt/atlassian/jira/bin/catalina.sh start
+【备份目录】
+/var/atlassian/application-data/jira/export
+
 ---------------------数据库配置----------------------
 /var/atlassian/application-data/jira/dbconfig.xml
 <jira-database-config>
