@@ -5,7 +5,6 @@ set character_set_results = 'utf8';
 set character_set_client = 'utf8';
 set names gbk
 
-/etc/my.cnf
 /etc/rc.d/init.d/mysqld
 MYOPTIONS="$MYOPTIONS --skip-grant-tables --skip-networking"
 --------------------------------------centos6安装mysql5.5-----------------------------------
@@ -69,7 +68,7 @@ mysqldump --opt jira_prod --host=127.0.0.1 -P 3306 --user=root --password=admin 
 mysql --host=10.10.84.18 -P 3306 --user=root --password=admin --default-character-set=utf8 jira_prod < jira_prod.sql
 
 
--------------------------------------配置文件-------------------------------------
+-------------------------------------配置文件【/etc/my.cnf】-------------------------------------
 
 [mysqld]
 datadir=/home/mysql/data
