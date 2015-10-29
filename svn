@@ -1,3 +1,7 @@
+git eclipse 冲突解决方法
+http://blog.csdn.net/rosten/article/details/17068285
+
+
 @echo off
 ::    
 :: Stops commits that have empty log messages.
