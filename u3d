@@ -14,3 +14,9 @@ C# Coroutines & Yield
 http://www.cnblogs.com/shawnzxx/archive/2013/01/01/2841451.html
 
 uni2d，骨骼动画功能插件
+
+//release
+zip.Dispose();
+zip = null;
+//if not release first,in some android device will crash.
+Resources.UnloadUnusedAssets();
