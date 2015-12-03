@@ -50,3 +50,21 @@ mmo
 音效：
 大气
 indra
+
+数据分析部分。
+百度指数（移动/PC）。
+月度，周，日
+AppAnnie（下载/畅销）
+月度，周，日
+成本分析（自己推算）
+日，周，月
+一般发行看产品数据（媒体指数/下载指数/畅销指数/成本分析），
+百度指数：付费帐号看的更多更细。
+http://index.baidu.com/
+App Annie：APP托管可以看渠道详细数据，付费帐号可以看竞品数据分析。
+https://www.appannie.com/cn/
+友盟：我这有个APP的帐号，可以看详细数据。他们的后台页面就做得很好。
+http://www.umeng.com/apps
+
+https://www.talkingdata.com
+dataeye
