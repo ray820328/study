@@ -23,3 +23,6 @@ zip.Dispose();
 zip = null;
 //if not release first,in some android device will crash.
 Resources.UnloadUnusedAssets();
+
+UNITY 2D入门基础教程
+http://blog.1vr.cn/?p=1422
