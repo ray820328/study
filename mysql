@@ -120,6 +120,13 @@ pid-file=/var/run/mysqld/mysqld.pid
 #
 !includedir /etc/my.cnf.d
 
+-------------------------------------win7注册服务------------------------------------
+将mysql注册为windows系统服务
+具体操作是在命令行中执行以下命令（需要以管理员身份运行命令行）：
+需要切换到bin目录，否则，会将服务目录指定为C:\Program Files\MySQL\MySQL Server 5.7\mysqld
+增加服务命令：mysqld install MySQL --defaults-file="D:\mysql\mysql-5.7.5-m15-winx64\my.ini" 
+移除服务命令为：mysqld remove
+
 -------------------------------------高级使用------------------------------------
 
 Mysql5.0以上的版本可以支持将执行比较慢的SQL语句记录下来。
