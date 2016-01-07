@@ -26,3 +26,28 @@ Resources.UnloadUnusedAssets();
 
 UNITY 2D入门基础教程
 http://blog.1vr.cn/?p=1422
+
+
+----------------------------------------技巧-----------------------------------
+技巧：满屏在屏幕上显示一个2D背景图
+创建一个新的摄像机，取名为”Background Camera”
+创建一个新的GUI贴图，取名为”Background Image”
+单击Background Image的监视器面板的”Layer”下拉按钮，创建一个新的层，取名为”Background Image”
+设置好贴图Background Image的大小和位置，同时将它的层设定为“Background Image”
+选中Background Camera，对它的一些属性进行这样的操作：取消勾选Flare Layer和Audio Listener，设定清除标志为Solid
+ Color，设定深度为-1，先将Culling Mask设为nothing，然后设为Background Image
+选中主摄像机，设置清除标志为Depth
+ Only，将它的Culling Mask里面的Background Image取消勾选
+到此为止，即设定了一个屏幕的背景贴图。这里先将背景相机的清除标志设置为Solid Color，那么该相机绘图后的空白区域就会填充背景色，让后通过设置Culling
+ Mask使其仅仅显示层”Background Image”，也就是说背景摄像机仅仅绘制背景贴图，空白部分用背景色填充。然后主摄像机设置Culling Mask使其不绘制背景贴图，并且将清除标志设置成Depth Only，因为背景相机的深度为-1，那么主相机的深度就为0，背景相机先进行绘制，然后主相机进行绘制，主相机绘制出来的不透明的部分会完全覆盖在前面层级相机的图像上，也就是说主相机的绘制结果会直接覆盖到背景贴图上，这就达到了屏幕背景贴图的效果。
+
+ 假如要进行满屏显示的话，手动调整背景图的大小显然是不实际的，应该使用代码
+backgroundGUITexture.pixelInset.width = Screen.width;
+backgroundGUITexture.pixelInset.height = Screen.height;
+backgroundGUITexture.pixelInset.x = 0;
+backgroundGUITexture.pixelInset.y = 0;
+但是由于程序运行的时候可能分辨率会发生改变，所以前面的两句应该设置成和分辨率相关的大小
+backgroundGUITexture.pixelInset.width = Screen.currentResolution.width;
+backgroundGUITexture.pixelInset.height = Screen.currentResolution.height;
+
+
