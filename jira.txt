@@ -8,6 +8,14 @@ Ray03
 create database jiradb character set 'UTF8';
 http://downloads.atlassian.com/software/jira/downloads/jira-jars-tomcat-distribution-6.0.5-tomcat-7x.zip
 
+/opt/atlassian/jira/atlassian-jira/WEB-INF/atlassian-bundled-plugins
+jira-languages-6.4.6-zh_CN.jar
+atlassian-universal-plugin-manager-plugin-2.10.1.jar
+
+/opt/atlassian/jira/atlassian-jira/WEB-INF/lib
+atlassian-extras-2.2.2.jar
+mysql-connector-java-5.1.26-bin.jar
+
 https://my.atlassian.com/product
 
 Description=JIRA: Commercial,
