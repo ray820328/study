@@ -65,6 +65,16 @@ mongodump -d game -o game_
 mongorestore -d game -dir game
 mongorestore -h127.0.0.1:27017 -d game --directoryperdb game
 
+mongodump -h127.0.0.1:17171 -d SDKLog -o SDKLog
+./mongodump -h127.0.0.1:17171 -d SDKLog -o /data/backup/
+./mongodump -h127.0.0.1:17171 -d SDKConfig -o /data/backup/
+./mongodump -h127.0.0.1:17171 -d bleach -o /data/backup/
+./mongodump -h127.0.0.1:17171 -d GameConfig -o /data/backup/
+./mongodump -h127.0.0.1:17171 -d samuruai -o /data/backup/
+./mongodump -h127.0.0.1:17171 -d admin -o /data/backup/
+
+zip -r data_mongo.zip ./*
+zip -r data_mongo.zip backup
 
 
 --------------------------------------------------------------
