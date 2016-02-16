@@ -1,5 +1,13 @@
 VMWare虚拟机设置
 NAT模式网络设置
+
+具体步骤：
+1. 首先开启VMWare中NAT服务；
+2. 打开VMWare程序目录下的vmnetcfg.exe，将主机虚拟网卡设置为VMnet8；
+3. 设置VMnet8的子网，DHCP和NAT；
+4. 运行虚拟机CentOS，打开系统->管理->网络，将eth0的IP，
+子网掩码和默认网关设置为VMnet8中一样的，重启之后即可联网。
+
 1）找到/etc/sysconfig/network-scripts/ifcfg-eth0这个文件，如果没有就创建一个，内容如下
 DEVICE=eth0
 BOOTPROTO=static
