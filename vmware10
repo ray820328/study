@@ -1,0 +1,44 @@
+VMWare虚拟机设置
+NAT模式网络设置
+1）找到/etc/sysconfig/network-scripts/ifcfg-eth0这个文件，如果没有就创建一个，内容如下
+DEVICE=eth0
+BOOTPROTO=static
+BROADCAST=192.168.201.255
+ONBOOT=yes
+IPADDR=192.168.201.101
+NETMASK=255.255.255.0
+GATEWAY=192.168.201.2
+DNS1=192.168.201.2
+DNS1=223.5.5.5
+
+2）找到/etc/sysconfig/network文件，内容如下
+NETWORKING=yes
+NETWORKING_IPV6=no
+HOSTNAME=localhost.localdomain
+GATEWAY=192.168.201.2
+
+service network restart
+
+防火墙
+service iptables stop
+iptables -V
+/etc/init.d/iptables status
+vi /etc/sysconfig/iptables 
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+永久性关闭防火墙 
+chkconfig --level 35 iptables off /etc/init.d/iptables stop iptables
+
+chkconfig iptables --list
+chkconfig iptables off
+
+字符编码
+/etc/sysconfig/i18n
+原来的配置：
+LANG="C"
+SYSFONT="latarcyrheb-sun16"
+现在的配置：LANG="zh_CN.UTF-8"
+SYSFONT="latarcyrheb-sun16"
+source /etc/sysconfig/i18n
+
+export LC_ALL=zh_CN.en_US.UTF-8 
+source /etc/profile
