@@ -28,6 +28,19 @@ chkconfig --level 35 iptables off /etc/init.d/iptables stop iptables
 chkconfig iptables --list
 chkconfig iptables off
 
+为了不重启服务器而使配置立即生效，可以执行
+　　#sysctl -w net.ipv4.tcp_max_syn_backlog=2048
+　　#sysctl -w net.ipv4.tcp_syncookies=1
+　　#sysctl -w net.ipv4.tcp_synack_retries=3
+　　#sysctl -w net.ipv4.tcp_syn_retries=3
+　　也有的人喜欢用访问控制列表来防止SYN的攻击，在一定程度上减缓了syn的攻击，防Syn 洪水攻击
+　　-A INPUT -p tcp --syn -m limit --limit 1/s -j ACCEPT
+　　--limit 1/s 限制syn并发数每秒1次
+　　防端口扫描
+　　-A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT
+　　死亡之ping
+　　-A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT
+
 字符编码
 /etc/sysconfig/i18n
 原来的配置：
