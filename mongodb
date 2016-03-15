@@ -1,3 +1,37 @@
+tar zxf mongodb-linux-x86_64-3.2.4.tgz
+
+设置开机自启动
+将mongodb启动项目追加入rc.local保证mongodb在服务器开机时启动 
+echo "/home/env/db/mongodb-linux-x86_64-3.2.4/bin/mongod --dbpath=/home/env/db/mongodb-linux-x86_64-3.2.4/data –logpath=/home/env/db/mongodb-linux-x86_64-3.2.4/logs/mongodb.log –logappend --auth –port=27017" >> /etc/rc.local
+
+/home/env/db/mongodb-linux-x86_64-3.2.4/bin/mongod --dbpath=/home/env/db/mongodb-linux-x86_64-3.2.4/data --logpath=/home/env/db/mongodb-linux-x86_64-3.2.4/logs/mongodb.log --logappend --auth --port=27017 --fork
+//这个是不需要密码的
+/home/env/db/mongodb-linux-x86_64-3.2.4/bin/mongod --dbpath=/home/env/db/mongodb-linux-x86_64-3.2.4/data --logpath=/home/env/db/mongodb-linux-x86_64-3.2.4/logs/mongodb.log --logappend --port=27017 --fork
+
+新建bin/mongodb.conf
+dbpath=/home/env/db/mongo324/data
+logpath=/home/env/db/mongo324/logs/mongodb.log
+port=27017
+fork=true
+nohttpinterface=false
+
+./mongod --bind_ip localhost -f mongodb.conf
+
+mongo 10.10.84.14
+use admin;
+db.addUser('root','xxx')
+必须先执行db.auth('root','xxx')
+
+4.修改soft rlimits的限制
+vi /etc/security/limits.conf
+在文件最后加上
+mongod soft nproc 65536
+mongod hard nproc 65536
+
+
+若数据库出现如不能连上，data目录下的mongod.lock文件清除命令，
+mongod --repair
+
 如何查看锁的状态
 db.serverStatus()
 db.currentOp()
