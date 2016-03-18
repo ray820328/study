@@ -28,6 +28,28 @@ Last
 mysql_upgrade -u root -p
 Now my MySql version is 5.5.32
 
+修改数据路径
+>1、使用命令service mysqld stop 停止mysql
+查看mysql数据库的默认路径：/var/lib/mysql
+使用cp -afir  /var/lib/mysql/*   /usr/local/mysql
+这里的a f i r参数具体指什么请查看cp的帮助
+2、更改my.cnf
+使用命令：vim /etc/my.cnf
+把其中的datadir更改为新的路径
+datadir=/usr/local/mysql
+为保证MySQL能够正常，需要指明mysql.sock文件的产生位置。
+#socket　 = /var/lib/mysql/mysql.sock（原内容，为了更稳妥用“#”注释此行）
+socket　 = /usr/local/mysql/mysql.sock　（加上此行）
+3、修改MySQL启动脚本/etc/init.d/mysqld，
+把其中datadir=/var/lib/mysql一行改成你现在的实际存放路径/usr/local/mysql
+[root@test1 etc]# vi　/etc/init.d/mysqld
+#datadir=/var/lib/mysql（注释此行）
+datadir=/usr/local/mysql （加上此行）
+5、ln -s /usr/local/mysql/mysql.sock /var/lib/mysql/mysql.sock
+给mysql.sock建立一个软链接，否则会提示找不到/var/lib/mysql/mysql.sock
+6、重启mysqld
+service mysqld restart
+
 -------------------------------------------------------------------------
 
 GRANT ALL PRIVILEGES ON *.* TO root@localhost IDENTIFIED BY 'admin' WITH GRANT OPTION; 
