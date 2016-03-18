@@ -28,9 +28,14 @@ vi /etc/security/limits.conf
 mongod soft nproc 65536
 mongod hard nproc 65536
 
-
 若数据库出现如不能连上，data目录下的mongod.lock文件清除命令，
 mongod --repair
+
+停止
+bin/mongo -port 20000
+> use  admin  
+> db.shutdownServer(); 
+
 
 如何查看锁的状态
 db.serverStatus()
