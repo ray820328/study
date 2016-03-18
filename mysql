@@ -65,6 +65,9 @@ mysql> quit;
  /usr/libexec/mysqld --skip-grant &
  或者/etc/init.d/mysqld start
 
+数据表损坏修复，存储过程丢失修复；
+repair table proc;
+
 【--lock-tables=false】
 mysqldump --opt jira_prod --host=127.0.0.1 -P 3306 --user=root --password=admin --default-character-set=utf8 > jira_prod.sql
 mysql --host=10.10.84.18 -P 3306 --user=root --password=admin --default-character-set=utf8 jira_prod < jira_prod.sql
