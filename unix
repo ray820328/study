@@ -12,10 +12,11 @@ mkfs.ext4 /dev/vdb
 mkdir /disk1
 mount /dev/vdb /disk1
 
-zip -r wwwroot.zip wwwroot
 磁盘大小
 df -h
+取消挂载 umount /dev/vdb /disk1
 
+zip -r wwwroot.zip wwwroot
 防火墙
 service iptables stop
 iptables -V
