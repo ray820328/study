@@ -66,6 +66,11 @@ netstat -lnput | grep 80
 ulimit -a
 open files 打开的文件句柄数
 max user processes 用户最大运行进程数
+/etc/security/limits.conf添加以下值
+*               hard    nofile          500000
+*               soft    nofile          500000
+*               hard    nproc           16384
+*               soft    nproc           20480
 
 对于服务器可以采用如下方法修改file-max:
 （1）重启机器后恢复为默认值
