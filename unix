@@ -72,6 +72,9 @@ max user processes 用户最大运行进程数
 *               hard    nproc           16384
 *               soft    nproc           20480
 
+/etc/security/limits.d/90-nproc.conf
+*         soft    nproc    65535
+
 对于服务器可以采用如下方法修改file-max:
 （1）重启机器后恢复为默认值
 echo 100000 > /proc/sys/fs/file-max
