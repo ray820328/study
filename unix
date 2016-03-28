@@ -29,6 +29,19 @@ chkconfig --level 35 iptables off /etc/init.d/iptables stop iptables
 chkconfig iptables --list
 chkconfig iptables off
 
+单个IP的命令是
+iptables -I INPUT -s 59.151.119.180 -j DROP
+封IP段的命令是
+iptables -I INPUT -s 211.1.0.0/16 -j DROP
+iptables -I INPUT -s 211.2.0.0/16 -j DROP
+封整个段的命令是
+iptables -I INPUT -s 211.0.0.0/8 -j DROP
+封几个段的命令是
+iptables -I INPUT -s 61.37.80.0/24 -j DROP
+iptables -I INPUT -s 61.37.81.0/24 -j DROP
+白名单
+-A INPUT -s 10.104.0.0/16 -j ACCEPT
+
 为了不重启服务器而使配置立即生效，可以执行
 　　#sysctl -w net.ipv4.tcp_max_syn_backlog=2048
 　　#sysctl -w net.ipv4.tcp_syncookies=1
