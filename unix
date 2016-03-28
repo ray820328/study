@@ -146,6 +146,7 @@ which ssh
 　5.　$chmod 600 authorized_keys       
 　　   进入主机B的.ssh目录，改变authorized_keys文件的许可权限。
 　　 (4和5可以合成一步，执行:  $ssh-copy-id -i root@192.168.201.102)
+　　 ssh-copy-id -i '-p 2009 root@ip'
 默认用法：
 ssh-copy-id user@server  
 自定义用法：
