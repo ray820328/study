@@ -11,6 +11,9 @@ n->p->1->回车->回车【意思就是新建一个主分区，大小是整个sdd
 mkfs.ext4 /dev/vdb
 mkdir /disk1
 mount /dev/vdb /disk1
+开机自动挂载
+vi /etc/fstab
+/dev/vdb  /data ext4  defaults 0 0
 
 磁盘大小
 df -h
