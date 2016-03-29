@@ -55,6 +55,8 @@ iptables -I INPUT -s 61.37.81.0/24 -j DROP
 　　死亡之ping
 　　-A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT
 
+时区确认，时间
+date
 字符编码
 /etc/sysconfig/i18n
 原来的配置：
@@ -152,6 +154,16 @@ ssh-copy-id user@server
 自定义用法：
 ssh-copy-id -i 公钥文件路径 user@server
 ssh-copy-id -p 服务器SSH服务端口 user@server
+
+root ssh
+setenforce 0
+/etc/selinux/config文件中设置SELINUX=disabled ，然后重启服务器
+
+vi /etc/ssh/sshd_config
+PermitRootLogin no 改成yes
+#service sshd restart
+
+ssh-copy-id -i '-p 2009 root@ip'
 
 ------------------------------Yum(未成功)---------------------------------
 CentOS下重新安装yum (2013-02-17 22:14:55)转载▼
