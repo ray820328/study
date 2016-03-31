@@ -158,6 +158,8 @@ ssh-copy-id user@server
 ssh-copy-id -i 公钥文件路径 user@server
 ssh-copy-id -p 服务器SSH服务端口 user@server
 
+scp -P 2009 -rp apache-storm-0.9.3/ root@hadoop.vm02:/data/env/
+
 root ssh
 setenforce 0
 /etc/selinux/config文件中设置SELINUX=disabled ，然后重启服务器
