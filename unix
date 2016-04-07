@@ -2,7 +2,7 @@
 lsb_release -a
 cat /proc/version
 centos cat /etc/redhat-release
-
+uname -n --- whereis mysql --- find / -name my*
 挂载硬盘
 fdisk -l
 fdisk /dev/vdb
