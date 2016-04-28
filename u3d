@@ -1,5 +1,3 @@
-slua + demo游戏框架
-https://github.com/pangweiwei/slua/
 
 class中文手册
 http://game.ceeger.com/Script/index.Classes.html
@@ -53,4 +51,9 @@ backgroundGUITexture.pixelInset.y = 0;
 backgroundGUITexture.pixelInset.width = Screen.currentResolution.width;
 backgroundGUITexture.pixelInset.height = Screen.currentResolution.height;
 
+------------------------------------------------------------
+slua + demo游戏框架
+https://github.com/pangweiwei/slua/
 
+1、编译 SLua Windows 版
+打开Vistual Studio 命令提示符【vs2013开发人员命令提示】，到 slua-0.8.3\build 中执行 make_win_with_2013.bat 。
