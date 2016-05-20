@@ -15,6 +15,19 @@ mount /dev/vdb /disk1
 vi /etc/fstab
 /dev/vdb  /data ext4  defaults 0 0
 
+du -h --max-depth=1
+du -h --max-depth=1 work/testing
+du -h --max-depth=1 work/testing/×
+
+find /tmp -mtime +3 -type f -name *.sh[ab] -exec rm -f {} \;
+/tmp  --设置查找的目录；
+-mtime +30 --设置时间为30天前；
+-type f --设置查找的类型为文件；
+-name *.sh[ab] --设置文件名称中包含sha或者shb；
+-exec rm -f --查找完毕后执行删除操作；
+find /data/bigdata/zookeeper-3.4.6/data/version-2 -mtime +3 -type f -name *.* -exec rm -f {} \;
+find . -mtime +3 -type f | xargs rm -rf
+
 磁盘大小
 df -h
 取消挂载 umount /dev/vdb /disk1
