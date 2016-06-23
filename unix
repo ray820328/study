@@ -381,5 +381,35 @@ SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:0c:29:50:bd:1
 
 # /etc/init.d/network restart
 
+------------------------------ubuntu 环境安装---------------------------------
+ufw status
+apt-get install openjdk-7-jdk
+ls /usr/lib/jvm
+vi /etc/profile
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:${JRE_HOME}/bin:$PATH
+
+apt-get install tomcat7 tomcat7-admin
+/var/lib/tomcat7/webapps
+/usr/share/tomcat7/bin
+/etc/init.d/tomcat7 restart
+netstat -ntlp | grep :8080
+
+apt-get install mysql-server
+apt-get install mysql-client
+/etc/init.d/mysql start
+删除mysql
+apt-get autoremove --purge mysql-server-5.0
+apt-get remove mysql-server
+apt-get autoremove mysql-server
+apt-get remove mysql-common
+清理残留数据
+dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
+
+tail -f /data/tomcat/logs/game_admin/log_
+
 ---------------------------------------------------------------
+
 
