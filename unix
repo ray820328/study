@@ -32,6 +32,10 @@ find . -mtime +3 -type f | xargs rm -rf
 df -h
 取消挂载 umount /dev/vdb /disk1
 
+centos修改主机名命令
+/etc/sysconfig/network
+/etc/hosts
+
 zip -r wwwroot.zip wwwroot
 unzip wwwroot.zip -d wwwroot
 防火墙
