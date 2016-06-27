@@ -237,39 +237,6 @@ export PATH=$PATH:$JAVA_HOME/bin
 刷新环境变量（执行下面命令）
 # source /etc/profile
 
-------------------------------ZooKeeper---------------------------------
-# tar zxf zookeeper-3.3.3.tar.gz
-# cp -R zookeeper-3.3.3 /usr/local/zookeeper
-# vi ~/.bashrc (设置ZOOKEEPER_HOME和ZOOKEEPER_HOME/bin) 
-          追加：
-          export ZOOKEEPER_HOME=/home/data/zookeeper
-          export PATH=$PATH:$ZOOKEEPER_HOME/bin
-
-# cp /usr/local/zookeeper/conf/zoo_sample.cfg /usr/local/zookeeper/conf/zoo.cfg (用zoo_sample.cfg制作$ZOOKEEPER_HOME/conf/zoo.cfg)
-启动zookeeper：
-
-/usr/local/zookeeper/bin/zkServer.sh start  单机版直接启动，不用修改什么配置，
-
-zkServer.sh status   #查看zkserver是否成功启动
-[root@master bin]# ./zkServer.sh status
-JMX enabled by default
-Using config: /usr/local/zookeeper-3.3.5/bin/../conf/zoo.cfg
-Mode: standalone
- 输入jps命令查看进程：
-namenode上显示为（本次为单机配置）：
-19361 QuorumPeerMain
-21691 Jps
-其中，QuorumPeerMain是zookeeper进程，启动正常。
-
-tickTime=2000
-dataDir=/var/zookeeper/
-clientPort=2181
-initLimit=5
-syncLimit=2
-server.1=zoo1:2888:3888
-server.2=zoo2:2888:3888
-server.3=zoo3:2888:3888
-
 
 -----------------------------文件输出命令----------------------------
 
