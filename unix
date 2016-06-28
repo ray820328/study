@@ -381,6 +381,46 @@ dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
 
 tail -f /data/tomcat/logs/game_admin/log_
 
----------------------------------------------------------------
+-----------------------------nginx日志切割脚本----------------------------------
+#nginx日志切割脚本
+#author: http://www.nginx.cn
+ 
+#!/bin/bash
+#设置日志文件存放目录
+logs_path="/data/env/nginx/logs/"
+#设置pid文件
+pid_path="/var/run/nginx.pid"
+ 
+#重命名日志文件
+mv ${logs_path}access.log ${logs_path}access_$(date -d "yesterday" +"%Y%m%d").log
+mv ${logs_path}error.log ${logs_path}error_$(date -d "yesterday" +"%Y%m%d").log
+ 
+#向nginx主进程发信号重新打开日志
+kill -USR1 `cat ${pid_path}`
 
+
+
+加入配置文件
+if ($time_iso8601 ~ "^(\d{4})-(\d{2})-(\d{2})T(\d{2})") {
+    set $year $1;
+    set $month $2;
+    set $day $3;
+}
+access_log  /home/wwwlogs/$year-$month-$day-bbs-access.log access;
+
+-----------------------------crontab定时任务----------------------------------
+/sbin/service crond start //启动服务
+/sbin/service crond stop //关闭服务
+/sbin/service crond restart //重启服务
+/sbin/service crond reload //重新载入配置
+查看crontab服务是否已设置为开机启动，执行命令：ntsysv
+加入开机自动启动:
+chkconfig –level 35 crond on
+
+crontab -e 　编辑该用户的计时器设置。
+-l 　列出该用户的计时器设置。
+-r 　删除该用户的计时器设置。
+
+crontab 设置作业
+0 0 * * * bash /etc/nginx/nginx_log.sh
 
