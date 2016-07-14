@@ -467,3 +467,7 @@ logfile /var/redis/log/redis_6379.log
 dir /var/redis/6379
 最后运行redis：
 $ redis-server /etc/redis/6379.conf
+
+redis-cli -h 127.0.0.1 -p 6379
+set user.name name
+get user.name
