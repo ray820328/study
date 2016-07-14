@@ -465,9 +465,13 @@ daemonize yes
 pidfile /var/redis/run/redis_6379.pid
 logfile /var/redis/log/redis_6379.log
 dir /var/redis/6379
+#requirepass foobared 去掉前面的注释#，并把foobared 替换为你自己的密码
+远程访问
+注释掉 #bind 127.0.0.1
 最后运行redis：
-$ redis-server /etc/redis/6379.conf
+redis-server /etc/redis/6379.conf
+redis-cli -h 127.0.0.1 -p 6379 -a shutdown
 
-redis-cli -h 127.0.0.1 -p 6379
+redis-cli -h 127.0.0.1 -p 6379 -a 
 set user.name name
 get user.name
