@@ -50,6 +50,8 @@ chkconfig --level 35 iptables off /etc/init.d/iptables stop iptables
 chkconfig iptables --list
 chkconfig iptables off
 
+netstat -nltp
+
 单个IP的命令是
 iptables -I INPUT -s 59.151.119.180 -j DROP
 封IP段的命令是
