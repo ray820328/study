@@ -477,3 +477,81 @@ redis-cli -h 127.0.0.1 -p 6379 -a shutdown
 redis-cli -h 127.0.0.1 -p 6379 -a 
 set user.name name
 get user.name
+
+-----------------------------nginx负载均衡以及tomcat session共享----------------------------------
+/etc/nginx
+nginx -s reload
+upstream 127.0.0.1 {
+	server 127.0.0.1:18001;
+	server 127.0.0.1:28001;
+	#根据ip计算将请求分配各那个后端tomcat，许多人误认为可以解决session问题，其实并不能。
+	#同一机器在多网情况下，路由切换，ip可能不同
+	#ip_hash;
+    }
+location / {
+        proxy_connect_timeout   1;
+        proxy_send_timeout      5;
+	proxy_read_timeout      5;
+	proxy_pass http://127.0.0.1;
+	proxy_redirect off;
+	proxy_set_header Host $host;  
+	proxy_set_header X-Real-IP $remote_addr;  
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  
+	client_max_body_size 1m;  
+	client_body_buffer_size 32k;
+	proxy_buffer_size 5k;  
+	proxy_buffers 5 32k;  
+	proxy_busy_buffers_size 64k;  
+	proxy_temp_file_write_size 64k;
+    }    
+    
+tomcat-redis-session
+jar包构建
+wget https://github.com/jcoleman/tomcat-redis-session-manager/archive/master.zip
+找到源码中的 build.gradle文件，注释和增加以下
+//signing {
+//  sign configurations.archives
+//}
+
+task copyJars(type: Copy) {
+  from configurations.runtime
+  into 'dist'  
+}
+
+//repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+      //  authentication(userName: sonatypeUsername, password: sonatypePassword)
+      //}
+      //repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+      //  authentication(userName: sonatypeUsername, password: sonatypePassword)
+      //}
+
+gradle build -x test copyJars
+
+修改配置使用 tomcat-redis-session-manager-master 作为 tomcat session 管理器
+　　1、分别将第三步生成的 tomcat-redis-session-manager-master 及依赖jar包覆盖到 tomcat 安装目录的 lib 文件夹
+	只需要 jedis-2.5.2.jar commons-pool2-2.2.jar tomcat-redis-session-2.0.0.jar (注意不要和项目里同名包冲突)
+　　2、分别修改2台 tomcat 的 context.xml 文件，使 tomcat-redis-session-manager-master 作为session管理器，同时指定redis地址和端口。
+
+　　context.xml 增加以下配置：
+<Context>
+      <Valve className="com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve" />
+      <Manager className="com.orangefunction.tomcat.redissessions.RedisSessionManager"
+           host="10.10.84.16"
+	   password="44443333"
+           port="6379"
+           database="0"
+           maxInactiveInterval="60" />
+</Context>
+
+　　3、分别重启2台 tomcat 服务器。
+
+--------------------------------------centos6.6 gradle安装----------------------------------
+http://www.gradle.org/downloads
+cd /home/soft/ 
+unzip gradle-2.14.1-all.zip -d .
+vi /etc/profile
+在文件中增加GRADLE_HOME输出路径,并且修订PATH设置如下
+export GRADLE_HOME=/home/soft/gradle-2.14.1
+export PATH=${JAVA_HOME}/bin:${JRE_HOME}/bin:${GRADLE_HOME}/bin:${JAVA_HOME}:${PATH}
+gradle -version
+本地18环境
