@@ -449,6 +449,10 @@ couldn't execute "tclsh8.5": no such file or directory
 异常原因：没有安装tcl
 解决方案：yum install -y tcl。
 
+解决：Creating Server TCP listening socket *:6379: unable to bind socket
+将IPv6的网卡进行关闭
+添加在redis.conf中添加 bind 0.0.0.0
+
 在make成功以后，会在src目录下多出一些可执行文件：redis-server，redis-cli等等。
 方便期间用cp命令复制到usr目录下运行。
 cp redis-server /usr/local/bin/
