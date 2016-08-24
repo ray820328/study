@@ -167,7 +167,7 @@ vi /etc/ssh/sshd_config
 去掉该行前面的#号，使其成为下面这样：
 PermitRootLogin no
 重启ssh服务，切换到root修改密码：
-password
+passwd
 ----------------
 在主机A上执行如下：
 　1.　$cd ~/.ssh
