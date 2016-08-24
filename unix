@@ -161,6 +161,13 @@ which ssh
 #service sshd restart重新启动
 #netstat -antp |grep sshd看是否启动了22端口.确认下.
 #iptables -nL看看是否放行了22口.
+禁止root登录
+vi /etc/ssh/sshd_config
+#PermitRootLogin no
+去掉该行前面的#号，使其成为下面这样：
+PermitRootLogin no
+重启ssh服务，切换到root修改密码：
+password
 ----------------
 在主机A上执行如下：
 　1.　$cd ~/.ssh
