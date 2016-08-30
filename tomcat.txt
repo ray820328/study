@@ -27,7 +27,10 @@ JAVA_OPTS="-server -Xms1024m -Xmx1024m -XX:PermSize=64m -XX:MaxPermSize=128m"
                maxThreads="150" minSpareThreads="10" maxSpareThreads="20"
                enableLookups="false" redirectPort="8443" acceptCount="1000"
                connectionTimeout="20000" disableUploadTimeout="true"/>
-               
+
+关闭ajp并关闭控制端口
+<Server port="-1" shutdown="SHUTDOWN">
+
 <Context path="/admin" docBase="D:/ENV/eclipse/workspace/game_admin_cmge/build" debug="" reloadable="true"/>
 
   <role rolename="tomcat"/>
