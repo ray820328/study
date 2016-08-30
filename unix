@@ -409,7 +409,7 @@ kill -USR1 `cat ${pid_path}`
 
 
 
-加入配置文件
+或者将一下配置加入配置文件
 if ($time_iso8601 ~ "^(\d{4})-(\d{2})-(\d{2})T(\d{2})") {
     set $year $1;
     set $month $2;
@@ -418,6 +418,7 @@ if ($time_iso8601 ~ "^(\d{4})-(\d{2})-(\d{2})T(\d{2})") {
 access_log  /home/wwwlogs/$year-$month-$day-bbs-access.log access;
 
 -----------------------------crontab定时任务----------------------------------
+yum -y install crontabs
 /sbin/service crond start //启动服务
 /sbin/service crond stop //关闭服务
 /sbin/service crond restart //重启服务
