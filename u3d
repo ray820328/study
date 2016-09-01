@@ -1,4 +1,12 @@
+----------------------------------------api-----------------------------------
+ 
+Invoke("SendMsg", 5);//5 秒之后调用 SendMsg() 方法；
+1 ：它应该在 脚本的生命周期里的（Start、Update、OnGUI、FixedUpdate、LateUpdate）中被调用；
+2：Invoke(); 不能接受含有 参数的方法；
+3：在 Time.ScaleTime = 0; 时， Invoke() 无效，因为它不会被调用到
+InvokeRepeating("SendMsg", 2 , 3);  //2 秒后调用 SendMsg()，并且之后每隔 3 秒调用一次 SendMsg ()
 
+----------------------------------------资料-----------------------------------
 class中文手册
 http://game.ceeger.com/Script/index.Classes.html
 
