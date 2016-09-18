@@ -1,3 +1,7 @@
 
 webview离线功能
 “text/cache-manifest              mf  manifest”
+
+因部分打包工具默认设置为preferExternal属性，需要检查打包后的AndroidManifest.xml文件，android:installLocation是否设置属性为“preferExternal”,此属性会影响到有些机子(如华为mate7、荣耀6等）无法安装的，请改成auto
+注：Unity的OtherSetting下有个installLocation配置，需要修改此处，否则只修改manifest后打包仍会使用配置项的，无法修改成功
+
