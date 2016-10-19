@@ -31,6 +31,8 @@ find . -mtime +3 -type f | xargs rm -rf
 磁盘大小
 df -h
 取消挂载 umount /dev/vdb /disk1
+文件夹大小
+du -h --max-depth=1
 
 centos修改主机名命令
 /etc/sysconfig/network
