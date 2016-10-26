@@ -1,5 +1,6 @@
 虚拟化机器查看工具
 wget http://soft.kwx.gd/tools/virt-what-1.11.tar.gz
+yum install lrzsz
 版本信息
 lsb_release -a
 cat /proc/version
@@ -365,7 +366,9 @@ SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:0c:29:50:bd:1
 
 # /etc/init.d/network restart
 
-------------------------------ubuntu 环境安装---------------------------------
+------------------------------ubumtu 环境安装---------------------------------
+apt-get install lrzsz
+
 ufw status
 apt-get install openjdk-7-jdk
 ls /usr/lib/jvm
