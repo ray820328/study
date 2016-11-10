@@ -53,6 +53,10 @@ indra
 
 ------------------------------------------------------------------------------------
 程序设计经验
+LoginServer建议保存至少玩家角色ID；
+GameServer一定保存AccountKey；
+
+
  使用行为树(Behavior Tree)实现游戏AI
 http://blog.csdn.net/kenkao/article/details/6099966
 十字链表的AOI算法
