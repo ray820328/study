@@ -200,7 +200,10 @@ setenforce 0
 
 vi /etc/ssh/sshd_config
 PermitRootLogin no 改成yes
-#service sshd restart
+修改两处的值为：  
+ClientAliveInterval 60  
+ClientAliveCountMax 10 
+#service sshd reload/restart
 
 ssh-copy-id -i '-p 2009 root@ip'
 
