@@ -28,6 +28,17 @@ Last
 mysql_upgrade -u root -p
 Now my MySql version is 5.5.32
 
+修改数据路径问题解决
+【centos  Can't create table 'db' (errno: 13)】
+setenforce 0
+getenforce
+【重启后需要再执行】
+chown -R mysql /data/mysql/data
+chgrp -R mysql /data/mysql/data
+【Fatal error: Can't open and lock privilege tables: Table 'mysql.host' doesn't exist】
+mysql_install_db --user=mysql
+
+
 修改数据路径
 >1、使用命令service mysqld stop 停止mysql
 查看mysql数据库的默认路径：/var/lib/mysql
