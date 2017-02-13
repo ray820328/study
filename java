@@ -6,6 +6,12 @@ tasklist | findstr eclipse
 
 使用jmap -dump:format=b,file=netty.bin PID 将堆内存dump出来，通过IBM的HeapAnalyzer工具进行分析，发现ByteBuf发生了泄露。
 
+进程垃圾回收描述查看
+jstat -gcutil 18071 1000
+
+垃圾回收参数权威
+http://www.fasterj.com/articles/oraclecollectors1.shtml
+
 ------------------------netty--------------------------
 PooledByteBufAllocator内存泄漏
 http://www.cnblogs.com/zoucaitou/p/4280618.html
