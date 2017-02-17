@@ -114,23 +114,19 @@ netstat -lnput | grep 80
 ulimit -a
 open files 打开的文件句柄数
 max user processes 用户最大运行进程数
+vim /etc/security/limits.conf
+末尾加两行后重启
+*              -       nproc           102400  
+*              -       nofile          102400  
+
+
 /etc/security/limits.conf添加以下值
 *               hard    nofile          500000
 *               soft    nofile          500000
 *               hard    nproc           16384
 *               soft    nproc           20480
-
 /etc/security/limits.d/90-nproc.conf
 *         soft    nproc    65535
-
-对于服务器可以采用如下方法修改file-max:
-（1）重启机器后恢复为默认值
-echo 100000 > /proc/sys/fs/file-max
-或者
-sysctl -w "fs.file-max=100000"
-（2）修改配置文件/etc/sysctl.conf, 在最后加上一行：
-fs.file-max = 100000
-然后重启机器后生效。以后永久生效。
 
 打开的连接数fd
 netstat -ano|grep 80|grep -V EST|wc -l
