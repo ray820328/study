@@ -85,6 +85,7 @@ iptables -I INPUT -s 61.37.81.0/24 -j DROP
 
 时区确认，时间同步
 ntpdate time.windows.com && hwclock -w
+date -d @14300092339
 字符编码
 /etc/sysconfig/i18n
 原来的配置：
