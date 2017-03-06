@@ -83,8 +83,8 @@ iptables -I INPUT -s 61.37.81.0/24 -j DROP
 　　死亡之ping
 　　-A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT
 
-时区确认，时间
-date
+时区确认，时间同步
+ntpdate time.windows.com && hwclock -w
 字符编码
 /etc/sysconfig/i18n
 原来的配置：
