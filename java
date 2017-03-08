@@ -11,6 +11,8 @@ jstat -gcutil 18071 1000
 
 垃圾回收参数权威
 http://www.fasterj.com/articles/oraclecollectors1.shtml
+类加载器，网络加载安全加密
+http://www.ibm.com/developerworks/cn/java/j-lo-classloader/index.html
 
 ------------------------netty--------------------------
 PooledByteBufAllocator内存泄漏
