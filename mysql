@@ -1,3 +1,4 @@
+
 /etc/init.d/mysqld start/stop
 
 set character_set_connection = 'utf8';
@@ -7,6 +8,13 @@ set names gbk
 
 /etc/rc.d/init.d/mysqld
 MYOPTIONS="$MYOPTIONS --skip-grant-tables --skip-networking"
+
+/usr/bin/mysqld_safe --skip-grant-tables &
+use mysql;
+update user set password=password('pwd') where user='root';
+flush privileges;
+exit;
+
 --------------------------------------centos6安装mysql5.5-----------------------------------
 yum list installed | grep -i mysql
 yum remove mysql mysql-*
