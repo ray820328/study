@@ -165,6 +165,47 @@ pid-file=/var/run/mysqld/mysqld.pid
 #
 !includedir /etc/my.cnf.d
 
+
+-------------------------优化---------------------
+# MySQL Server Instance Configuration File
+[client]
+port=3306
+
+[mysql]
+default-character-set=gbk
+
+[mysqld]
+port=3306
+basedir="C:/mysql50/"
+datadir="C:/mysql50/Data/"
+default-character-set=gbk
+default-storage-engine=INNODB
+sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+max_connections=100
+
+query_cache_size=0
+table_cache=256
+tmp_table_size=50M
+thread_cache_size=8
+myisam_max_sort_file_size=100G
+myisam_max_extra_sort_file_size=100G
+myisam_sort_buffer_size=100M
+key_buffer_size=82M
+read_buffer_size=64K
+read_rnd_buffer_size=256K
+sort_buffer_size=256K
+
+innodb_additional_mem_pool_size=4M
+innodb_flush_log_at_trx_commit=0
+innodb_log_buffer_size=2M
+innodb_buffer_pool_size=1024M
+innodb_log_file_size=80M
+innodb_thread_concurrency=8
+
+性能优化
+innodb_flush_log_at_trx_commit=0/默认1
+innodb_buffer_pool_size=1024M/默认159M
+
 -------------------------------------win7注册服务------------------------------------
 将mysql注册为windows系统服务
 具体操作是在命令行中执行以下命令（需要以管理员身份运行命令行）：
