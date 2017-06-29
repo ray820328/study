@@ -1,0 +1,234 @@
+http://www.bilibili.com/video/av4153819/
+
+T4M
+http://blog.csdn.net/tianmao111/article/details/46482963
+
+c#生成protobuf【按下Shift+F6生成dll，在项目的bin\Debug目录下就可以找到ProtoModelDLL.dll了】
+http://blog.csdn.net/kakashi8841/article/details/17334493
+
+扇形范围计算
+http://stackoverflow.com/questions/13652518/efficiently-find-points-inside-a-circle-sector
+
+http://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
+
+http://gad.qq.com/article/detail/7156276
+http://blog.csdn.net/kenkao/article/details/6099966
+
+数学算法
+https://www.easycalculation.com/examples.php
+
+MMO位置同步
+
+1.client和server之间或多或少存在网络延迟，需要提前做好对时，并在网络环境发生变化时校正时差。国内的公网通信，非跨网的情况下，一般在120ms左右。本地的网络会好一些。
+2. 要努力防止外挂，如果是以client的通知为主，也要做抽查，或者全部都校验。
+3. 应用DR技术，在没有收到位置更新包的同时，client视野中的其他client按照游戏规则运动。
+4. 控制位置同步的频率，减少网络流量。
+
+以client为主的处理流程：
+server只做简单校验，不做逻辑运算，优点是比较平滑，但是尽管有校验，还是不可避免会有安全性的问题：
+1. client登录之后，与server做对时计算时差。
+2. 位置数据包内容有：当前位置、速度、方向、时间戳。
+3.client发送位置数据包给server。发包的触发条件有两个：超过了DR的阈值和定时tick触发，如果没有到定时时间但是超过了阈值，也应该发送。
+4.server收到位置数据后，首先根据游戏规则校验是否合法，不合法则拉回合法的位置。然后根据时差，预测client当前的状态，并把这个计算得到位置数据广播给相关的client（包括client自己）。
+5. client收到位置数据包后，根据时差，计算得到经过了延迟，现在实际的位置信息。
+6.client收到的位置数据是属于其它玩家的：需要将当前模拟的玩家的位置修正到最新的位置，为了避免瞬移现象，一个简单的方法是预测一段时间之后（比如一秒后）的状态，用一条直线运动去修正。即，设想一秒后这个玩家在哪里，然后反推回现在应该用什么速度运动可以在一秒后到达那个地方。在对方玩家网络环境不好的情况下，采用这种算法会使得这个玩家在游戏画面上的速度突然加快一下，不过比瞬移会好很多。
+7.client收到的信息是属于自己的，即server认可的自己的状态（并广播给别人了）。如果有误差，则是由于server的预测补偿和网络延迟的误差造成的。如果误差超过了设定的阈值，就直接跳转过去，否则不处理。
+
+以server为准的处理流程：
+以server的计算和模拟为主，client只在变化速度或者方向的时候，通知server，特点是安全性高，逻辑简单，但是server的cpu消耗大：
+与以client为主的处理流程不一样的是第3步：server的计算也由两个触发条件，一是server定时做的server_move这种操作，来模拟计算并更新所有client的位置信息；二是收到client的速度或者方向改变的通知包。在满足这两个条件之一的情况下，server就应该计算得到client当前的位置信息，并广播通知到相关的玩家。
+
+
+
+AOI ( Area Of Interest ) ，大致有两个用途。
+    一则是解决 NPC 的 AI 事件触发问题。游戏场景中有众多的 NPC ，比 PC 大致要多一个数量级。NPC 的 AI 触发条件往往是和其它 NPC 或 PC 距离接近。如果没有 AOI 模块，每个 NPC 都需要遍历场景中其它对象，判断与之距离。这个检索量是非常巨大的（复杂度 O(N*N) ）。一般我们会设计一个 AOI 模块，统一处理，并优化比较次数，当两个对象距离接近时，以消息的形式通知它们。
+    二则用于减少向 PC 发送的同步消息数量。把离 PC 较远的物体状态变化的消息过滤掉。PC 身上可以带一个附近对象列表，由 AOI 消息来增减这个列表的内容。
+在服务器上，我们一般推荐把 AOI 模块做成一个独立服务 。场景模块通知它改变对象的位置信息。AOI 服务则发送 AOI 消息给场景
+AOI 的传统实现方法大致有三种：
+
+第一，也是最苯的方案。直接定期比较所有对象间的关系，发现能够触发 AOI 事件就发送消息。这种方案实现起来相当简洁，几乎不可能有 bug ，可以用来验证服务协议的正确性。在场景中对象不对的情况下其实也是不错的一个方案。如果我们独立出来的话，利用一个单独的核，其实可以定期处理相当大的对象数量。
+
+第二，空间切割监视的方法。把场景划分为等大的格子，在每个格子里树立灯塔。在对象进入或退出格子时，维护每个灯塔上的对象列表。对于每个灯塔还是 O(N * N) 的复杂度，但由于把对象数据量大量降了下来，所以性能要好的多，实现也很容易。缺点是，存储空间不仅和对象数量有关，还和场景大小有关。更浪费内存。且当场景规模大过对象数量规模时，性能还会下降。因为要遍历整个场景。对大地图不太合适。这里还有一些优化技巧，比如可以把格子划分为六边形 的。
+
+第三，使用十字链表 (3d 空间则再增加一个链表维度) 保存一系列线段，当线段移动时触发 AOI 事件。算法不展开解释，这个用的很多应该搜的到。优点是可以混用于不同半径的 AOI 区域。
+
+
+首先，我们设计一个最简单的对时协议。即，我们先约定，我们的网络包里的最小时间精度是 10ms ，即 0.01s 。以这个为单位 1 。短于这个时间的都认为是同时发生。
+
+客户端发送一个本地时间量给服务器，服务收到包后，夹带一个服务器时间返回给客户端。当客户端收到这个包后，可以估算出包在路程上经过的时间。同时把本地新时间夹带进去，再次发送给服务器。服务器也可以进一步的了解响应时间。到此为止。
+
+客户端时间和服务器时间具体是什么含义不重要，数值也不必统一。我们简单认为，这个时间值是各自的本地时间就好了。两边分别利用数值计算时差。
+
+由于我们暂时只解决位置同步问题。
+
+首先信任客户端的数据。客户端发送自己的位置坐标和运动矢量（包含有方向和速度）以及当前时间给服务器。
+
+服务器收到后，认为在某一时刻（客户端时间），这个玩家在什么位置，怎样运动的。根据对时求得的时差和估算的延迟，可以预计客户端当前时刻（服务器时间）应该是什么状态（位置以及运动矢量）。把这个信息广播给所有的玩家。
+
+每个玩家收到后，再根据他们之前估算出来的时差以及延迟，得到本地时间当时，所有玩家的状态。
+
+因为玩家运动是连续的。上面得到的状态和他们看到的这些角色的时间状态会有偏差。校准偏差分两种情况讨论。
+
+一种，收到的信息是属于其它玩家的。我们从最新得到的状态信息，预测一段时间之后（比如一秒后的状态），用一条直线运动去修正。即，设想一秒后这个玩家在哪里，然后反推回现在应该用什么速度运动可以在一秒后到达那个地方。
+
+另一种，收到的信息是属于自己的，即服务器认可的自己的状态（并广播给别人了）。这个偏差是由于服务器的预测补偿造成的。为了保持用户的操作手感，对于不太极端的偏差，我们全部不修正，而是依然发送客户端自己操作的位置状态给服务器。服务器那边玩家是处于一种离散的运动状态的。而其他人见到你会再做预测补偿；如果和服务器相差过于剧烈，则直接跳转到服务器认可的新位置。
+
+这里几乎全部相信客户端的行为，以获取最好的操作手感。防止客户端作弊是另外一个话题，也不是不能解决的，但目前不要碰了。
+
+客户端到底以怎样的频率发送那些位置信息给服务器呢？
+
+策略应该是这样的：
+
+每次发送完一个完整的位置信息后，预测服务器看待这个位置信息包一秒后的位置大约在哪里。每次变化做一个累积，一秒内都但不用立刻发送。但每次小的状态改变都和假设的预测位置做一些比较，如果位置偏差比较大，就可以提前发送。否则一直累计到一秒再发送。
+
+这个一秒的周期可以根据实际测试情况来调整。可能一秒太短，也可能过长了。
+
+每次收到服务器发送过来的新的玩家位置信息时，都在里面会找到一个时间戳，表识的包发出的服务器时间。客户端可以验算之前的网络延迟是否正确。如果网络延迟稳定在一个固定值，说明没有问题。但如果延迟值为负数，则说明之前的对时流程中网络不稳定（可能是因为上下行时间偏差比较大造成的，也可能是当时服务器负载很大，造成了较大的内部延迟），造成本地时间和服务器时间的时差计算错误。这个时候重新发起对时流程就好了。
+
+
+
+
+游戏服务器之分线处理
+游戏服务器之分线处理处理的是游戏服务器在多场景服务器和每个场景服务器下分多场景对象的情况下的角色跳线和进入分线场景的应用的处理。
+设计上：
+（1）配置分线信息到静态表，服务器启动时加载并创建场景对象。
+（2）每生产一个场景对象（包括分线的场景对象）就注册到社会关系服务器。
+（3）进入场景或者跳线时，则查询场景服务器中的分线信息，然后选择在当前服务器下切换场景对象还是切换场景服务器。
+1、场景配置处理
+场景id是由服务器id和地图id哈希组成的。
+地图id配置规则，含分线的地图id命名为NewMapID(由地图id（mapID）和分线号组成),否则没有分线的地图就只是使用地图id（mapID）。
+每个NewMapID只能配到一个serverId下。然后根据地图id和分线号就可以找到应该是要切到哪个服务器（是要跨场景进程还是就是在本进程里面换换地图）。
+地图id规则上：line 节点下,NewMapID由(500+mapID*10+分线号)组成,新增分线要按这种格式,分线数量要为双数.
+格式上：line 节点下,mapID为需要分线的基础ID , 在下一层节点 NewMapID 为映射的分线地图ID .
+<line mapID="1" >  
+<info serverId="21" NewMapID="511"/>  
+<info serverId="22" NewMapID="512"/>  
+<info serverId="21" NewMapID="513"/>  
+<info serverId="22" NewMapID="514"/>  
+<info serverId="21" NewMapID="515"/>  
+<info serverId="22" NewMapID="516"/>  
+</line>  
+<line mapID="2" >  
+<info serverId="21" NewMapID="521"/>  
+<info serverId="22" NewMapID="522"/>  
+<info serverId="21" NewMapID="523"/>  
+<info serverId="22" NewMapID="524"/>  
+</line>  
+<line mapID="3" >  
+<info serverId="21" NewMapID="531"/>  
+<info serverId="22" NewMapID="532"/>  
+<info serverId="21" NewMapID="533"/>  
+<info serverId="22" NewMapID="534"/>  
+</line>  
+<line mapID="4" >  
+<info serverId="21" NewMapID="541"/>  
+<info serverId="22" NewMapID="542"/>  
+</line>  
+2、分线信息应用
+在服务器启动时，根据分线信息容器创建场景对象。每创建一个场景服务器（或者副本服务器）的一个场景对象,会注册场景对象（地图id、服务器id、场景名称、场景对象类型）到社会关系服务器，以便作为角色切换场景服务器的参考。
+在请求跳线时，根据基础地图id、线号和分线信息（容器）可查询到是否是分线场景以及其场景id 。再根据场景id判断是否是在当前场景服务器，而选择是否需要切换服务器或者在当前服务器下切换场景。
+至于在当前场景进程的切换场景，主要是
+1、更新当前场景状态（如特殊场景有buff）
+2、更新屏索引
+3、更新角色坐标
+4、同步刷新社会关系服务器用户场景
+5、同步网关屏索引
+6、重新加载玩家个人信息给队友
+7、特殊的副本就需要进行特殊的限制（如不能摆摊交易、不能组队、设置pk模式）等
+8、如果是普通场景发送分线信息
+至于需要切换场景进程的切换场景,除了以上的一些步骤还要的步骤是角色的存档和读档(可优化成直接转移角色内存数据到另一个场景服务器)。
+（在另一篇文章游戏服务器之跨场景进程有一些分析：http://blog.csdn.net/chenjiayi_yun/article/details/18416543）
+（2） 跳转场景应用
+场景id规则:（使每个服务器的场景id都不一样）
+//场景id哈希（顺便提一下，除了网络字节序是大端顺序，程序逻辑环境一般是小端顺序，也就是数据的高位字节存放在地址的高位 低位字节存放在地址低位，在这里就是serverid在高位也就是高地址，就算这样不怎么影响哈希结果，但对有些特殊的需要排序的情景下还是要注意下哈希的顺序）
+[cpp] view plain copy
+inline uint32 sceneid_hash(const uint16& serverid, const uint16 &mapid)//mapid包括分线的新地图id和不分线的地图id  
+{  
+return (serverid<< 16) + mapid;  
+}  
+客户端发来切线的请求。调用角色的换线函数,查找需求场景。
+场景进程的场景管理器（g_scene_mgr），根据地图的id和分线的号可以获取需求的场景（这些在配置文件里面配置），如果该场景和在本场景进程中可以找得到，
+则只是需要在本进程中切换下场景，否则就需要跨场景服务器了。
+[html] view plain copy 在CODE上查看代码片派生到我的代码片
+bool scene_player::changeLineByNum( uint8 lineNum )  
+{  
+    debug_log("[%s,%u]请求切线",this->name,this->id);  
+    if(this->getEntryState() == SceneObject_Death)//限制切换场景时的角色状态  
+    {  
+        scene_chat::send_sys(this,"角色死亡不能切线");  
+        return false;  
+    }  
+    if (lastChangeLineTime + 10 > main_logic_thread::currentTime.sec())//限制切线频率  
+    {  
+        g_player_mgr.sendTipsToUser(this->id,TIPS_TYPE_CENTER,"切线过于频繁，请稍候再试");  
+        return false;  
+    }  
+    lastChangeLineTime = main_logic_thread::currentTime.sec();  
+  
+    uint32 sceneid = g_scene_mgr.getSceneIdByLineNum(this->scene->map->id,lineNum);  
+    if (sceneid && sceneid != this->scene->id)  
+    {  
+        Scene *pScene = g_scene_mgr.get_scene_by_id(sceneid);  
+        if (pScene)//本服务器内切换场景  
+        {  
+            nPos intoPos = this->getPos();  
+            return changeScene(pScene, intoPos);  
+        }  
+        else//切换场景服务器切换场景  
+        {  
+            return changeServer(sceneid,this->getPos().x,this->getPos().y);  
+        }  
+    }  
+    return false;  
+}  
+
+
+
+
+
+netty资料集合
+http://www.phplinux.net/java/netty/list-2.html
+
+Unity打包
+http://www.xuanyusong.com/archives/2748
+
+
+
+
+
+
+
+贴图、纹理、材质
+CG 领域中这三个概念都是差不多的，在一般的实践中，大致上的层级关系是：材质 Material包含贴图 Map，贴图包含纹理 Texture。纹理是最基本的数据输入单位，游戏领域基本上都用的是位图。此外还有程序化生成的纹理 Procedural Texture。贴图的英语 Map 其实包含了另一层含义就是“映射”。其功能就是把纹理通过 UV 坐标映射到3D 物体表面。贴图包含了除了纹理以外其他很多信息，比方说 UV 坐标、贴图输入输出控制等等。材质是一个数据集，主要功能就是给渲染器提供数据和光照算法。贴图就是其中数据的一部分，根据用途不同，贴图也会被分成不同的类型，比方说 Diffuse Map，Specular Map，Normal Map 和 Gloss Map 等等。另外一个重要部分就是光照模型 Shader ，用以实现不同的渲染效果。
+
+贴图：不愿意做成3d的就用照片替代了一下，例如要做个门，为了省事用一张照片替代。
+纹理：一张贴图产生无数张效果叫做纹理，比如墙纸有很多花，其实是一朵花阵列的，拉伸之类的形成了贴墙纸的效果，这就是纹理。
+材质：反光，折射，透明度，自发光，这些都属于材料的光学特性和视觉特效被称为材质。比如贴图是不锈钢的，但是需要实时发反光线光是用贴图是解决不了的，就需要不锈钢材质才可以解决。贴图是一张照片，用于替代模型。纹理是重复，阵列，缩放的贴图。材质是视觉层面的表现力。&lt;br&gt;这个主要是针对unity方面的回答，如果涉及到有限元分析方面，我会有另外一套答案。
+
+贴图：英文叫做map，最有名的是lighting map，即光照贴图， 光照贴图是生成或者绘制出来，用于物体表面模拟光照效果的。
+纹理：英文texture，包括手绘，以及照片加工，过程生成三种方式产生，<br> 并且在opengl术语中，显存中保存的图像数据，也称为纹理，显存中有多种纹理，包括深度texture，颜色texture， 法向量texture。
+材质：英文名material，在ogre中，会写一种材质文件，用于描述渲染一个对象采用哪些技术， 如何使用纹理等信息， 而在 3dmax，maya等建模软件中，材质球也表示类似的意思，即描述如何渲染一个对象。</p><br><p>通过分析这些词的使用语境，来区分这些词，首先贴图和纹理的区别，例如分析常见的三种贴图 法向量贴图normal map，反射贴图 reflection map，环境贴图等， 就指这些技术使用的纹理，以及对应的纹理坐标集。 因为cube环境贴图需要六张纹理，以及需要生成对应的纹理坐标。</p>而材质概念则包含这些贴图技术，以及shader渲染程序，因此属于更高的层次。<br>可以参考一个ogre的材质文件是如何书写的，可以理清这个概念，而unity中的shaderlab的语法和ogre的材质语法很类似。
+
+uv坐标
+如何把一个二维的平面贴到三维的NURBS表面和多边形表面呢？对于NURBUS表面。由于他本身具有UV参数，尽管这个UV值是用来定位表面上的点的参数，但由于它也是二维的，所以很容易通过换算把表面上的点和平面图象上的象素对应起来。所以把图象贴带NURBUS表面上是很直接的一件事。但是对于多边形模型来讲，贴图就变成一件麻烦的事了。所以多边形为了贴图就额外引进了一个UV坐标，以便把多边形的顶点和图象文件上的象素对应起来，这样才能在多边形表面上定位纹理贴图。所以说多边形的顶点除了具有三维的空间坐标外。还具有二维的UV坐标。对于纹理贴图而言，一张贴图的U和V坐标的数值范围都是0到1，而不管他的实际分辨率是多少，MAYA会自动把UV纹理坐标换算成贴图的象素坐标。
+
+"UV"这里是指u,v纹理贴图坐标的简称(它和空间模型的X, Y, Z轴是类似的). 它定义了图片上每个点的位置的信息. 这些点与3D模型是相互联系的, 以决定表面纹理贴图的位置. UV就是将图像上每一个点精确对应到模型物体的表面. 在点与点之间的间隙位置由软件进行图像光滑插值处理. 这就是所谓的UV贴图. 那为什么用UV坐标而不是标准的投影坐标呢? 通常给物体纹理贴图最标准的方法就是以planar(平面),cylindrical(圆柱), spherical(球形),cubic(方盒)坐标方式投影贴图. Planar projection(平面投影方式)是将图像沿x,y或z轴直接投影到物体. 这种方法使用于纸张, 布告, 书的封面等 - 也就是表面平整的物体.平面投影的缺点是如果表面不平整, 或者物体边缘弯曲, 就会产生如图A的不理想接缝和变形. 避免这种情况需要创建带有alpha通道的图像, 来掩盖临近的平面投影接缝, 而这会是非常烦琐的工作. 所以不要对有较大厚度的物体和不平整的表面运用平面投影方式. 对于立方体可以在x, y方向分别进行平面投影, 但是要注意边缘接缝的融合. 或者采用无缝连续的纹理, 并使用cubic投影方式. 多数软件有图片自动缩放功能, 使图像与表面吻合. 显然, 如果你的图像与表面形状不同, 自动缩放就会改变图像的比例以吻合表面. 这通常会产生不理想的效果, 所以制作贴图前先测量你的物体尺寸.
+
+Unity中的Path对应各平台中的Path
+IOS:
+Application.dataPath :                    Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxx.app/Data
+Application.streamingAssetsPath : Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxx.app/Data/Raw
+Application.persistentDataPath :    Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/Documents
+Application.temporaryCachePath : Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/Library/Caches
+
+Android:
+Application.dataPath :             /data/app/xxx.xxx.xxx.apk
+Application.streamingAssetsPath :     jar:file:///data/app/xxx.xxx.xxx.apk/!/assets
+Application.persistentDataPath :     /data/data/xxx.xxx.xxx/files
+Application.temporaryCachePath :     /data/data/xxx.xxx.xxx/cache
+
+Windows Web Player:
+Application.dataPath :             file:///D:/MyGame/WebPlayer (即导包后保存的文件夹，html文件所在文件夹)
+Application.streamingAssetsPath :     
+Application.persistentDataPath :     
+Application.temporaryCachePath :
