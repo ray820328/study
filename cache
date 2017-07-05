@@ -1,0 +1,14 @@
+
+--------------------------------------------- Redis -------------------------------------------------
+
+redis内存管理方式,支持tcmalloc，jemalloc，malloc三种内存分配，memcache使用slabs,malloc等内存分配方式。
+简单点，就是redis,是边用边申请，使用现场申请内存的方式来存储数据，并且很少使用free-list等方式来优化内存分配；
+memcache使用预分配的内存池的方式，使用slab和大小不同的chunk来管理内存，Item根据大小选择合适的chunk存储，内存池的方式可以省去申请/释放内存的开销
+优化的参数：
+1.设置下redis.conf中的maxmemory选项，我的经验是当你的redis物理内存使用超过内存总容量的3/5时就会开始比较危险了。
+2.需要将vm.overcommit设置为1，这参数在大量写入时，很有用
+overcommit_memory=0，默认，智能超发，每次要求分配内存时，kernel都会比较请求的空间和空余的空间是否足以分配
+overcommit_memory=1，请求分配内存时，永远假装还有足够的内存
+overcommit_memory=2，不允许超发内存，即允许分配的大小小于
+3.确保设置了一定量的swap，最好和内存一样大，否则内核的OOM（out-of-memory）killer会干掉Redis进程
+
