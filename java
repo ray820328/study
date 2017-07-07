@@ -48,3 +48,25 @@ JAVA_OPTS="-server -XX:+UseParNewGC -Xms1024m -Xmx2048m -XX:MaxNewSize=128m -XX:
 -XX:-CMSParallelRemarkEnabled：在使用 UseParNewGC 的情况下 , 尽量减少 mark 的时间。
 -XX:CMSInitiatingOccupancyFraction=70：指示在 old generation 在使用了 70% 的比例后 , 启动 concurrent collector。
 -XX:SoftRefLRUPolicyMSPerMB=0：每兆堆空闲空间中SoftReference的存活时间
+
+-----------------------------------centos top显示占用虚拟内存太大的问题-----------------------------------
+There is a known problem with Java and glibc >= 2.10 (includes Ubuntu >= 10.04, RHEL >= 6).
+The cure is to set this env. variable: 
+export MALLOC_ARENA_MAX=4
+If you are running Tomcat, you can add this to TOMCAT_HOME/bin/setenv.sh file.
+
+There is an IBM article about setting MALLOC_ARENA_MAX https://www.ibm.com/developerworks/community/blogs/kevgrig/entry/linux_glibc_2_10_rhel_6_malloc_may_show_excessive_virtual_memory_usage?lang=en
+
+This blog post says
+resident memory has been known to creep in a manner similar to a memory leak or memory fragmentation.
+search for MALLOC_ARENA_MAX on Google or SO for more references.
+
+You might want to tune also other malloc options to optimize for low fragmentation of allocated memory:
+# tune glibc memory allocation, optimize for low fragmentation
+# limit the number of arenas
+export MALLOC_ARENA_MAX=2
+# disable dynamic mmap threshold, see M_MMAP_THRESHOLD in "man mallopt"
+export MALLOC_MMAP_THRESHOLD_=131072
+export MALLOC_TRIM_THRESHOLD_=131072
+export MALLOC_TOP_PAD_=131072
+export MALLOC_MMAP_MAX_=65536
