@@ -41,6 +41,9 @@ centos修改主机名命令
 /etc/sysconfig/network
 /etc/hosts
 
+LINUX下查看CPU使用率的命令
+vmstat，top，dstat，mpstat
+
 zip -r wwwroot.zip wwwroot
 unzip wwwroot.zip -d wwwroot
 防火墙
