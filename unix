@@ -586,7 +586,18 @@ export PATH=${JAVA_HOME}/bin:${JRE_HOME}/bin:${GRADLE_HOME}/bin:${JAVA_HOME}:${P
 gradle -version
 本地18环境
 
+-------------------------------------Linux文件系统，页缓存----------------------------------
+http://blog.csdn.net/u014686399/article/details/71247437
+$ sysctl -a 2>/dev/null | grep dirty
+vm.dirty_background_ratio = 10
+vm.dirty_background_bytes = 0
+vm.dirty_ratio = 20
+vm.dirty_bytes = 0
+vm.dirty_writeback_centisecs = 500
+vm.dirty_expire_centisecs = 3000
 
+回写脏页和清空页缓存，执行如下命令
+sync && sudo sysctl -w vm.drop_caches=3
 
 -----------------------------------文本操作-------------------------------------
 [options]主要参数：
