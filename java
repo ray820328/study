@@ -17,6 +17,13 @@ http://www.ibm.com/developerworks/cn/java/j-lo-classloader/index.html
 堆外内存使用，某一些情况是可以通过JVM的特定参数可以拿到 如jinfo， 还可以使用btrace 
 查看api性能可以使用oprofile， 或者淘宝的tprofiler
 
+针对tomcat上的应用的. 其他的java程序, 只要你能触发他的thread dump并且拿到结果, 也是一样.
+1. ps -ef | grep java找到你的java程序的进程id, 定位 pid
+2. top -Hp $pidshift+t 查看耗cpu时间最多的几个线程, 记录下线程的id
+3. 把上诉线程ID转换成16进制小写  比如  : 0x12ef
+4. kill -3 $pid  触发tomcat的thread dump
+5. 找到tomcat的catalin.out 日志, 把 上面几个线程对应的代码段拿出来.
+
 ------------------------netty--------------------------
 PooledByteBufAllocator内存泄漏
 http://www.cnblogs.com/zoucaitou/p/4280618.html
