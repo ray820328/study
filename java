@@ -14,6 +14,9 @@ http://www.fasterj.com/articles/oraclecollectors1.shtml
 类加载器，网络加载安全加密
 http://www.ibm.com/developerworks/cn/java/j-lo-classloader/index.html
 
+Java线程与Linux内核线程的映射关系
+http://blog.sina.com.cn/s/blog_605f5b4f010198b5.html
+
 堆外内存使用，某一些情况是可以通过JVM的特定参数可以拿到 如jinfo， 还可以使用btrace 
 查看api性能可以使用oprofile， 或者淘宝的tprofiler
 
