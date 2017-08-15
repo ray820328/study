@@ -14,6 +14,9 @@ http://www.fasterj.com/articles/oraclecollectors1.shtml
 类加载器，网络加载安全加密
 http://www.ibm.com/developerworks/cn/java/j-lo-classloader/index.html
 
+堆外内存使用，某一些情况是可以通过JVM的特定参数可以拿到 如jinfo， 还可以使用btrace 
+查看api性能可以使用oprofile， 或者淘宝的tprofiler
+
 ------------------------netty--------------------------
 PooledByteBufAllocator内存泄漏
 http://www.cnblogs.com/zoucaitou/p/4280618.html
