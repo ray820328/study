@@ -4,6 +4,8 @@ yum install lrzsz
 版本信息
 lsb_release -a
 cat /proc/version
+uname -r
+cat /etc/centos-release
 centos cat /etc/redhat-release
 uname -n --- whereis mysql --- find / -name my*
 挂载硬盘
