@@ -1,0 +1,4 @@
+Win：
+查看库文件依赖状态
+dumpbin /dependents libllbc.dll
+
