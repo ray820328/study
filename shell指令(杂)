@@ -1,4 +1,4 @@
 Win：
-查看库文件依赖状态
+命令行查看库文件依赖状态（VS2013 x64 本机工具命令提示）
 dumpbin /dependents libllbc.dll
 
