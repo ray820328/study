@@ -33,3 +33,7 @@ http://www.infoq.com/cn/articles/nodejs-callback-hell
 
 maven公共仓库
 http://mvnrepository.com/
+
+
+虚拟内存使用过大问题描述
+https://stackoverflow.com/questions/561245/virtual-memory-usage-from-java-under-linux-too-much-memory-used
