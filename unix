@@ -628,6 +628,9 @@ pattern正则表达式主要参数：
 　　(5)grep -r magic /usr/src　　#显示/usr/src目录下的文件(包含子目录)包含magic的行
 　　(6)grep -w pattern files ：只匹配整个单词，而不是字符串的一部分(如匹配’magic’，而不是’magical’)
 
+-----------------------------------网络安全-------------------------------------
+“海蜘蛛路由系统”(Hi-Spider Router)
+
 -----------------------------------术语，参数解释-------------------------------------
 us: is meaning of "user CPU time"  用户空间占用CPU百分比
 sy: is meaning of "system CPU time"  内核空间占用CPU百分比
