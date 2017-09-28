@@ -20,6 +20,10 @@ http://blog.sina.com.cn/s/blog_605f5b4f010198b5.html
 堆外内存使用，某一些情况是可以通过JVM的特定参数可以拿到 如jinfo， 还可以使用btrace 
 查看api性能可以使用oprofile， 或者淘宝的tprofiler
 
+虚拟内存太高可能原因
+unix操作系统提供了一种非常高效的途径来实现页面缓存和socket之间的数据传递。在Linux操作系统中，
+这种方式被称作：sendfile system call（Java提供了访问这个系统调用的方法：FileChannel.transferTo api）。
+
 针对tomcat上的应用的. 其他的java程序, 只要你能触发他的thread dump并且拿到结果, 也是一样.
 1. ps -ef | grep java找到你的java程序的进程id, 定位 pid
 2. top -Hp $pidshift+t 查看耗cpu时间最多的几个线程, 记录下线程的id
