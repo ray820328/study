@@ -631,6 +631,48 @@ pattern正则表达式主要参数：
 -----------------------------------网络安全-------------------------------------
 “海蜘蛛路由系统”(Hi-Spider Router)
 
+-----------------------------------网络配置参数-------------------------------------
+linux内建支持keepalive. 有三个相关的参数.
+tcp_keepalive_time
+上次发送数据(简单的ACK不算)多久之后开始发送探针. 默认是2小时.
+当连接被标记为需要keepalive之后, 这个计数器就不再需要了(没理解啥意思)
+tcp_keepalive_probes
+一共发多久次探针, 默认9次.
+tcp_keepalive_intvl
+两个探针之间隔多久, 默认75秒
+注意, keepalive默认是不启用的,除非在建立socket的时候用setsockopt接口配置了这个socket. 过会给示例.
+如何配置参数
+有两个方法可以配置这三个参数
+proc文件系统
+查看当前值:
+  # cat /proc/sys/net/ipv4/tcp_keepalive_time
+  7200
+  # cat /proc/sys/net/ipv4/tcp_keepalive_intvl
+  75
+  # cat /proc/sys/net/ipv4/tcp_keepalive_probes
+  9
+更改配置:
+  # echo 600 > /proc/sys/net/ipv4/tcp_keepalive_time
+  # echo 60 > /proc/sys/net/ipv4/tcp_keepalive_intvl
+  # echo 20 > /proc/sys/net/ipv4/tcp_keepalive_probes
+sysctl命令
+查看:
+# sysctl \
+  > net.ipv4.tcp_keepalive_time \
+  > net.ipv4.tcp_keepalive_intvl \
+  > net.ipv4.tcp_keepalive_probes
+  net.ipv4.tcp_keepalive_time = 7200
+  net.ipv4.tcp_keepalive_intvl = 75
+  net.ipv4.tcp_keepalive_probes = 9
+更改配置:
+  # sysctl -w \
+  > net.ipv4.tcp_keepalive_time=600 \
+  > net.ipv4.tcp_keepalive_intvl=60 \
+  > net.ipv4.tcp_keepalive_probes=20
+  net.ipv4.tcp_keepalive_time = 600
+  net.ipv4.tcp_keepalive_intvl = 60
+  net.ipv4.tcp_keepalive_probes = 20
+
 -----------------------------------术语，参数解释-------------------------------------
 us: is meaning of "user CPU time"  用户空间占用CPU百分比
 sy: is meaning of "system CPU time"  内核空间占用CPU百分比
