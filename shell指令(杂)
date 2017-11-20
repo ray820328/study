@@ -1,3 +1,10 @@
+kill关键字相关进程
+procid=$(ps -ef | grep "logic_server" | grep "java" | awk '{print $2;}')
+if [ "${procid}" == "" ]; then
+	break
+fi
+kill -TERM ${procid}
+
 Win：
 命令行查看库文件依赖状态（VS2013 x64 本机工具命令提示）
 dumpbin /dependents libllbc.dll
