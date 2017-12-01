@@ -9,6 +9,9 @@ tasklist | findstr eclipse
 进程垃圾回收描述查看
 jstat -gcutil 18071 1000
 
+无锁高并发disruptor框架
+https://github.com/trevorbernard/disruptor-examples
+
 垃圾回收参数权威
 http://www.fasterj.com/articles/oraclecollectors1.shtml
 类加载器，网络加载安全加密
