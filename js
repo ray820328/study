@@ -1,3 +1,10 @@
+
+chrome启用 /uploadify/scripts/uploadify.swf
+chrome://flags#run-all-flash-in-allow-mode
+chrome://flags/#enable-site-settings
+Site settings with All sites and Site details Mac, Windows, Linux, Chrome OS
+启用
+
 $("#form").attr("action","deployResult.jsp");
     $("#form").attr("target","_blank");
     $("#form").attr("method","GET");
