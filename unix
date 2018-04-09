@@ -510,6 +510,14 @@ redis-cli -h 127.0.0.1 -p 6379 -a
 set user.name name
 get user.name
 
+--直接操作Redis
+EXISTS Key_StateWarGroupMax
+GET Key_StateWarGroupMax
+SET Key_StateWarGroupMax "10"
+DEL Key_StateWarGroupMax
+HSET StateWarFactionNoticy_0 0 "{}"
+HGETALL StateWarFactionNoticy_0
+
 -----------------------------nginx负载均衡以及tomcat session共享----------------------------------
 /etc/nginx
 nginx -s reload
