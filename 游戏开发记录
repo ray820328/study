@@ -17,6 +17,9 @@ http://blog.csdn.net/kenkao/article/details/6099966
 数学算法
 https://www.easycalculation.com/examples.php
 
+unity lua使用性能细节
+http://www.cnblogs.com/zwywilliam/p/5999924.html
+
 MMO位置同步
 
 1.client和server之间或多或少存在网络延迟，需要提前做好对时，并在网络环境发生变化时校正时差。国内的公网通信，非跨网的情况下，一般在120ms左右。本地的网络会好一些。
