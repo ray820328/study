@@ -90,3 +90,65 @@ export MALLOC_MMAP_THRESHOLD_=131072
 export MALLOC_TRIM_THRESHOLD_=131072
 export MALLOC_TOP_PAD_=131072
 export MALLOC_MMAP_MAX_=65536
+
+
+
+
+
+
+Netty之有效规避内存泄漏
+文章来自http://calvin1978.blogcn.com/articles/netty-leak.html 2016-01-15 546浏览
+游戏开发GC培养
+想免费获取内部独家PPT资料库？观看行业大牛直播？点击加入腾讯GAD游戏开发行业精英群711501594
+　　有过痛苦的经历，特别能写出深刻的文章 —— 凯尔文. 肖
+　　直接内存是IO框架的绝配，但直接内存的分配销毁不易，所以使用内存池能大幅提高性能，也告别了频繁的GC。但，要重新培养被Java的自动垃圾回收惯坏了的惰性。
+　　Netty有一篇必读的文档 官方文档翻译：引用计数对象 ，在此基础上补充一些自己的理解和细节。
+
+一、为什么要有引用计数器
+　　Netty里四种主力的ByteBuf，其中UnpooledHeapByteBuf 底下的byte[]能够依赖JVM GC自然回收；而UnpooledDirectByteBuf底下是DirectByteBuffer，如Java堆外内存扫盲贴所述，除了等JVM GC，最好也能主动进行回收；而PooledHeapByteBuf 和 PooledDirectByteBuf，则必须要主动将用完的byte[]/ByteBuffer放回池里，否则内存就要爆掉。所以，Netty ByteBuf需要在JVM的GC机制之外，有自己的引用计数器和回收过程。
+　　一下又回到了C的冰冷时代，自己malloc对象要自己free。 但和C时代又不完全一样，内有引用计数器，外有JVM的GC，情况更为复杂。
+
+二、引用计数器常识
+  •  计数器基于 AtomicIntegerFieldUpdater，为什么不直接用AtomicInteger？因为ByteBuf对象很多，如果都把int包一层AtomicInteger花销较大，而AtomicIntegerFieldUpdater只需要一个全局的静态变量。
+  •  所有ByteBuf的引用计数器初始值为1。
+  •  调用release()，将计数器减1，等于零时， deallocate()被调用，各种回收。
+  •  调用retain()，将计数器加1，即使ByteBuf在别的地方被人release()了，在本Class没喊cut之前，不要把它释放掉。
+  •  由duplicate(), slice()和order()所衍生的ByteBuf，与原对象共享底下的buffer，也共享引用计数器，所以它们经常需要调用retain()来显示自己的存在。
+  •  当引用计数器为0，底下的buffer已被回收，即使ByteBuf对象还在，对它的各种访问操作都会抛出异常。
+
+三、谁来负责Release
+　　在C时代，我们喜欢让malloc和free成对出现，而在Netty里，因为Handler链的存在，ByteBuf经常要传递到下一个Hanlder去而不复还，所以规则变成了谁是最后使用者，谁负责释放。
+另外，更要注意的是各种异常情况，ByteBuf没有成功传递到下一个Hanlder，还在自己地界里的话，一定要进行释放。
+1、InBound Message
+　　在AbstractNioByteChannel.NioByteUnsafe.read() 处创建了ByteBuf并调用pipeline.fireChannelRead(byteBuf) 送入Handler链。
+　　根据上面的谁最后谁负责原则，每个Handler对消息可能有三种处理方式：
+  •  对原消息不做处理，调用 ctx.fireChannelRead(msg)把原消息往下传，那不用做什么释放。
+  •  将原消息转化为新的消息并调用 ctx.fireChannelRead(newMsg)往下传，那必须把原消息release掉。
+  •  如果已经不再调用ctx.fireChannelRead(msg)传递任何消息，那更要把原消息release掉。
+　　假设每一个Handler都把消息往下传，Handler并也不知道谁是启动Netty时所设定的Handler链的最后一员，所以Netty在Handler链的最末补了一个TailHandler，如果此时消息仍然是ReferenceCounted类型就会被release掉。
+2、OutBound Message
+　　要发送的消息由应用所创建，并调用 ctx.writeAndFlush(msg) 进入Handler链。在每个Handler中的处理类似InBound Message，最后消息会来到HeadHandler，再经过一轮复杂的调用，在flush完成后终将被release掉。
+3、异常发生时的释放
+　　多层的异常处理机制，有些异常处理的地方不一定准确知道ByteBuf之前释放了没有，可以在释放前加上引用计数大于0的判断避免释放失败；有时候不清楚ByteBuf被引用了多少次，但又必须在此进行彻底的释放，可以循环调用reelase()直到返回true。
+
+四、内存泄漏检测
+　　所谓内存泄漏，主要是针对池化的ByteBuf。ByteBuf对象被JVM GC掉之前，没有调用release()把底下的DirectByteBuffer或byte[]归还到池里，会导致池越来越大。而非池化的ByteBuf，即使像DirectByteBuf那样可能会用到System.gc()，但终归会被release掉的，不会出大事。
+　　Netty担心大家不小心就搞出个大新闻来，因此提供了内存泄漏的监测机制。
+　　Netty默认会从分配的ByteBuf里抽样出大约1%的来进行跟踪。如果泄漏，会有如下语句打印：
+
+　　这句话报告有泄漏的发生，提示你用-D参数，把防漏等级从默认的simple升到advanced，就能具体看到被泄漏的ByteBuf被创建和访问的地方。
+  •  禁用（DISABLED） - 完全禁止泄露检测，省点消耗。
+  •  简单（SIMPLE） - 默认等级，告诉我们取样的1%的ByteBuf是否发生了泄露，但总共一次只打印一次，看不到就没有了。
+  •  高级（ADVANCED） - 告诉我们取样的1%的ByteBuf发生泄露的地方。每种类型的泄漏（创建的地方与访问路径一致）只打印一次。对性能有影响。
+  •  偏执（PARANOID） - 跟高级选项类似，但此选项检测所有ByteBuf，而不仅仅是取样的那1%。对性能有绝大的影响。
+
+实现细节
+　　每当各种ByteBufAllocator 创建ByteBuf时，都会问问是否需要采样，Simple和Advanced级别下，就是以113这个素数来取模（害我看文档的时候还在瞎担心，1％，万一泄漏的地方有所规律，刚好躲过了100这个数字呢，比如都是3倍数的），命中了就创建一个Java堆外内存扫盲贴里说的PhantomReference。然后创建一个Wrapper，包住ByteBuf和Reference。
+　　simple级别下，wrapper只在执行release()时调用Reference.clear()，Advanced级别下则会记录每一个创建和访问的动作。
+　　当GC发生，还没有被clear()的Reference就会被JVM放入到之前设定的ReferenceQueue里。
+　　在每次创建PhantomReference时，都会顺便看看有没有因为忘记执行release()把Reference给clear掉，在GC时被放进了ReferenceQueue的对象，有则以 "io.netty.util.ResourceLeakDetector”为logger name，写出前面例子里的Error级别的日日志。顺便说一句，Netty能自动匹配日志框架，先找Slf4j，再找Log4j，最后找JDK logger。
+
+值得说三遍的事
+　　一定要盯紧log里有没有出现 "LEAK: "字样，因为simple级别下它只会出现一次，所以不要依赖自己的眼睛，要依赖grep。如果出现了，而且你用的是PooledBuf，那一定是问题，不要有任何的侥幸，立刻用"-Dio.netty.leakDetectionLevel=advanced" 再跑一次，看清楚它创建和访问的地方。
+　　功能测试时，最好开着"-Dio.netty.leakDetectionLevel=paranoid"。
+　　但是，怎么测试都可能存在没有覆盖到的分支。如果内存尚够，可以适当把-XX:MaxDirectMemorySize 调大，反正只是max，平时也不会真用了你的。然后监控其使用量，及时报警。
