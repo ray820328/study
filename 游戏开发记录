@@ -25,6 +25,9 @@ https://mp.weixin.qq.com/s?__biz=MzI3MzA2MzE5Nw==&mid=2668910286&idx=1&sn=3bb96f
 mmo游戏开发组合模式研究（ECS）
 http://t-machine.org/index.php/2007/09/03/entity-systems-are-the-future-of-mmog-development-part-1/
 
+Unity下的ECS框架 Entitas简介
+https://www.cnblogs.com/yangrouchuan/p/7436533.html
+
 MMO位置同步
 
 1.client和server之间或多或少存在网络延迟，需要提前做好对时，并在网络环境发生变化时校正时差。国内的公网通信，非跨网的情况下，一般在120ms左右。本地的网络会好一些。
