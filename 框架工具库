@@ -1,5 +1,7 @@
 SDL（Simple DirectMedia Layer）跨平台多媒体开发库，C语言写成
 https://www.libsdl.org/download-2.0.php
+NavMesh 生成算法
+https://wo1fsea.github.io/2016/08/20/About_NavMesh/
 
 Recast寻路算法框架原理与算法简介
 http://www.aiuxian.com/article/p-1974951.html
