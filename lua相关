@@ -5,4 +5,5 @@ http://blog.crasheye.cn/lua-compile-codereading.html
 用LuaBridge为Lua绑定C/C++对象
 https://blog.csdn.net/maximuszhou/article/details/22691895
 
-
+lua函数返回值 lua_call lua_getglobal lua_gettop(L)
+https://blog.csdn.net/qq1841370452/article/details/62037295
