@@ -7,3 +7,6 @@ https://blog.csdn.net/maximuszhou/article/details/22691895
 
 lua函数返回值 lua_call lua_getglobal lua_gettop(L)
 https://blog.csdn.net/qq1841370452/article/details/62037295
+
+Lua中的userdata
+https://blog.csdn.net/adam040606/article/details/56484488
