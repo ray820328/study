@@ -2,3 +2,7 @@
 【源码解读】lua源码分析之编译器部分
 http://blog.crasheye.cn/lua-compile-codereading.html
 
+用LuaBridge为Lua绑定C/C++对象
+https://blog.csdn.net/maximuszhou/article/details/22691895
+
+
