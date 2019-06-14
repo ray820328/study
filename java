@@ -6,6 +6,9 @@ tasklist | findstr eclipse
 
 使用jmap -dump:format=b,file=netty.bin PID 将堆内存dump出来，通过IBM的HeapAnalyzer工具进行分析，发现ByteBuf发生了泄露。
 
+Java 类的热替换 —— 概念、设计与实现
+https://www.ibm.com/developerworks/cn/java/j-lo-hotswapcls/index.html
+
 进程垃圾回收描述查看
 jstat -gcutil 18071 1000
 
