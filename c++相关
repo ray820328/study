@@ -9,6 +9,9 @@ https://cloud.tencent.com/developer/news/376747
 
 vtune分析消耗热点
 
+字节对齐的规则总结
+https://blog.csdn.net/gaoyi221119/article/details/77989522
+
 类型对齐方式（变量存放的起始地址相对于结构的起始地址的偏移量） 
 Char 偏移量必须为sizeof(char)即1的倍数 
 int 偏移量必须为sizeof(int)即4的倍数 
