@@ -2,6 +2,9 @@
 看到work_queue中保存的工作队列
 执行sqlite3 .svn/wc.db "delete from work_queue" 删除工作队列
 
+Git本地仓库（Repository）详解
+https://www.cnblogs.com/joshua317/articles/4606328.html
+
 git eclipse 冲突解决方法
 http://blog.csdn.net/rosten/article/details/17068285
 
