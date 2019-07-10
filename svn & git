@@ -57,3 +57,53 @@ git pull
 针对文件回退本地修改
 git checkout HEAD file/to/restore
 
+
+git合并分支，解决冲突
+1，先检出项目到一个文件夹
+git clone
+
+2，你检出的项目默认是master，所以现在要查看远程全部分支
+git branch -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/v1.2
+  remotes/origin/master
+  remotes/origin/v1.1
+  remotes/origin/v1.0
+
+3，切换分支
+比如同时有三个人开发，1.2最早是基于1.0，但是由于项目未发布，1.0,1.1,1.2全部都在同时开发，现在想把1.0已经增加的功能先合并到1.2；
+此时的步骤：check 1.2和1.0
+git checkout v1.0 
+git checkout v1.2
+
+然后再v1.2的分支基础上执行merge
+git merge v1.0
+
+如果没有报错，那就直接提交代码git push origin v1.2
+如果报错，基本是冲突了(比如)：
+CONFLICT (content): Merge conflict in app/src/main/AndroidManifest.xml
+Auto-merging app/build.gradle
+CONFLICT (content): Merge conflict in app/build.gradle
+Automatic merge failed; fix conflicts and then commit the result.
+你需要去到提示的文件里把git自动标注的版本冲突注释掉，看你具体需要的功能进行删减
+
+然后把冲突的文件git add，和commit 
+比如有2个冲突文件，多文件add的时候直接空格隔开
+git add app/src/main/AndroidManifest.xml app/build.gradle
+最后再commit
+git commit -m "解决2个分支之间的冲突"
+
+4，提交代码
+git push origin v1.2
+
+5，参考命令：
+Git鼓励大量使用分支：
+查看分支：git branch
+创建分支：git branch <name>
+切换分支：git checkout <name>
+创建+切换分支：git checkout -b <name>
+合并某分支到当前分支：git merge <name>
+删除分支：git branch -d <name>
+--------------------- 
+
