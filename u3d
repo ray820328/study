@@ -66,6 +66,11 @@ http://blog.1vr.cn/?p=1422
 
 
 ----------------------------------------技巧-----------------------------------
+如何才能创建不带顶点色的Mesh。
+关闭Use Direct3D 11选项，重启Unity即可。关了Use Direct3D 11之后，重新创建Mesh，此时已经不带顶点色了。
+Obj文件以及不带顶点色的FBX文件，直接预览，顶点色也没了。
+开关位置：Edit>Project Settings>Player>Other Settings>Use Direct3D 11（PC选项卡下）
+
 技巧：满屏在屏幕上显示一个2D背景图
 创建一个新的摄像机，取名为”Background Camera”
 创建一个新的GUI贴图，取名为”Background Image”
