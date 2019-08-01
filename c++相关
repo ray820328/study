@@ -18,6 +18,23 @@ http://book.51cto.com/art/201202/317619.htm
 Effective Modern C++
 https://proquest.safaribooksonline.com/book/programming/cplusplus/9781491908419
 
+core dump调试
+core dump配置：ulimit -c或ulimit -a为0则默认关闭，
+$ulimit -c unlimited　　（只对当前shell进程有效）
+或在~/.bashrc　的最后加入： ulimit -c unlimited （一劳永逸）
+
+gdb ./test test.core
+gdb>bt
+出错的代码位置
+gdb>print 变量名
+
+http://valgrind.org/downloads/current.html
+./configure
+make
+make install
+安装成功后，使用类似如下命令启动程序：
+valgrind --tool=memcheck --leak-check=full --track-origins=yes --leak-resolution=high --show-reachable=yes --log-file=memchecklog ./controller_test
+其中，–log-file=memchecklog指记录日志文件，名字为memchecklog；–tool=memcheck和–leak-check=full用于内存检测。
 
 字节对齐的规则总结
 https://blog.csdn.net/gaoyi221119/article/details/77989522
