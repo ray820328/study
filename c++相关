@@ -36,9 +36,21 @@ make install
 valgrind --tool=memcheck --leak-check=full --track-origins=yes --leak-resolution=high --show-reachable=yes --log-file=memchecklog ./controller_test
 其中，–log-file=memchecklog指记录日志文件，名字为memchecklog；–tool=memcheck和–leak-check=full用于内存检测。
 
-stl注意：
+STL中的容器注意：
+分为顺序存储(如vector、deque)与链式存储(如list、map、set)
+链式存储删除
+for(; iter!=mapStudent.end(); )
+    mapStudent.erase(iter++);
 mapStudent.erase(iter++)语句，map中在删除iter的时候，先将iter做缓存，然后执行iter++使之指向下一个结点，再进入erase函数体中执行删除操作，
 删除时使用的iter就是缓存下来的iter(也就是当前iter(做了加操作之后的iter)所指向结点的上一个结点)。
+但顺序存储第一种用法却是错误的。因为顺序存储的容器一旦erase时，会涉及到数据移动，
+iterator所指的位置还是那个位置，但元素却移动了，iter++之后已不再你想要的元素位置了
+对于非结点类，如数组类的容器vector,string,deque，如果erase会返回下个有效的iterator,可以这样处理：
+for(vector<int>::iterator iter = m_vector.begin(); iter != m_vector.end();)
+    if(flag)
+         iter = m_vector.erase(iter);
+    else
+         ++ iter;
 
 字节对齐的规则总结
 https://blog.csdn.net/gaoyi221119/article/details/77989522
