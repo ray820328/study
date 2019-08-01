@@ -36,6 +36,10 @@ make install
 valgrind --tool=memcheck --leak-check=full --track-origins=yes --leak-resolution=high --show-reachable=yes --log-file=memchecklog ./controller_test
 其中，–log-file=memchecklog指记录日志文件，名字为memchecklog；–tool=memcheck和–leak-check=full用于内存检测。
 
+stl注意：
+mapStudent.erase(iter++)语句，map中在删除iter的时候，先将iter做缓存，然后执行iter++使之指向下一个结点，再进入erase函数体中执行删除操作，
+删除时使用的iter就是缓存下来的iter(也就是当前iter(做了加操作之后的iter)所指向结点的上一个结点)。
+
 字节对齐的规则总结
 https://blog.csdn.net/gaoyi221119/article/details/77989522
 
