@@ -61,6 +61,10 @@ class Singleton : private NonCopyable {
         return new T(std::forward(args...));
     }
 
+std::function
+void XXX::Foreach(std::function<void(ConfigXXX* config)> iterFunc)
+xxxPtr->Foreach([this](ConfigXXX* config) {
+
 字节对齐的规则总结
 https://blog.csdn.net/gaoyi221119/article/details/77989522
 
