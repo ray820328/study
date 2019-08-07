@@ -52,6 +52,15 @@ for(vector<int>::iterator iter = m_vector.begin(); iter != m_vector.end();)
     else
          ++ iter;
 
+模板参数推断，传递
+template <typename T>
+class Singleton : private NonCopyable {
+    template <typename... TArgs>
+    static T* NewInstance(TArgs&&... args) {
+        assert(!ms_singleton);
+        return new T(std::forward(args...));
+    }
+
 字节对齐的规则总结
 https://blog.csdn.net/gaoyi221119/article/details/77989522
 
