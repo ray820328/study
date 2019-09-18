@@ -17,6 +17,8 @@ https://blog.csdn.net/silangquan/article/details/49700863#commentBox
 FPS相机
 https://blog.csdn.net/silangquan/article/details/49700083
 
+DateTime.Now.Ticks = 10 * 1000 * 10000;//10S
+
 【Unity3D的四种坐标系】
 1、World Space（世界坐标）：我们在场景中添加物体（如：Cube），他们都是以世界坐标显示在场景中的。transform.position可以获得该位置坐标。
 2、Screen Space（屏幕坐标）:以像素来定义的，以屏幕的左下角为（0，0）点，右上角为（Screen.width，Screen.height），Z的位置是以相机的世界单位来衡量的。
