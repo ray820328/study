@@ -4,6 +4,8 @@ https://github.com/Unity-Technologies/
 渲染优化
 https://zhuanlan.zhihu.com/p/23693325
 
+性能分析工具，Android系统RenderDoc，iOS分析直接XCode
+
 Recast源码解析（一）：射线实现原理
 https://blog.csdn.net/needmorecode/article/details/81416553
 Recast & Detour
