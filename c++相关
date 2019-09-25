@@ -28,6 +28,14 @@ gdb>bt
 出错的代码位置
 gdb>print 变量名
 
+https://blog.csdn.net/swartz_lubel/article/details/77972384
+i r epb
+打印寄存器 ebp 的内容（函数的地址及局部变量栈顶head指针，在 64 位系统中, 寄存器 esp 变成了 rsp, 寄存器 ebp 变成了 rbp, 寄存器 ip 变成了 rip. 而在 arm 平台中, 寄存器 ebp 则变成了 fp）
+x /4x 0x...
+寄存器 ebp 内容所指向的区域信息
+info symbol 0x...
+与 head 节点一样, 第一个节点的最低 4 个字节存储的是下一链表节点位置的指针, 紧随其后的 4 个字节是该层调用的返回地址, 查看其内容如下:
+
 http://valgrind.org/downloads/current.html
 ./configure
 make
