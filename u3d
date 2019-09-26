@@ -68,12 +68,23 @@ C# Coroutines & Yield
 http://www.cnblogs.com/shawnzxx/archive/2013/01/01/2841451.html
 
 uni2d，骨骼动画功能插件
-
 //release
 zip.Dispose();
 zip = null;
 //if not release first,in some android device will crash.
 Resources.UnloadUnusedAssets();
+
+Unity动画中加入触发事件
+https://blog.csdn.net/yangxuan0261/article/details/52335575
+1、Animator模式
+首先在模型上挂个脚本
+public class charEvents : MonoBehaviour ｛
+	public void ActionEvent1(string _arg1)
+双击状态，在 Events 中添加事件，输入方法名 ActionEvent1
+2、Animation模式
+在该模式下，模型的动画都是 read-only，不能编辑及插入事件，自定义的animation可以
+解决方法：
+直接把对应的动画资源重新拖进对应的动画中，就可以编辑加事件回调了
 
 UNITY 2D入门基础教程
 http://blog.1vr.cn/?p=1422
