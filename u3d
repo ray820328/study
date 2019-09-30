@@ -1,6 +1,9 @@
 Unity git版本库
 https://github.com/Unity-Technologies/
 
+5款提升游戏图形效果的资源包（Mesh Effects包含不同网格效果的资源包，Surforge制作高质量PBR纹理插件，SE Screen-Space Shadows提供屏幕空间的光线跟踪阴影）
+https://mp.weixin.qq.com/s/WyrGPtijglf0FYGSjF1Y8w
+
 渲染优化
 https://zhuanlan.zhihu.com/p/23693325
 性能分析工具，Android系统RenderDoc，iOS分析直接XCode
