@@ -8,6 +8,9 @@ https://mp.weixin.qq.com/s/WyrGPtijglf0FYGSjF1Y8w
 https://zhuanlan.zhihu.com/p/23693325
 性能分析工具，Android系统RenderDoc，iOS分析直接XCode
 
+可视化粒子特效编辑系统
+"com.unity.visualeffectgraph": "5.16.1-preview"
+
 Unity LOD更优化方案：Amplify ImpostorsUnity
 http://seanyxie.com/a/youxikaifa/Unity/2019/0327/19.html
 
