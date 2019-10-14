@@ -18,7 +18,21 @@ http://book.51cto.com/art/201202/317619.htm
 Effective Modern C++
 https://proquest.safaribooksonline.com/book/programming/cplusplus/9781491908419
 
-core dump调试
+崩溃处理过程
+一，strace 查信号描述
+strace -i -x -o segfault.txt ./segfault.o
+得到如下信息： 
+1.错误信号：SIGSEGV 
+3.错误码：SEGV_MAPERR 
+3.错误内存地址：0x0 
+4.逻辑地址0x400507处出错.
+二，dmesg 查错误现场
+dmesg
+得到： 
+1.错误类型：segfault ,即段错误（Segmentation Fault）. 
+2.出错时ip：0x400507 
+3.错误号：6，即110
+三，core dump调试
 core dump配置：ulimit -c或ulimit -a为0则默认关闭，
 $ulimit -c unlimited　　（只对当前shell进程有效）
 或在~/.bashrc　的最后加入： ulimit -c unlimited （一劳永逸）
