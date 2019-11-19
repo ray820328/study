@@ -118,6 +118,16 @@ public static float GetAngleBetween(Vector3 from, Vector3 to, Vector3 origin)
 }
 例子：向量from=(1, 0, 1), to=(-1, 0, 1) ，求from顺时针转到b的旋转角，则origin应该为(0, 1, 0)，结果为270度。若origin=(0, -1, 0)，则逆时针，结果为90度。
 
+//类似Transform.RotateAround(Vector3 point, Vector3 axis, float angle)方法的效果
+public static Vector3 RotateAround(Vector3 from, Vector3 center, Vector3 axis, float angle)
+{
+    Quaternion quaternion = Quaternion.AngleAxis(angle, axis);// 旋转系数
+    Vector3 detaVec = from - center;// 旋转中心到起点的偏移向量
+    detaVec = quaternion * detaVec;// 旋转偏移向量，得到旋转中心到目标点的偏移向量
+    Vector3 destPos = center + detaVec;
+    //Debug.LogErrorFormat("RotateAround destPos = {0}, 【{1}, {2}, {3}】 angle = {4}", destPos, from, center, axis, angle);
+    return destPos;
+}
 
 如何才能创建不带顶点色的Mesh。
 关闭Use Direct3D 11选项，重启Unity即可。关了Use Direct3D 11之后，重新创建Mesh，此时已经不带顶点色了。
