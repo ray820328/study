@@ -111,7 +111,7 @@ Unity3D 两向量旋转角
 public static float GetAngleBetween(Vector3 from, Vector3 to, Vector3 origin)
 {
     float angle = Vector3.Angle(origin - from, origin - to);
-    float sign = Mathf.Sign(Vector3.Dot(origin, Vector3.Cross(from, to)));
+    float sign = Mathf.Sign(Vector3.Dot(Vector3.up, Vector3.Cross(origin - from, origin - to)));
     float signedAngle = angle * sign;
     float destAngle = (signedAngle <= 0) ? 360 + signedAngle : signedAngle;
     return destAngle;
