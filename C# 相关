@@ -1,4 +1,5 @@
-
+struct在分配内存的时候, 各个成员的地址是相邻的. C#中alignment的字节数为4个字节. 
+因此, 它将4个字节作为一个分配单元. 如果相邻的几个成员字节数相加不超过一个分配单元, 则这几个成员都会在一个分配单元中.
 
 关于CLR内存管理一些深层次的讨论[上篇]
 https://www.cnblogs.com/artech/archive/2010/10/18/CLR_Memory_Mgt_01.html
