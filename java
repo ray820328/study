@@ -37,6 +37,12 @@ unix操作系统提供了一种非常高效的途径来实现页面缓存和sock
 4. kill -3 $pid  触发tomcat的thread dump
 5. 找到tomcat的catalin.out 日志, 把 上面几个线程对应的代码段拿出来.
 
+------------------------多线程--------------------------
+深入分析Synchronized原理
+https://www.cnblogs.com/aspirant/p/11470858.html
+深入分析wait/notify为什么要在同步块内
+https://blog.csdn.net/lsgqjh/article/details/61915074
+
 ------------------------netty--------------------------
 PooledByteBufAllocator内存泄漏
 http://www.cnblogs.com/zoucaitou/p/4280618.html
