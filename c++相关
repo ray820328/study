@@ -1,5 +1,7 @@
 Eclipse 平台进行 C/C++ 开发
 https://www.ibm.com/developerworks/cn/linux/opensource/os-ecc/index.html
+gcc 生成 .a静态库和 .so动态库 
+http://www.cppblog.com/wc250en007/archive/2012/11/03/194186.html
 
 静态代码分析工具Coverity
 https://blog.csdn.net/yasi_xi/article/details/8349985
