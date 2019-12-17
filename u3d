@@ -56,6 +56,13 @@ DateTime.Now.Ticks = 10 * 1000 * 10000;//10S
 扇形角度
 Vector3.Angle(source, target - source) < angle / 2;
 
+// V 的长度会变为 1 但方向不变
+v.Normalize ();
+// 返回 V 方向上的单位向量，但是 V本身不会发生变化
+v.normalized;
+// 获取 V 的长度
+float l = v.magnitude;
+
 ----------------------------------------api-----------------------------------
  
 Invoke("SendMsg", 5);//5 秒之后调用 SendMsg() 方法；
