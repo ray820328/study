@@ -16,3 +16,22 @@ regsvr32 %windir%\system32\system.xml.dll /s
 
 当前目录下所有文件的行数
 wc –l ./*
+
+git hooks提交检测
+#!/usr/bin/env bash
+lua_files=$(git status -s|awk '{if (($1=="M"||$1=="A") && $2 ~ /.lua$/)print $2;}')
+if [[ "$lua_files" != "" ]]; then
+    result=$(luacheck $lua_files)
+
+    if [[ "$result" =~ .*:.*:.*: ]]; then
+        echo "$result"
+        echo ""
+        exec < /dev/tty
+        read -p "Abort commit?(Y/n)"
+
+        if [[ "$REPLY" == y* ]] || [[ "$REPLY" == Y* ]]; then
+            echo "Abort commit"
+            exit 1
+        fi
+    fi
+fi
