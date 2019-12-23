@@ -103,6 +103,12 @@ LDFLAGS = -L/var/xxx/lib -L/opt/mysql/lib -Wl,R/var/xxx/lib -Wl,R/opt/mysql/lib
 如果在执行./configure以前设置环境变量export LDFLAGS="-L/var/xxx/lib -L/opt/mysql/lib -Wl,R/var/xxx/lib -Wl,R/opt/mysql/lib" ，注意设置环境变量等号两边不可以有空格，而且要加上引号（shell的用法）。
 那么执行configure以后，Makefile将会设置这个选项，链接时会有这个参数，编译出来的可执行程序的库文件搜索路径就得到扩展了
 
+cJSON不是线程安全的。
+但是，在以下情况下它是线程安全的：
+永远不使用cJSON_GetErrorPtr（可以使用cJSON_ParseWithOpts的return_parse_end参数）
+在任何线程中使用cJSON之前调用cJSON_InitHooks。
+在返回对cJSON函数的所有调用之前，永远不会调用setlocale。
+
 字节对齐的规则总结
 https://blog.csdn.net/gaoyi221119/article/details/77989522
 
