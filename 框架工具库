@@ -9,6 +9,8 @@ http://www.aiuxian.com/article/p-1974951.html
 Recast寻路算法框架java版本
 https://github.com/ppiastucki/recast4j
 
+JPS高效率无权重寻路算法，速度优于A*
+
 C++ 11 序列化框架
 http://uscilab.github.io/cereal
 
