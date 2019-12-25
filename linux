@@ -7,6 +7,12 @@
 https://www.ibm.com/developerworks/cn/linux/l-ipc/part5/index1.html
 
 perf、 gprof 等程序的性能分析工具
+性能分析工具几个因素： 
+工具本身消耗的cpu大小：valgrind本身cpu消耗非常大，不适合使用于服务器负载较大时的性能分析，只适合于性能是线性增长的情况并作低负载测试。Oprofile、perf等系统内核支持的一般cpu消耗较低。 
+能否用于运营环境的性能分析：Gprof是使用编译时嵌入代码的方式，需要程序正常退出才能得到统计结果，oprofile需要重编系统内核支持，运营环境下使用不方便。 
+可视化操作是否简便等
+基于功能上考虑。Gprof不能统计内核调用消耗，perf、vtune等基于硬件性能计数器的方式可以提供多种事件的统计分析结果，
+perf工具指定branch-misses事件查看函数的分支预测失败率并进行优化
 
 linux 下/proc/self/statm有当前进程的内存占用情况，
 共有七项：vsize虚拟内存页数、resident物理内存、share共享内存、text代码段内存页数， lib引用库内存页数、data_stack 数据/堆栈段内存页数、dt 脏页数，
