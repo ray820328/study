@@ -6,3 +6,11 @@
 共享内存（上）
 https://www.ibm.com/developerworks/cn/linux/l-ipc/part5/index1.html
 
+perf、 gprof 等程序的性能分析工具
+
+linux 下/proc/self/statm有当前进程的内存占用情况，
+共有七项：vsize虚拟内存页数、resident物理内存、share共享内存、text代码段内存页数， lib引用库内存页数、data_stack 数据/堆栈段内存页数、dt 脏页数，
+单位是内存的页数，需要乘以getpagesize()转换为byte。在每个模块结束后统计vsize的增加，可知该模块占用的内存大小
+
+
+
