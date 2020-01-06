@@ -21,6 +21,18 @@ linux 下/proc/self/statm有当前进程的内存占用情况，
 这并不是说“STL必然是坏的”, 编写一个在非优化的build模式下不会变慢10倍的STL实现是有可能的（如EASTL或Libc++）。但是无论出于何种原因，微软的STL速度非常慢。由于它过度依赖于inlining.
 作为语言的使用者，我不在乎它是谁的错！我只知道的“STL在调试中太慢”，我要么将它解决掉，要么寻找替代方案（例如不使用STL，重新实现我需要的bits库，或者完全不再使用C++）。
 
+将 cpu 占用率高的线程找出来:
+ ps H -eo user,pid,ppid,tid,time,%cpu,cmd --sort=%cpu
+这个命令首先指定参数'H'，显示线程相关的信息，格式输出中包含:user,pid,ppid,tid,time,%cpu,cmd，然后再用%cpu字段进行排序。这样就可以找到占用处理器的线程了。
+直接 ps Hh -eo pid,tid,pcpu | sort -nk3 |tail 获取对于的进程号和线程号，然后跳转到3.
+查看哪个进程线程占用cpu过高； top / ps -aux， 获得进程号
+确定哪个线程占用cpu过高，进入进程号的目录：/proc/pid/task， 
+执行：grep SleepAVG  **/status  | sort -k2,2 | head，  确定cpu占用较高的线程号。
+使用kill -3 pid 会打印线程堆栈的情况
+在 Linux 下 top 工具可以显示 cpu 的平均利用率(user,nice,system,idle,iowait,irq,softirq,etc.)，可以显示每个 cpu 的利用率。但是无法显示每个线程的 cpu 利用率情况，这时就可能出现这种情况，总的 cpu 利用率中 user 或 system 很高，但是用进程的 cpu 占用率进行排序时，没有进程的 user 或 system 与之对应。
+ps H -eo user,pid,ppid,tid,time,%cpu,cmd --sort=%cpu | grep engine
+查看出engine的pid后top -H -p pid直接看线程cpu使用率
+
 Linux内存管理
 sbrk不是系统调用，是C库函数。系统调用通常提供一种最小功能，而库函数通常提供比较复杂的功能。
 在Linux系统上，程序被载入内存时，内核为用户进程地址空间建立了代码段、数据段和堆栈段，在数据段与堆栈段之间的空闲区域用于动态内存分配。
