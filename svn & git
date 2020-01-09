@@ -8,6 +8,10 @@ https://www.cnblogs.com/joshua317/articles/4606328.html
 git eclipse 冲突解决方法
 http://blog.csdn.net/rosten/article/details/17068285
 
+clone失败，更改本地凭证
+ssh-keygen -t rsa -C 'Ray820328@163.com'
+id_rsa.pub
+控制面板\用户帐户\凭据管理器\Windows 凭据
 
 @echo off
 ::    
