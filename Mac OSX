@@ -1,0 +1,9 @@
+文件访问
+Mac -> Mac
+scp /Users/Ray/Desktop/aaa.text2 mac@192.168.33.88:/Users/Mac/Downloads
+Mac -> Windows
+1 新建本地用户
+windows+R -> 输入:netplwiz -> 点击添加 -> 选择不使用Microsoft帐户 -> 本地账户 -> 输入用户名，密码等信息（注意记住用于mac登录
+2 选择你要共享的文件, 右键属性, 选择共享, 添加刚才创建的共享账号
+3 mac上 点击finder 选择 前往 -> 连接服务器 连接身份选择注册用户 账号密码输入第一步创建的账号密码, 连接即可
+
