@@ -44,6 +44,39 @@ https://gameinstitute.qq.com/community/detail/120610
 
 DateTime.Now.Ticks = 10 * 1000 * 10000;//10S
 
+虚拟机——Mono
+Mono是一个基于CLR的开源项目，允许引擎和用户的托管代码运行在每一个目标平台上。而CLR全称为通用语言运行平台（Common Language Runtime），是微软的.Net虚拟机。它其中两个主要作用是：1，编译——运行前把C#编译为CIL；2，运行——在运行的时把CIL转换成各平台的原生码。
+这些是Mono支持的平台：Android，Apple iOS（iOS，Apple macOS，Apple tvOS，Apple watchOS），BSD （OpenBSD, FreeBSD, NetBSD），Linux，Microsoft Windows，Nintendo Wii，Sony PlayStation 3，Sony PlayStation 4，Sun Solaris
+IL2CPP
+Unity跨平台：
+1、把C#通过Mono compiler（其他语言用的是Unity单独开发的一个Unity compiler），编译成CIL语言；
+2、各个平台下的Mono虚拟机，运行CIL语言，转换成原生码给CPU执行。
+其实Unity后来出了另外一个方案：IL2PP。
+它会在项目转成CIL之后，再把CIL转成CCPP，然后在运行的时候，把CPP加载进来，由各个平台的IL2PP VM转换成原生码。
+Mono vs IL2CPP
+Mono模式下编译出来的安卓包体：
+ \assets\bin\Data\Managed\
+ Assembly-CSharp.dll 为游戏的控制逻辑，运行时调用。
+ \lib\armeabi-v7a\
+libmono.so包含了mono VM的功能
+IL2CPP模式下编译出来的安卓包体：
+ \assets\bin\Data\Managed\
+ 已经没有了DLL文件。 \lib\armeabi-v7a\
+ libmono.so变成了libil2cpp.so，包含了Mono模式下的DLL和IL2CPP VM功能
+IL2CPP的好处是：
+1、运行速度快（CPP转原生码比CIL快）；
+2、减少Unity公司的维护成本：Mono VM官方是不支持那么多平台的，所以很多平台的Mono VM都需要Unity自己去制作和维护，而C++编译器是本来各个平台都现成的。
+缺点是：
+1、包体会变大；
+2、编译速度慢；
+3、不支持JIT。
+Mono如何运行CIL
+1、JIT（Just In Time）模式——在编译的时候，把C#编译成CIL，在运行时，逐条读入，逐条解析翻译成原生码交给CPU再执行；
+2、AOT（Ahead Of Time）模式——在编译成CIL之后，会把CIL再处理一遍，编译成原生码，在运行的时候交给CPU直接执行，Mono下的AOT只会处理部分的CIL，还有一部分CIL采用了JIT的模式；
+3、Full AOT模式——在编译成CIL之后，把所有的CIL编译成原生码，在运行的时候直接执行。
+JIT模式是边运行，边翻译，支持运行时加载新的代码进来。而IOS是禁止内存的可执行权限的，不允许在运行过程中创建新的函数等，所以必须要提前编译好所有的代码，更不用说在运行时加载新的代码了。
+
+
 【Unity3D的四种坐标系】
 1、World Space（世界坐标）：我们在场景中添加物体（如：Cube），他们都是以世界坐标显示在场景中的。transform.position可以获得该位置坐标。
 2、Screen Space（屏幕坐标）:以像素来定义的，以屏幕的左下角为（0，0）点，右上角为（Screen.width，Screen.height），Z的位置是以相机的世界单位来衡量的。
