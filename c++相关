@@ -90,6 +90,16 @@ void push(T const& data) {
      while(!head.compare_exchange_weak(new_node->next,new_node));
 }
 
+/* 需求有第三方语言使用 */
+#if defined(XXX_BUILD_AS_DLL)
+#if defined(XXX_CORE) || defined(XXX_LIB)
+#define XXX_API		__declspec(dllexport)
+#else
+#define XXX_API		__declspec(dllimport)
+#endif
+#else
+#define XXX_API		extern
+#endif
 
 模板参数推断，传递
 template <typename T>
