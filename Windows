@@ -3,3 +3,5 @@ netstat -aon|findstr "6000"
 tasklist|findstr "12112"
 taskkill /f /t /im baidunetdiskhost.exe
 
+openssl
+https://slproweb.com/products/Win32OpenSSL.html
