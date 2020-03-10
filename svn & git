@@ -2,9 +2,6 @@
 看到work_queue中保存的工作队列
 执行sqlite3 .svn/wc.db "delete from work_queue" 删除工作队列
 
-Git本地仓库（Repository）详解
-https://www.cnblogs.com/joshua317/articles/4606328.html
-
 git eclipse 冲突解决方法
 http://blog.csdn.net/rosten/article/details/17068285
 
@@ -44,10 +41,38 @@ git push [远程主机名] [本地分支名]:[远程分支名] -u origin master
 git fetch [远程主机名] [分支名]
 git checkout -m 版本号 文件/文件夹
 git branch -r/-a --来查看远程分支
-git checkout -b newBrach origin/master --在origin/master的基础上，创建一个新分支。
 $ git merge origin/master
 # 或者在本地分支上合并远程分支
 $ git rebase origin/master
+第一种方法
+   git fetch --all
+   git reset --hard origin/master
+   git fetch  下载远程最新的。
+   git reset master  分支重置
+第二种方法
+   git reset --hard HEAD
+   git pull
+#本地分支和远程分支建立映射关系的作用
+git branch --set-upstream-to origin/远程分支名  本地分支名
+#拉取分支
+git pull
+拉取远程分支并创建本地分支
+git checkout -b 本地分支名x origin/远程分支名x
+使用该方式会在本地新建分支x，并自动切换到该本地分支x。
+采用此种方法建立的本地分支会和远程分支建立映射关系。
+git fetch origin 远程分支名x:本地分支名x
+使用该方式会在本地新建分支x，但是不会自动切换到该本地分支x，需要手动checkout。
+采用此种方法建立的本地分支不会和远程分支建立映射关系。
+切换分支
+git checkout 本地分支名
+合并分支
+git merge 本地分支名称
+建立远程分支
+git push origin cola_build:远端分支名
+远程分支Chapater6
+使用命令 git push origin --delete cola_build
+删除本地分支
+git branch -d 本地分支名称
 
 保留生产服务器上所做的改动,仅并入新配置项
 git stash
