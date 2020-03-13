@@ -14,4 +14,4 @@ https://blog.csdn.net/xiaodan007/article/details/8934207
 Lua中的userdata
 https://blog.csdn.net/adam040606/article/details/56484488
 
-
+obj:method() 等价于 getmetatable(obj).__index.method(obj)
