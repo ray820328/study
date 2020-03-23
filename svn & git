@@ -88,6 +88,13 @@ git reset --hard
 git pull
 针对文件回退本地修改
 git checkout HEAD file/to/restore
+
+工作区和暂存区的区别 git diff
+工作区和版本库的区别 git diff HEAD
+暂存区和版本库的区别 git diff --cached
+git log --oneline --graph
+merge git reset --merge 7f811bf 或 git reset --merge HEAD^
+git clean -f
 ---------------------------
 
 git 拉取远程分支到本地
