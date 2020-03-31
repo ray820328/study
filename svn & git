@@ -9,6 +9,8 @@ clone失败，更改本地凭证
 ssh-keygen -t rsa -C 'Ray820328@163.com'
 id_rsa.pub
 控制面板\用户帐户\凭据管理器\Windows 凭据
+清除账号信息
+git config --system --unset credential.helper
 
 git全局ignore文件 + 项目ignore
 gitignore_global.txt
