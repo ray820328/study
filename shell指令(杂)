@@ -7,7 +7,7 @@ kill -TERM ${procid}
 
 Win：
 命令行查看库文件依赖状态（VS2013 x64 本机工具命令提示）
-dumpbin /dependents libllbc.dll
+dumpbin /dependents xxx.dll
 
 @echo 开始注册dll
 copy system.xml.dll %windir%\system32\
@@ -16,6 +16,9 @@ regsvr32 %windir%\system32\system.xml.dll /s
 
 当前目录下所有文件的行数
 wc –l ./*
+
+下载sh直接执行
+curl -H "X-PROJECT-ID: xxx" http://xxx/install | bash
 
 git hooks提交检测
 #!/usr/bin/env bash
