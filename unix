@@ -48,6 +48,16 @@ vmstat，top，dstat，mpstat
 
 zip -r wwwroot.zip wwwroot
 unzip wwwroot.zip -d wwwroot
+function unzip_wwwroot()
+{
+  echo "Unzipping the package"
+  if [[ -d "wwwroot" ]]; then
+    echo "Cleaning wwwroot folder"
+    rm -rf wwwroot
+  fi
+  unzip -q -o wwwroot.zip -d wwwroot
+}
+
 防火墙
 service iptables stop
 iptables -V
@@ -146,6 +156,7 @@ ansible self -m shell -a 'cd /home/RUNDIR; sh all.sh restart'
 
 端口服务状态查看
 netstat – ano
+lsof -
 
 编辑网卡配置文件，命令： vim /etc/sysconfig/network-scripts/ifcfg-eth0
 DEVICE=eth0
