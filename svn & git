@@ -111,6 +111,8 @@ git fetch origin develop（develop为远程仓库的分支名）
 git checkout -b dev(本地分支名称) origin/develop(远程分支名称)
 6、把某个分支上的内容都拉取到本地
 git pull origin develop(远程分支名称)
+7、获取子模块
+git submodule update --init --recursive
 ----------------------------
 
 git合并分支，解决冲突
