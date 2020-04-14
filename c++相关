@@ -26,6 +26,19 @@ ACE支持多种平台，可移植性不存在问题。
 ASIO支持多种平台，可移植性不存在问题（http://think-async.com/   https://github.com/kingsamchen/asio-cmake）。
 libevent主要支持linux平台，freebsd平台， 其他平台下通过select模型进行支持， 效率相对低一些。
 
+CMake
+32位-linux
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+Windows
+cmake -G "Visual Studio 15 2017" -DCRC32C_BUILD_TESTS=0 -DCRC32C_BUILD_BENCHMARKS=0 .. && make all install
+cmake .. && cmake --build .
+64位
+Windows
+set(BUILD_USE_64BITS on)
+cmake -G "Visual Studio 15 2017 Win64" -DCRC32C_BUILD_TESTS=0 -DCRC32C_BUILD_BENCHMARKS=0 .. && make all install
+cmake .. && cmake --build .
+
 崩溃处理过程
 一，strace 查信号描述
 strace -i -x -o segfault.txt ./segfault.o
