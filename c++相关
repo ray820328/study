@@ -39,6 +39,13 @@ set(BUILD_USE_64BITS on)
 cmake -G "Visual Studio 15 2017 Win64" -DCRC32C_BUILD_TESTS=0 -DCRC32C_BUILD_BENCHMARKS=0 .. && make all install
 cmake .. && cmake --build .
 
+新建Visual C++空项目
+打开View -》 Other Windows
+选择对应平台，如Debug|Win32，右键属性
+VC++目录，头文件包含目录，工程引用目录，库目录（xxx\build\Debug）
+连接器 -》 输入 -》 附件依赖项，添加lib，dll
+改控制台任务
+
 崩溃处理过程
 一，strace 查信号描述
 strace -i -x -o segfault.txt ./segfault.o
