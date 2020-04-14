@@ -12,3 +12,16 @@ LSS - 小于
 LEQ - 小于或等于
 GTR - 大于
 GEQ - 大于或等于
+
+msys2
+安装软件
+pacman -S 软件名: 安装软件。也可以同时安装多个包，只需以空格分隔包名即可。
+pacman -S --needed 软件名1 软件名2: 安装软件，但不重新安装已经是最新的软件。
+pacman -Sy 软件名：安装软件前，先从远程仓库下载软件包数据库(数据库即所有软件列表)。
+pacman -Sv 软件名：在显示一些操作信息后执行安装。
+pacman -Sw 软件名: 只下载软件包，不安装。
+pacman -U 软件名.pkg.tar.gz：安装本地软件包。
+pacman -U http://www.example.com/repo/example.pkg.tar.xz: 安装一个远程包（不在 pacman 配置的源里面）。
+更新系统
+pacman -Sy: 从服务器下载新的软件包数据库（实际上就是下载远程仓库最新软件列表到本地）。
+pacman -Su: 升级所有已安装的软件包。
