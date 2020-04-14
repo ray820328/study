@@ -25,3 +25,5 @@ pacman -U http://www.example.com/repo/example.pkg.tar.xz: 安装一个远程包�
 更新系统
 pacman -Sy: 从服务器下载新的软件包数据库（实际上就是下载远程仓库最新软件列表到本地）。
 pacman -Su: 升级所有已安装的软件包。
+安装putty
+pacman -Sy mingw-w64-x86_64-putty-ssh
