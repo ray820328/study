@@ -15,6 +15,48 @@ git config --system --unset credential.helper
 git全局ignore文件 + 项目ignore
 gitignore_global.txt
 
+
+查看远程是否有提交
+git fetch
+git status -uno
+git show-branch *master
+changed=0
+git remote update && git status -uno | grep -q 'Your branch is behind' && changed=1
+if [ $changed = 1 ]; then
+    git pull
+    echo "Updated successfully";
+else
+    echo "Up-to-date"
+fi
+
+本地和远程hash
+git log --pretty=%H ...refs/heads/master^
+git ls-remote origin -h refs/heads/master |cut -f1
+
+git rev-list HEAD...origin/master --count
+if git checkout master &&
+    git fetch origin master &&
+    [ `git rev-list HEAD...origin/master --count` != 0 ] &&
+    git merge origin/master
+then
+    echo 'Updated!'
+else
+    echo 'Not updated.'
+fi
+
+【python3】
+#strCommand = r'd: && cd {} && git rev-list {}...{} --count'
+strCommand = r'cd {} && git rev-list {}...{} --count'
+'''Execute commant, return string array.'''
+execCommand = strCommand.format(localDir, "HEAD", "origin/master")
+#output = os.system(execCommand)
+#execCommand = ["git", "rev-list", "HEAD...origin/master", "--count"]
+result = run(execCommand, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
+print("status = %s, output = %s" % (result.stderr, result.stdout))
+if result.stderr.strip() != "":
+   assert False
+if result.stdout.strip() != "0":
+
 @echo off
 ::    
 :: Stops commits that have empty log messages.
