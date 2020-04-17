@@ -15,6 +15,9 @@ git config --system --unset credential.helper
 git全局ignore文件 + 项目ignore
 gitignore_global.txt
 
+git config --global user.name username
+git config --global user.email email
+git config --list
 
 查看远程是否有提交
 git fetch
