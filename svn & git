@@ -210,4 +210,17 @@ Git鼓励大量使用分支：
 --------------------- 
 
 mac免密码git
+在~/下， touch创建文件 .git-credentials：
+touch .git-credentials
+# 用vim编辑此文件，
+vim .git-credentials
+#输入内容格式
+https://username:password@github.com
+git config --global credential.helper store
+可以看到~/.gitconfig文件，会多了一项：
+[credential]
+    helper = store
+删除保存的密码
+git credential-osxkeychain erase
+https://my.oschina.net/yangq20/blog/803036
 https://www.cnblogs.com/SUPER-F/p/7298556.html
