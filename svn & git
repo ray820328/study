@@ -207,6 +207,12 @@ Git鼓励大量使用分支：
 创建+切换分支：git checkout -b <name>
 合并某分支到当前分支：git merge <name>
 删除分支：git branch -d <name>
+
+git restore -s HEAD~1 READEME.md  // 将版本回退到当前快照的前一个版本
+git restore -s 91410eb9  READEME.md  // 指定明确的 commit id ，回退到指定的快照中
+git reset --soft HEAD^  // 撤销 commit 至上一次 commit 的版本
+git restore --worktree README.md	表示撤销 README.md 文件工作区的的修改	参数等同于 -W
+git restore --staged README.md	表示撤销暂存区的修改，将文件状态恢复到未 add 之前	参数等同于 -S
 --------------------- 
 
 mac免密码git
