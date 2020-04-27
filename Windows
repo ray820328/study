@@ -3,6 +3,9 @@ netstat -aon|findstr "6000"
 tasklist|findstr "12112"
 taskkill /f /t /im baidunetdiskhost.exe
 
+文件占用信息
+任务管理器 -》 性能 -》 资源监视器 -》搜索
+
 openssl
 https://slproweb.com/products/Win32OpenSSL.html
 
