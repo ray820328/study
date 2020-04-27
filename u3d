@@ -168,6 +168,17 @@ public static float GetAngleBetween(Vector3 from, Vector3 to, Vector3 origin)
 }
 例子：向量from=(1, 0, 1), to=(-1, 0, 1) ，求from顺时针转到b的旋转角，则origin应该为(0, 1, 0)，结果为270度。若origin=(0, -1, 0)，则逆时针，结果为90度。
 
+function MovementSystem:GetDestAngle(tbFrom, tbTo)
+	local nAngle = Vector3.Angle(Vector3.zero - tbFrom, Vector3.zero - tbTo)
+	local nSign = Mathf.Sign(Vector3.Dot(Vector3.up, Vector3.Cross(Vector3.zero - tbFrom, Vector3.zero - tbTo)))
+	local nSignedAngle = nAngle * nSign
+	local nDestAngle = nSignedAngle
+	if nSignedAngle <= 0 then
+    	nDestAngle = 360 + nSignedAngle
+    end
+    return nDestAngle
+end
+
 //类似Transform.RotateAround(Vector3 point, Vector3 axis, float angle)方法的效果
 public static Vector3 RotateAround(Vector3 from, Vector3 center, Vector3 axis, float angle)
 {
