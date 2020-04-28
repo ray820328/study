@@ -1,7 +1,9 @@
 /usr/local/etc/nginx/nginx.conf
+nginx -t -c /usr/nginx/conf/nginx.conf
 nginx -s reload
 nginx -s stop
 nginx
+service nginx start
 
 location /xxx/ {
  alias /xxx/xxx/;
