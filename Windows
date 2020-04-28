@@ -5,6 +5,9 @@ taskkill /f /t /im baidunetdiskhost.exe
 
 文件占用信息
 任务管理器 -》 性能 -》 资源监视器 -》搜索
+删除特殊文件，被Windows当作设备文件
+一、rd /s \\.\C:\aux，rd 是命令提示符删除文件夹的命令，/s 参数表示从所有子目录删除指定文件。
+二、del \\.\D:\xxx\Third\tolua\tolua_runtime-master\android\NUL
 
 openssl
 https://slproweb.com/products/Win32OpenSSL.html
