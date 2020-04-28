@@ -27,5 +27,6 @@ ssh
 如果你的安装包形式是.dmg，可能需要把其中的 .pkg 文件拷贝到桌面上，
 然后进入 Desktop 目录。一旦确认 .pkg 文件的位置，输入“lsbom .pkg/Contents/Archive.bom> | more”。你所看见的就是新程序将会安装的完整文件列表。
 
+brew cask install homebrew/cask-versions/adoptopenjdk8
 brew cask install homebrew/cask-versions/java8
 brew cask uninstall java
