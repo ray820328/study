@@ -18,3 +18,24 @@ lua内存检测
 https://github.com/leinlin/Miku-LuaProfiler/tree/master#zh
 
 obj:method() 等价于 getmetatable(obj).__index.method(obj)
+
+tolua协程（基于FrameTimer）
+coroutine.start(self.MoveTowards, tbFrom, tbTo)
+function XXXSystem:MoveTowards(tbFrom, tbTo)
+    print('Coroutine started')
+    local i = 0
+    for i = 0, 10, 1 do
+        print(i)
+        coroutine.wait(0.1)
+    end	
+	print("current frameCount: "..Time.frameCount)
+	coroutine.step()
+	print("yield frameCount: "..Time.frameCount)
+ 
+	-- local www = UnityEngine.WWW("http://www.baidu.com")
+	-- coroutine.www(www)
+	-- local s = tolua.tolstring(www.bytes)
+	-- print(s:sub(1, 128))
+    print('Coroutine ended')
+end
+
