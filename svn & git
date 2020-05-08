@@ -2,6 +2,16 @@
 看到work_queue中保存的工作队列
 执行sqlite3 .svn/wc.db "delete from work_queue" 删除工作队列
 
+svn st | grep '^\?' | tr '^\?' ' ' | sed 's/[ ]*//' | sed 's/[ ]/\\ /g' | xargs svn add
+svn st | awk '{if ( $1 == "?") { print $2}}' | xargs svn add
+将同一目录下的未加入版本库的文件提交到版本库。 
+svn add *
+上面只是针对同一目录的文件，如果目录下还有目录，这时上面的命令提交就不行了。如果是二级目录的话。操作命令如下： 
+svn add */* 
+三目录依次类推。 
+svn add */*/* 
+svn commit path path path -m ""
+
 git eclipse 冲突解决方法
 http://blog.csdn.net/rosten/article/details/17068285
 
