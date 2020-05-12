@@ -14,6 +14,10 @@ copy system.xml.dll %windir%\system32\
 regsvr32 %windir%\system32\system.xml.dll /s
 @echo system.xml.dll注册成功
 
+转换sh格式
+:set ff
+:set ff=unix
+
 当前目录下所有文件的行数
 wc –l ./*
 
