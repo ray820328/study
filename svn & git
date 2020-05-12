@@ -259,7 +259,23 @@ git clean -d -fx
     -x -----删除忽略文件已经对git来说不识别的文件
     -d -----删除未被添加到git的路径中的文件
     -f -----强制运行
-    
+
+git revert和git reset的区别
+revert 是将之前的提交反转（新增就删除），然后作为一次新的提交；
+reset commit_id是回滚到该commit_id下，该commit_id之后的提交都会删除。
+在生产环境一般建议用git revert。
+步入正题：(若回滚多个commit，做好先回滚最近的commit) 
+1、git revert -n commit_id ，若出现is a merge but no -m option was given 
+这是因为你revert的那个commit是一个merge commit，它有两个parent, Git不知道base是选哪个parent，就没法diff，要显示告诉Git用哪一个parent。 
+git revert -n commit_id -m 1 这样就选parent 1，那么parent 1又是哪一个呢？ 
+一般来说，如果你在master上merge branch_xxx,那么parent 1就是master，parent 2就是branch_xxx. 
+2、git reset HEAD 
+3、git add. 
+4、git commit -m “xxx” 
+5、git push origin master
+revert之后，修改好分支再merge到master发现之前merge的代码不能merge到master上了，这是因为master上已经有了之前的merge历史了 
+解决办法：revert之前revert的commit_id 
+
 --------------------- 
 
 mac免密码git
