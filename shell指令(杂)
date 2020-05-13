@@ -21,6 +21,8 @@ regsvr32 %windir%\system32\system.xml.dll /s
 当前目录下所有文件的行数
 wc –l ./*
 
+date +%Y%m%d_%H%M%S
+
 下载sh直接执行
 curl -H "X-PROJECT-ID: xxx" http://xxx/install | bash
 
