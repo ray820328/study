@@ -44,6 +44,10 @@ https://gameinstitute.qq.com/community/detail/120610
 
 DateTime.Now.Ticks = 10 * 1000 * 10000;//10S
 
+pvrtextool_wrapper：https://github.com/fxgames/pvrtextool_wrapper
+Unity打包会调用pvrtextool，通过这个wrapper替换掉原始程序，这样可以在打开发版本时，强制把压缩质量设置到fast模式，
+这样就可以节约大量的时间，而不需要修改任何贴图的压缩质量参数。如果觉得Mac Pro太贵了，可以试一下这个方法。
+
 虚拟机——Mono
 Mono是一个基于CLR的开源项目，允许引擎和用户的托管代码运行在每一个目标平台上。而CLR全称为通用语言运行平台（Common Language Runtime），是微软的.Net虚拟机。它其中两个主要作用是：1，编译——运行前把C#编译为CIL；2，运行——在运行的时把CIL转换成各平台的原生码。
 这些是Mono支持的平台：Android，Apple iOS（iOS，Apple macOS，Apple tvOS，Apple watchOS），BSD （OpenBSD, FreeBSD, NetBSD），Linux，Microsoft Windows，Nintendo Wii，Sony PlayStation 3，Sony PlayStation 4，Sun Solaris
