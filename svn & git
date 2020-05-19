@@ -12,6 +12,13 @@ svn add */*
 svn add */*/* 
 svn commit path path path -m ""
 
+不同操作系统协同开发，换行符问题
+Windows and UNIX system don't use same line-ending, to prevent conflict from happening based on these, you should setup you git config this way:
+Windows : git config --global core.autocrlf true
+Unix : git config --global core.autocrlf input
+Next, to make sure we only commit with ideal whitespace rules, you can set this config option:
+git config --global core.whitespace trailing-space,space-before-tab,indent-with-non-tab
+
 git eclipse 冲突解决方法
 http://blog.csdn.net/rosten/article/details/17068285
 
