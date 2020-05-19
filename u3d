@@ -18,6 +18,13 @@ https://zhuanlan.zhihu.com/p/23693325
 Unity Playables API
 https://blog.csdn.net/SHIYUEDYX/article/details/87188675
 
+平台打包，设置宏
+ProjectSettings.asset
+  scriptingDefineSymbols:
+    1: Debug;UNITY_ANDROID
+    4: BUNDLE;UNITY_IPHONE
+    7: UNITY_STANDALONE_WIN
+
 Unity LOD更优化方案：Amplify ImpostorsUnity
 http://seanyxie.com/a/youxikaifa/Unity/2019/0327/19.html
 
