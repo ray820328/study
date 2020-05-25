@@ -49,3 +49,5 @@ fi
 if [表达式1 –a 表达式2]
 逻辑或 -o 条件表达式的或
 if [表达式1 –o 表达式2]
+
+sed -n '/scriptingDefineSymbols/,/platformArchitecture/p' /xxx/ProjectSettings.asset
