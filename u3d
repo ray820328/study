@@ -56,6 +56,8 @@ wnd.Init();
 EditorWindow window = EditorWindow.GetWindow<Panel2>("选择2", typeof(Panel1));
 wnd.Focus();
 
+UnityEngine.Input.GetKey("left shift")
+
 pvrtextool_wrapper：https://github.com/fxgames/pvrtextool_wrapper
 Unity打包会调用pvrtextool，通过这个wrapper替换掉原始程序，这样可以在打开发版本时，强制把压缩质量设置到fast模式，
 这样就可以节约大量的时间，而不需要修改任何贴图的压缩质量参数。如果觉得Mac Pro太贵了，可以试一下这个方法。
