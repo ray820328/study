@@ -162,4 +162,53 @@ ENOTSOCK：sock索引的不是套接字 当返回值是0时，为正常关闭连
 当对侧没有send，即本侧的套接字s的接收缓冲区无数据，返回值是什么（EAGAIN，原因为超时，待测）
 
 
+------------------------------------------------工具软件
+gcc升级到9.2.0
+gcc -v    # 查看当前gcc版本信息
+yum -y install wget bzip2 gcc gcc-c++ glibc-headers
+wget -c -P /opt/tmp/ https://mirrors.tuna.tsinghua.edu.cn/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.gz
+cd /opt/tmp/
+tar -zxvf gcc-9.2.0.tar.gz
+cd gcc-9.2.0
+./contrib/download_prerequisites    #下载gmp mpfr mpc等供编译需求的依赖项
+mkdir build    #不能在source目录下configure必须在上一层的目录下
+cd build
+../configure --prefix=/usr/local/gcc-9.2.0 --enable-bootstrap --enable-checking=release --enable-languages=c,c++ --disable-multilib
+make install
+gcc -v
+echo -e '\nexport PATH=/usr/local/gcc-9.2.0/bin:$PATH\n' >> /etc/profile.d/gcc.sh && source /etc/profile.d/gcc.sh
+#导出头文件
+ln -sv /usr/local/gcc-9.2.0/include/ /usr/include/gcc
+#配置生效
+ldconfig -v
+#导出验证
+ldconfig -p |grep gcc
+gcc -v
+link到旧的gcc
+/usr/bin/gcc
+
+/usr/bin/gcc -v
+
+备份系统默认的gcc版本
+mv /usr/bin/gcc /usr/bin/gcc-bak
+mv /usr/bin/g++ /usr/bin/g++-bak
+mv /usr/bin/c++ /usr/bin/c++-bak
+mv /usr/lib64/libstdc++.so.6 /usr/lib64/libstdc++.so.6-bak
+创建新的gcc软连接
+ln -fs /usr/local/gcc-9.2.0/bin/gcc /usr/bin/gcc
+ln -fs /usr/local/gcc-9.2.0/bin/c++ /usr/bin/c++
+ln -fs /usr/local/gcc-9.2.0/bin/g++ /usr/bin/g++
+ln -fs /usr/local/gcc-9.2.0/lib64/libstdc++.so.6.0.27 /usr/lib64/libstdc++.so.6
+
+
+svn
+yum install apr
+yum install apr-util-devel
+wget www.sqlite.org/sqlite-amalgamation-3071501.zip
+unzip sqlite-amalgamation-3071501.zip
+mv  sqlite-amalgamation-3071501  sqlite-amalgamation
+yum install cyrus-sasl-md5
+yum install cyrus-sasl cyrus-sasl-plain cyrus-sasl-ldap
+svn checkout svn://ccc.rdev.ccc.net/ccc/trunk/Server/work ./
+svn update
 
