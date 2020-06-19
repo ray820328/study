@@ -142,6 +142,8 @@ echo $((N#xx))
 42
 [root@localhost ~]# echo $((8#11))
 9
+10进制转16
+printf "%x" 128
 
 (())重定义变量值
 [root@localhost ~]# a=5;b=7
