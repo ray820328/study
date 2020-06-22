@@ -11,6 +11,23 @@ svn add */*
 三目录依次类推。 
 svn add */*/* 
 svn commit path path path -m ""
+svn up
+mkdir product && cd product
+svn checkout svn://xxx.net/xx/trunk/Server/work ./
+svn revert --recursive .
+
+Centos升级svn
+[删掉重装，可以直接update升级 yum remove subversion / yum clean all]
+cd /etc/yum.repos.d/
+cp CentOS-Base.repo CentOS-Base.repo.back
+vi CentOS-Base.repo
+[WandiscoSVN]
+name=Wandisco SVN Repo
+baseurl=http://opensource.wandisco.com/centos/$releasever/svn-1.10/RPMS/$basearch/
+enabled=1
+gpgcheck=0
+yum list subversion
+yum -y install/update subversion
 
 不同操作系统协同开发，换行符问题
 Windows and UNIX system don't use same line-ending, to prevent conflict from happening based on these, you should setup you git config this way:
