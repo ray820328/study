@@ -61,6 +61,11 @@ dmesg
 2.出错时ip：0x400507 
 3.错误号：6，即110
 三，core dump调试
+解决
+Missing separate debuginfos, use: debuginfo-install glibc-2.17-307.el7.1.x86_64 libgcc-4.8.5-39.el7.x86_64
+yum install yum-utils
+debuginfo-install glibc-2.17-307.el7.1.x86_64 libgcc-4.8.5-39.el7.x86_64
+
 core dump配置：ulimit -c或ulimit -a为0则默认关闭，
 $ulimit -c unlimited　　（只对当前shell进程有效）
 或在~/.bashrc　的最后加入： ulimit -c unlimited （一劳永逸）
