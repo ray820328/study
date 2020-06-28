@@ -212,3 +212,16 @@ yum install cyrus-sasl cyrus-sasl-plain cyrus-sasl-ldap
 svn checkout svn://ccc.rdev.ccc.net/ccc/trunk/Server/work ./
 svn update
 
+
+centos开机自启动
+# chkconfig:   2345 90 10
+# description:  server run env
+1、将脚本移动到/etc/rc.d/init.d目录下
+mv /opt/script/AutoServices.sh /etc/rc.d/init.d
+2、增加脚本的可执行权限
+chmod +x  /etc/rc.d/init.d/AutoServices.sh
+3、添加脚本到开机自动启动项目中
+cd /etc/rc.d/init.d
+chkconfig --add AutoServices.sh
+chkconfig AutoServices.sh on
+
