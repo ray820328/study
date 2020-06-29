@@ -15,6 +15,13 @@ update user set password=password('pwd') where user='root';
 flush privileges;
 exit;
 
+mysql -uroot -p -e  "source temp1.sql" >> 2.txt
+mysql -uroot -p  < temp1.sql >> 3.txt
+mysql -uroot -p -e "    
+use study;
+select * from t_user;  
+"  >> user.txt
+
 --------------------------------------centos6安装mysql5.5-----------------------------------
 yum list installed | grep -i mysql
 yum remove mysql mysql-*
