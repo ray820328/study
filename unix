@@ -26,6 +26,7 @@ du -h --max-depth=1 work/testing/×
 
 last -x|grep reboot/shutdown
 last /var/log/wtmp
+ulimit -c unlimited
 
 find /tmp -mtime +3 -type f -name *.sh[ab] -exec rm -f {} \;
 /tmp  --设置查找的目录；
