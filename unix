@@ -24,6 +24,8 @@ du -h --max-depth=1
 du -h --max-depth=1 work/testing
 du -h --max-depth=1 work/testing/×
 
+last -x|grep reboot/shutdown
+
 find /tmp -mtime +3 -type f -name *.sh[ab] -exec rm -f {} \;
 /tmp  --设置查找的目录；
 -mtime +30 --设置时间为30天前；
