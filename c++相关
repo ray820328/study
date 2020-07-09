@@ -139,6 +139,15 @@ std::function
 void XXX::Foreach(std::function<void(ConfigXXX* config)> iterFunc)
 xxxPtr->Foreach([this](ConfigXXX* config) {
 
+bool xxx::WriteLog(int priority, const std::string &fields, const char* format, ...) {
+    assert(format);
+    va_list args;
+    va_start(args, format);
+    bool result = m_logger.WriteWithHeadVNew(priority, fields, format, args);
+    va_end(args);
+    return result;
+}
+
 Makefile选项CFLAGS,LDFLAGS,LIBS
 CFLAGS 表示用于 C 编译器的选项，
 CXXFLAGS 表示用于 C++ 编译器的选项。
