@@ -224,4 +224,7 @@ chmod +x  /etc/rc.d/init.d/AutoServices.sh
 cd /etc/rc.d/init.d
 chkconfig --add AutoServices.sh
 chkconfig AutoServices.sh on
+方式二，
+chmod +x /etc/rc.d/rc.local
+./data/AutoServices.sh start
 
