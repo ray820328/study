@@ -45,6 +45,11 @@ id_rsa.pub
 控制面板\用户帐户\凭据管理器\Windows 凭据
 清除账号信息
 git config --system --unset credential.helper
+不能解决问题那么用这个命令： 
+git config -–global http.emptyAuth true
+如果两个方法不起作用，采用以下方法：
+进入控制面板》用户账号》凭据管理器？windows凭据》普通凭据，在里面找到git，编辑密码，更新为最新密码
+
 
 git全局ignore文件 + 项目ignore
 gitignore_global.txt
