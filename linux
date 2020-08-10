@@ -214,6 +214,9 @@ svn update
 
 
 jq
+centos
+yum install jq -y
+
 wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-1.5.tar.gz
 tar -zvxf jq-1.5.tar.gz
 jq-1.5
