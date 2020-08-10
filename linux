@@ -213,6 +213,14 @@ svn checkout svn://ccc.rdev.ccc.net/ccc/trunk/Server/work ./
 svn update
 
 
+jq
+wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-1.5.tar.gz
+tar -zvxf jq-1.5.tar.gz
+jq-1.5
+./configure --prefix=/usr/local --disable-maintainer-mode
+make && make install
+
+
 centos开机自启动
 # chkconfig:   2345 90 10
 # description:  server run env
