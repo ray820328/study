@@ -290,3 +290,32 @@ gcc mydll.c -shared -o mydll.dll -Wl,--out-implib,mydll.lib
 gcc mydll.c -shared -o mydll.dll -Wl,--output-def,mydll.def,--out-implib,mydll.a
 动态dll库调用
 gcc -m32  -o Test  Test.c  mydll.dll
+
+静态库链接时搜索路径顺序：
+1. ld会去找GCC命令中的参数-L
+2. 再找gcc的环境变量LIBRARY_PATH
+3. 再找内定目录 /lib /usr/lib /usr/local/lib 这是当初compile gcc时写在程序内的
+动态链接时、执行时搜索路径顺序:
+1. 编译目标代码时指定的动态库搜索路径
+2. 环境变量LD_LIBRARY_PATH指定的动态库搜索路径
+3. 配置文件/etc/ld.so.conf中指定的动态库搜索路径
+4. 默认的动态库搜索路径/lib
+5. 默认的动态库搜索路径/usr/lib
+有关环境变量：
+LIBRARY_PATH环境变量：指定程序静态链接库文件搜索路径
+LD_LIBRARY_PATH环境变量：指定程序动态链接库文件搜索路径
+在Linux下编译链接或运行c/c++程序时可能会遇到找不到头文件，找不到库文件的错误，简单总结一下这些错误的解决方法
+1，找不到头文件
+解决方法一：在编译时使用 -I 来指定头文件的路径，例如把头文件放在 /home/user/include/ 目录下，则在编译时加上 -I /home/user/include/ ,如有多个目录，可多次使用-I来指定
+解决方法二：将头文件的路径加入环境变量CPATH中，如 export CPATH=" /home/user/include/",也可以根据情况使用下面的三个环境变量：
+C_INCLUDE_PATH 编译C程序时使用的环境变量，用于查找头文件。
+CPLUS_INCLUDE_PATH 编译C++程序时使用的环境变量，用于查找头文件。
+OBJC_INCLUDE_PATH 编译Obj-C程序时使用的环境变量，用于查找头文件。
+CPATH 编译C/C++/Obj-C程序时使用的环境变量，用于查找头文件。
+2，链接时找不到库文件
+解决方法一：在链接时使用-L参数来指定库的路径,例如把某个自己制作的动态库放在/home/user/lib/目录下了，则链接程序时加上-L/home/user/lib/,同时可以使用-l来指定库的名称，如指定线程库:-lpthread
+解决方法二：把库文件放入系统的库文件目录下，如/lib,/usr/lib等，操作系统运行该程序时会自动到这些目录下找库文件
+解决方法三：把库文件所在的目录加入LIBRARY_PATH环境变量中，如 export LIBRARY_PATH=" /home/user/lib/"
+3,运行时找不到动态库
+解决方法一：把库文件放入系统的库文件目录下，如/lib,/usr/lib等
+解决方法二：把库文件所在的目录加入LD_LIBRARY_PATH环境变量中，如 export LD_LIBRARY_PATH=" /home/user/lib/"
