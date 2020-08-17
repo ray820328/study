@@ -46,6 +46,27 @@ VC++目录，头文件包含目录，工程引用目录，库目录（xxx\build\
 连接器 -》 输入 -》 附件依赖项，添加lib，dll
 改控制台任务
 
+Win cl生成静态动态库
+:WORKFLOW
+if %BUILD_DYNAMIC_LIB% equ "true" goto :BUILD_DYNAMIC_LIBRARY
+cl /c /nologo /W3 /O2 /Ob1 /Oi /Gs /MD /D_CRT_SECURE_NO_DEPRECATE l*.c
+@rem 重命名lua.c,luac.c的中间文件，lib是不需要连接该文件的
+ren lua.obj lua.o
+ren luac.obj luac.o
+lib /OUT:%LIBNAME% *.obj
+copy %LIBNAME% ..\lib\%LIBNAME%
+del *.o *.obj *.exp *.lib *.dll *.exe
+goto :BUILD_END
+:BUILD_DYNAMIC_LIBRARY
+cl /c /nologo /W3 /O2 /Ob1 /Oi /Gs /MD /D_CRT_SECURE_NO_DEPRECATE /DLUA_BUILD_AS_DLL l*.c
+ren lua.obj lua.o
+ren luac.obj luac.o
+link /DLL /IMPLIB:%LIBNAME% /OUT:%DLLNAME% *.obj
+link /OUT:lua53.exe lua.o %LIBNAME%
+link /OUT:luac53.exe luac.o *.obj
+使用以下命令行提示符运行生成
+适用于 VS2017的 x64 本机工具命令提示
+
 崩溃处理过程
 一，strace 查信号描述
 strace -i -x -o segfault.txt ./segfault.o
