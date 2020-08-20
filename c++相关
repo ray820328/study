@@ -319,3 +319,25 @@ CPATH 编译C/C++/Obj-C程序时使用的环境变量，用于查找头文件。
 3,运行时找不到动态库
 解决方法一：把库文件放入系统的库文件目录下，如/lib,/usr/lib等
 解决方法二：把库文件所在的目录加入LD_LIBRARY_PATH环境变量中，如 export LD_LIBRARY_PATH=" /home/user/lib/"
+
+//字符串替换所有
+void Debugger::ReplaceAll(std::string& source, const std::string& from, const std::string& to)
+{
+    std::string newString;
+    newString.reserve(source.length());  // avoids a few memory allocations
+
+    std::string::size_type lastPos = 0;
+    std::string::size_type findPos;
+
+    while (std::string::npos != (findPos = source.find(from, lastPos)))
+    {
+        newString.append(source, lastPos, findPos - lastPos);
+        newString += to;
+        lastPos = findPos + from.length();
+    }
+
+    // Care for the rest after last occurrence
+    newString += source.substr(lastPos);
+
+    source.swap(newString);
+}
