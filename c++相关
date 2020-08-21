@@ -104,6 +104,32 @@ x /4x 0x...
 info symbol 0x...
 与 head 节点一样, 第一个节点的最低 4 个字节存储的是下一链表节点位置的指针, 紧随其后的 4 个字节是该层调用的返回地址, 查看其内容如下:
 
+gdb
+解决
+Missing separate debuginfos, use: debuginfo-install glibc-2.17-307.el7.1.x86_64 libgcc-4.8.5-39.el7.x86_64
+yum install yum-utils
+debuginfo-install glibc-2.17-307.el7.1.x86_64 libgcc-4.8.5-39.el7.x86_64
+
+解决默认库路径问题
+warning: .dynamic section for "/usr/lib64/libstdc++.so.6" is not at the expected address (wrong library or version mismatch?)
+set solib-absolute-prefix /home #这步的作用是把你的app加载上的库，全部去除掉
+set solib-search-path /home/my/app/lib/ #这步的作用是把库重新加载一下。注意，如果你的系统库（比如libc libgcc之类）与core dump文件里记录的版本不同，这里也可以直接把系统库放在该路径下
+info sharedlibrary #查看一下是不是所有的库都加载上了。
+
+warning: Can't read pathname for load map: Input/output error.
+
+https://www.cnblogs.com/muhe221/articles/4846680.html
+dbg core.27398 serverd
+backtrace/bt
+disas 【反汇编后 “=>”表示出错的汇编代码位置】
+info r 【查看寄存器的情况】
+frame/f x
+p var
+p *ptr
+help x
+x/16c 【address //表示查看address地址后面的16个char类型的值】
+
+
 http://valgrind.org/downloads/current.html
 ./configure
 make
