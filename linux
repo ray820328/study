@@ -200,6 +200,33 @@ ln -fs /usr/local/gcc-9.2.0/bin/c++ /usr/bin/c++
 ln -fs /usr/local/gcc-9.2.0/bin/g++ /usr/bin/g++
 ln -fs /usr/local/gcc-9.2.0/lib64/libstdc++.so.6.0.27 /usr/lib64/libstdc++.so.6
 
+cmake手动升级
+yum remove cmake
+cd /opt
+wget https://cmake.org/files/v3.10/cmake-3.10.2-Linux-x86_64.tar.gz
+tar zxvf cmake-3.10.2-Linux-x86_64.tar.gz
+./bootstrap
+报错ssl的话安装一下
+yum install openssl-devel
+make
+make install
+错误2：make install时出现报错：
+[100%] Built target foo
+Install the project...
+-- Install configuration: ""
+CMake Error at Source/kwsys/cmake_install.cmake:41 (file):
+  file cannot create directory: /usr/local/doc/cmake-3.16/cmsys.  Maybe need
+  administrative privileges.
+Call Stack (most recent call first):
+  cmake_install.cmake:42 (include)
+Makefile:76: recipe for target 'install' failed
+make: *** [install] Error 1
+解决方案：
+直接在make 和 make install 前面加 sudo
+vi /etc/profile
+export CMAKE_HOME=/data/download/CMake-3.18.2
+export PATH=$PATH:$CMAKE_HOME/bin
+source /etc/profile
 
 svn
 yum install apr
