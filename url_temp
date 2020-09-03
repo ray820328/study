@@ -49,3 +49,6 @@ http://mvnrepository.com/
 
 虚拟内存使用过大问题描述
 https://stackoverflow.com/questions/561245/virtual-memory-usage-from-java-under-linux-too-much-memory-used
+
+浅论面向字节无损数据压缩算法LZ4在ARM上的应用
+https://www.rs-online.com/designspark/lz4-cn
