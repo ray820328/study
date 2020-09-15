@@ -67,69 +67,6 @@ link /OUT:luac53.exe luac.o *.obj
 使用以下命令行提示符运行生成
 适用于 VS2017的 x64 本机工具命令提示
 
-崩溃处理过程
-一，strace 查信号描述
-strace -i -x -o segfault.txt ./segfault.o
-得到如下信息： 
-1.错误信号：SIGSEGV 
-3.错误码：SEGV_MAPERR 
-3.错误内存地址：0x0 
-4.逻辑地址0x400507处出错.
-二，dmesg 查错误现场
-dmesg
-得到： 
-1.错误类型：segfault ,即段错误（Segmentation Fault）. 
-2.出错时ip：0x400507 
-3.错误号：6，即110
-三，core dump调试
-解决
-Missing separate debuginfos, use: debuginfo-install glibc-2.17-307.el7.1.x86_64 libgcc-4.8.5-39.el7.x86_64
-yum install yum-utils
-debuginfo-install glibc-2.17-307.el7.1.x86_64 libgcc-4.8.5-39.el7.x86_64
-
-core dump配置：ulimit -c或ulimit -a为0则默认关闭，
-$ulimit -c unlimited　　（只对当前shell进程有效）
-或在~/.bashrc　的最后加入： ulimit -c unlimited （一劳永逸）
-
-gdb ./test test.core
-gdb>bt
-出错的代码位置
-gdb>print 变量名
-
-https://blog.csdn.net/swartz_lubel/article/details/77972384
-i r epb
-打印寄存器 ebp 的内容（函数的地址及局部变量栈顶head指针，在 64 位系统中, 寄存器 esp 变成了 rsp, 寄存器 ebp 变成了 rbp, 寄存器 ip 变成了 rip. 而在 arm 平台中, 寄存器 ebp 则变成了 fp）
-x /4x 0x...
-寄存器 ebp 内容所指向的区域信息
-info symbol 0x...
-与 head 节点一样, 第一个节点的最低 4 个字节存储的是下一链表节点位置的指针, 紧随其后的 4 个字节是该层调用的返回地址, 查看其内容如下:
-
-gdb
-解决
-Missing separate debuginfos, use: debuginfo-install glibc-2.17-307.el7.1.x86_64 libgcc-4.8.5-39.el7.x86_64
-yum install yum-utils
-debuginfo-install glibc-2.17-307.el7.1.x86_64 libgcc-4.8.5-39.el7.x86_64
-
-解决默认库路径问题
-warning: .dynamic section for "/usr/lib64/libstdc++.so.6" is not at the expected address (wrong library or version mismatch?)
-set solib-absolute-prefix /home #这步的作用是把你的app加载上的库，全部去除掉
-set solib-search-path /home/my/app/lib/ #这步的作用是把库重新加载一下。注意，如果你的系统库（比如libc libgcc之类）与core dump文件里记录的版本不同，这里也可以直接把系统库放在该路径下
-info sharedlibrary #查看一下是不是所有的库都加载上了。
-
-warning: Can't read pathname for load map: Input/output error.
-
-https://www.cnblogs.com/muhe221/articles/4846680.html
-dbg core.27398 serverd
-backtrace/bt
-disas 【反汇编后 “=>”表示出错的汇编代码位置】
-info r 【查看寄存器的情况】
-frame/f x
-p var
-p *ptr
-help x
-x/16c 【address //表示查看address地址后面的16个char类型的值】
-
-
 http://valgrind.org/downloads/current.html
 ./configure
 make
