@@ -57,6 +57,9 @@ gitignore_global.txt
 git config --global user.name username
 git config --global user.email email
 git config --list
+小乌龟免密码
+[credential]
+  helper = store
 
 查看远程是否有提交
 git fetch
