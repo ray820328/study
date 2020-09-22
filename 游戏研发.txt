@@ -1,3 +1,15 @@
+Android后台切回前台的事件流
+onPause(切回后台之前) -> onResume -> focusChanged(false) -> focusChanged(true) (后面3个都是要在前台才能收到）
+不切出游戏暂停游戏 focusChanged(false) -> focusChanged(true) // 如呼出键盘，或者下拉通知栏
+IOS后台切回前台的事件流
+IOS的消息顺序  resignActive(切回后台之前) -> enterBackground -> enterForeground -> becomeActive (后面3个都是要在前台才能收到）
+不切出游戏暂停游戏 resignctive -> becomeActive
+由上：
+Android可以监听focusChanged(false) -> focusChanged(true) ，注意onPause要当做一次focusChanged(false)。记录两次事件的间隔，比如间隔时间过长直接重新建立连接，比较短的话立即做一次
+网络检查。
+IOS可以监听resignctive -> becomeActive
+
+
 策划，配表
 通用奖励格式
 操作类型|道具id|最小数量|最大数量（0固定最小）|绑定（0非绑1绑）|随机取范围（0必中)|随机取模（0取默认100）_
