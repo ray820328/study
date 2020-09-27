@@ -365,7 +365,7 @@ git rebase -i "5b3ba7a"^
 git push origin master -f
 通过上述操作，如果你想对历史多个commit进行处理或者，可以选择git rebase -i，只需删除对应的记录就好。rebase还可对 commit 消息进行编辑，以及合并多个commit。
 
-git tag操作
+git tag管理
 列出已有的tag
 git tag -l "v0.1.*"
 新建tag
