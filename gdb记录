@@ -208,6 +208,12 @@ Enter actions for tracepoint 1, one per line:
  tstatus 显示当前跟踪数据收集的状态
 （8）断下后执行命令
 commands num（断点编号）在触发断点后执行commands，命令以end结束
+break server/mailservice/mail/xxx.cpp:648 if playerID==234881029
+commands 1
+    print playerID
+    print isOnline
+    continue
+end
 用define 编写自定义的宏
 (gdb) define br_info
 Type commands for definition of "br_info".
