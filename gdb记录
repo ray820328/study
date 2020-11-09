@@ -1,3 +1,14 @@
+layout split
+focus cmd/asm/cmd
+bt n
+b functionName if n==5
+frame n 切换到编号为 n 的栈帧 (f n)
+down n 往栈顶方向下移 n 层
+info frame(缩写形式 i f)当前栈帧的信息，如函数地址、调用函数的地址、被调用函数的地址、当前函数由哪种编程语言编写、函数参数地址及形参值、局部变量的地址等，
+info f 2 ( n )
+寄存器 ebp 指向当前栈帧的底部 (高地址)，寄存器 esp 指向当前栈帧的顶部 (低地址)。
+查看全局变量（file::variable/function::variable; 如：p 'file1.c'::x）
+
 确认程序发生过崩溃
 cat /var/log/messages
 coredump文件设置无大小限制，避免被自动删除
