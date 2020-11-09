@@ -1,3 +1,5 @@
+typedef interrupt void (*PINT)(void); 
+
 Eclipse 平台进行 C/C++ 开发
 https://www.ibm.com/developerworks/cn/linux/opensource/os-ecc/index.html
 gcc 生成 .a静态库和 .so动态库 
