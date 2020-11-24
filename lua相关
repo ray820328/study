@@ -17,6 +17,9 @@ https://blog.csdn.net/adam040606/article/details/56484488
 lua内存检测
 https://github.com/leinlin/Miku-LuaProfiler/tree/master#zh
 
+安装systemmap生成openresty的火焰图
+https://ytlm.github.io/2017/04/%E5%AE%89%E8%A3%85systemtap%E7%94%9F%E6%88%90openresty%E7%9A%84%E7%81%AB%E7%84%B0%E5%9B%BE/
+
 obj:method() 等价于 getmetatable(obj).__index.method(obj)
 
 tolua协程（基于FrameTimer）
