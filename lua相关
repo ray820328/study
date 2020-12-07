@@ -42,3 +42,301 @@ function XXXSystem:MoveTowards(tbFrom, tbTo)
     print('Coroutine ended')
 end
 
+luac -l t.lua
+
+Lua5.3.4源码，创建一个 Lua 状态机
+lua_newstate 接受2个参数,一个类型是lua_Alloc,另一个是void 。 f_luaopen调用stack_init初始化栈大小,默认为2LUA_MINSTACK,即 2* 20 = 40。 最后返回lua_State* L。
+/*lstate.c*/
+LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
+  int i;
+  lua_State *L;/*'per thread' state*/
+  global_State *g;/*'global state', shared by all threads of this state*/
+  LG *l = cast(LG *, (*f)(ud, NULL, LUA_TTHREAD, sizeof(LG)));
+  if (l == NULL) return NULL;
+  L = &l->l.l;
+  g = &l->g;
+  ...
+  if (luaD_rawrunprotected(L, f_luaopen, NULL) != LUA_OK) {
+    /* memory allocation error: free partial state */
+    close_state(L);
+    L = NULL;
+  }
+  return L;
+}
+
+Lua 状态机中使用的内存分配器函数l_alloc
+/*lauxlib.c*/
+static void *l_alloc (void *ud, void *ptr, size_t osize, size_t nsize) {
+  (void)ud; (void)osize;  /* not used */
+  if (nsize == 0) {
+    free(ptr);
+    return NULL;
+  }
+  else
+    return realloc(ptr, nsize);
+}
+
+(图：lua_State内存结构.jpg)
+lua_newstate第一块申请的内存将用来存储global_State（全局状态机）和lua_State（主线程）实例。为了避免内存碎片的产生，利用一个LG结构，把分配lua_State和global_State的行为关联在一起。
+/* @@ LUA_EXTRASPACE defines the size of a raw memory area associated with ** a Lua state with very fast access. ** CHANGE it if you need a different size. */
+#define LUA_EXTRASPACE (sizeof(void *)) 
+/* ** thread state + extra space */
+typedef struct LX {
+  lu_byte extra_[LUA_EXTRASPACE];
+  lua_State l;
+} LX;
+/* ** Main thread combines a thread state and the global state */
+typedef struct LG {
+  LX l;
+  global_State g; 
+} LG;
+
+global_State：管理lua虚拟机的全局环境,global_state 是不可见的。
+1.stringtable：全局字符串表, 字符串池化，使得整个虚拟机中短字符串只有一份实例。
+2.gc相关的信息
+3.l_registry : 注册表（管理全局数据） ，Registry表可以用debug.getregistry获取。注册表
+就是一个全局的table（即整个虚拟机中只有一个注册表），它只能被C代码访问，通常，它用来保存
+那些需要在几个模块中共享的数据。比如通过luaL_newmetatable创建的元表就是放在全局的注册表中。
+4.主lua_State, 在一个独立的lua虚拟机里, global_State是一个全局的结构,
+ 而lua_State可以有多个。 lua_newstate会创建出一个lua_State, 绑在
+ lua_State *mainthread.可以说是主线程、主执行栈。
+5.Meta table ：tmname （tag method name） 预定义了元方法名字数组；mt 每一个Lua 的基本数
+据类型都有一个元表。 global_mt可以用debug.getmetatable获取。
+lua_State:管理一个lua虚拟机的上下文执行环境,也指代 lua 的一个线程。 一个lua虚拟机可以有多个执行环境.所有的lua C API 都是围绕这个状态机。它暴露给用户使用。
+1.stack的管理, 包括管理整个栈和当前函数使用的栈的情况.每个线程拥有独立的数据栈以及函数调用栈。
+2.CallInfo的管理
+3.hook相关、错误处理设置
+4.gc相关的信息
+
+
+
+ua_newstate第一块申请的内存将用来存储global_State（全局状态机）和lua_State（主线程）实例。为了避免内存碎片的产生，利用一个LG结构，把分配lua_State和global_State的行为关联在一起。
+
+// 5.3.6
+LUAMOD_API int luaopen_base (lua_State *L) {
+  /* open lib into global table */
+  lua_pushglobaltable(L);
+  luaL_setfuncs(L, base_funcs, 0);
+  /* set global _G */
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "_G");
+  /* set global _VERSION */
+  lua_pushliteral(L, LUA_VERSION);
+  lua_setfield(L, -2, "_VERSION");
+  return 1;
+}
+
+在Lua脚本层，Lua将所有的全局变量保存在一个常规的table中，这个table被称为全局环境，并且将这个table保存在一个全局变量_G中，也就是说在脚本中可以用_G获取这个全局table，并且有_G._G == _G，在默认情况，Lua在全局环境_G中添加了标准库比如math、函数比如pairs等
+变量_G是在C中注册的(源码linit.c, lbaselib.c中)，在C中，可以直接调用lua_pushglobaltable把这个全局环境压入栈中，在lua5.2 该函数实质就是从注册表中获取这个全局环境，即lua_pushglobaltable用下面宏定义的：
+[cpp]  view plain  copy   在CODE上查看代码片 派生到我的代码片
+#define lua_pushglobaltable(L) lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS)
+
+local g = _G          -- make an additional reference
+print(g, _G, _ENV)    -- prints same address thrice
+local p = print       -- backup print for later use
+_ENV = { }            -- point _ENV to a new table/environment
+p(g, _G, _ENV)        -- old, nil, new
+
+table: 00ce1be0    table: 00ce1be0    table: 00ce1be0
+table: 00ce1be0    nil                table: 00ce96e0
+_ENV = { _G = _G }
+_G.print(_G, _ENV, _ENV._G)   -- old, new, old
+
+一个chunk就是lua的一个解释单元，可以存储在文件或者字符串中。对于每一个chunk，都有一个叫_ENV的upvalue，此时_ENV的初值就是_G。在chunk内的函数，都会有这个upvalue值。修改当前的chunk的 _ENV，也就修改了_G(这段话解释有问题，_ENV 和 _G 都只是一个表table的名字, 改变_ENV的指向并不会对_G有影响, 仅仅_ENV的初值是_G而已)，那么在该代码块中加入的非local变量，可以直接通过名称在其他chunk中访问到(当然该chunk的_ENV 也得是 _G)。
+当lua编译一个chunk的时候，如果不指定的话，默认使用全局environment初始化它的upvalue _ENV（其实就是引用），它是隐式声明的一个upvalue，看load声明：
+load (ld [, source [, mode [, env］])
+loadfile ([filename [, mode [, env］])
+当我们执行loadfile(“test.lua”)时，便将test.lua的内容编译后的Chunk作为一个函数返回，如果出现编译错误，则返回nil和错误信息。而dofile相当于:
+function dofile (filename)
+    local f = assert(loadfile(filename))
+    return f()
+end
+
+
+从 lua 5.2 开始，可以通过修改 _ENV 这个值（lua 5.1 中的 setfenv 从 5.2 开始被废除）来设置某个函数的环境，从而让这个函数中的执行语句在一个新的环境中查找全局变量的值。
+a=1                             -- 全局变量中a=1
+local env={a=10,print=_G.print} -- 新环境中a=10,并且确保能访问到全局的print函数
+function f1()
+  local _ENV=env
+  print("in f1:a=",a)
+  a=a*10                        -- 修改的是新环境中的a值
+end
+
+f1()
+print("globally:a=",a)
+print("env.a=",env.a)
+in f1:a=    10
+globally:a= 1
+env.a=  100
+另外，新创建的闭包都继承了创建它的函数的环境。
+
+
+lua_pcall这个api在保护模式下调用一个Lua函数
+
+int lua_pcall (lua_State *L, int nargs, int nresults, int msgh);
+nargs是函数参数的个数，nresults是函数返回值的个数。约定：调用前需要依次把函数，nargs个参数（从左向右）压栈（此时最后一个参数在栈顶位置），然后函数和所有参数都出栈，并调用指定的Lua函数。如果调用过程没有发生错误，会把nresults个结果（从左向右）依次压入栈中（此时最后一个结果在栈顶位置），并返回成功LUA_OK。如果发生错误，lua_pcall会捕获它，把唯一返回值（错误信息）压栈，然后返回特定的错误码。此时，如果设置msgh不为0，则会指定栈上索引msgh指向的位置为错误处理函数，然后以错误信息作为参数调用该错误处理函数，最后把返回值作为错误信息压栈。
+
+void test_function(lua_State *L){ //调用lua函数
+    lua_getglobal(L, "f1");
+    lua_pcall(L, 0, 0, 0); //调用f1
+    lua_getglobal(L, "f2");
+    lua_pushnumber(L, 100);
+    lua_pushnumber(L, 10);
+    lua_pcall(L, 2, 2, 0); //调用f2
+    lua_getglobal(L, "f3");
+    char *str = "c";
+    lua_pushstring(L, str);
+    lua_pcall(L,1,1,0); //调用f3
+}
+
+对表的操作主要有查找t[k]、赋值t[k]=v以及遍历表。
+//c2lua.lua
+t = {1, 2, ["a"] = 3, ["b"] = {["c"] = 'd'}}
+int lua_getfield (lua_State *L, int index, const char *k);
+查找，把t[k]的值压栈，t为栈上索引index指向的位置，跟Lua一样该api可能触发"index"事件对应的元方法，等价于lua_pushstring(L,const char*k)和lua_gettable(L, int index)两步，所以通常用lua_getfield在表中查找某个值。
+void lua_setfield (lua_State *L, int index, const char *k);
+ 赋值，等价于t[k]=v，将栈顶的值(v)出栈，其中t为栈上索引index指向的位置，跟Lua一样该api可能触发“newindex”事件对应的元方法。需先调用lua_pushxxx(L,v)将v入栈，再调用lua_setfield赋值。
+
+
+//查询栈里面的元素
+int lua_is* (lua_State * L, int index);
+//获取栈内给定位置的元素值
+xxx lua_toXXX(lua_State * L, int index);
+//取得栈中元素个数
+ int  lua_gettop    (lua_State *L);
+//设置栈的大小为一个指定的值，而lua_settop(L,0)会把当前栈清空
+//如果指定的index大于之前栈的大小，那么空余的空间会被nil填充
+//如果index小于之前的栈中元素个数，则多余的元素会被丢弃
+ void lua_settop    (lua_State *L, int index);
+//把栈中index所在位置的元素压入栈
+ void lua_pushvalue (lua_State *L, int index);
+//移除栈中index所在位置的元素
+void lua_remove(lua_State *L, int index);
+//在栈的顶部的元素移动至index处
+void lua_insert(lua_State *L, int index);
+//从栈顶弹出一个值，并把它设置到给定的index处
+void lua_replace(lua_State *L, int index);
+//把fromidx处的元素copy一份插入到toidx，这操作不会修改fromidx处的元素
+void lua_copy(lua_State *L, int fromidx, int toidx);
+
+C/C++访问Lua的Table
+Lua文件中有一个Table
+me = { name = "zilongshanren", age = 27}
+通过以下C代码来访问它的元素:
+//从Lua里面取得me这个table，并压入栈
+lua_getglobal(L, "me");
+if (!lua_istable(L, -1)) {
+    CCLOG("error! me is not a table");
+}
+//往栈里面压入一个key:name
+lua_pushstring(L, "name");
+//取得-2位置的table，然后把栈顶元素弹出，取出table[name]的值并压入栈
+lua_gettable(L, -2);   
+//输出栈顶的name
+CCLOG("name = %s", lua_tostring(L, -1));
+stackDump(L);
+//把栈顶元素弹出去
+lua_pop(L, 1);
+//压入另一个key:age
+lua_pushstring(L, "age");
+//取出-2位置的table,把table[age]的值压入栈
+lua_gettable(L, -2);
+stackDump(L);
+CCLOG("age = %td", lua_tointeger(L, -1));
+
+
+https://www.cnblogs.com/yixiaozhou/p/6836745.html
+function f1(n)　　 
+ -- 函数参数也是局部变量 
+　　local function f2() 
+    　　print(n) -- 引用外包函数的局部变量 
+　　end 
+　　return f2 
+end 
+　　g1 = f1(1979) 
+　　g1() -- 打印出1979 
+　　g2 = f1(500) 
+　　g2() -- 打印出500 
+　　当执行完g1 = f1(1979)后，局部变量n的生命本该结束，但因为它已经成了内嵌函数f2(它又被赋给了变量g1)的upvalue，所以它仍然能以某种形式继续“存活”下来，从而令g1()打印出正确的值。
+　　可为什么g2与g1的函数体一样(都是f1的内嵌函数f2的函数体)，但打印值不同?这就涉及到一个相当重要的概念—— 闭包(closure)。事实上，Lua编译一个函数时，会为它生成一个原型(prototype)，其中包含了函数体对应的虚拟机指令、函数用到的常量值(数，文本字符串等等)和一些调试信息。在运行时，每当Lua执行一个形如function...end 这样的表达式时，它就会创建一个新的数据对象，其中包含了相应函数原型的引用、环境(environment，用来查找全局变量的表)的引用以及一个由所有upvalue引用组成的数组，而这个数据对象就称为闭包。由此可见，函数是编译期概念，是静态的，而闭包是运行期概念，是动态的。g1和g2的值严格来说不是函数而是闭包，并且是两个不相同的闭包，而每个闭包可以保有自己的upvalue值，所以g1和g2打印出的结果当然就不一样了。虽然闭包和函数是本质不同的概念，但为了方便，且在不引起混淆的情况下，我们对它们不做区分。
+
+
+https://zhuanlan.zhihu.com/p/22468297
+parser 在解析一个变量名时，会先在当前函数中找，找到则标记为 local 变量，否则递归的查找父函数，找到则为 upvalue, 否则为 global
+对当前函数的 upvalue 来说，有两种情况：是父函数的 upvalue；是父函数的 local
+当是父函数的 upvalue 时，将 instack 标记置为 0
+否则是父函数的 local，将 instack 标记置为 1
+
+当创建函数的 closure 对象时，需要初始化所有引用的 UpVal 对象，此时根据 Proto 对象中存放的 Upvaldesc 包含的信息来处理
+
+如果 instack 标记为 0
+需要的 UpVal 对象必然存在于父函数的 UpVal 列表里，直接从里面索引就行
+#define ClosureHeader \
+	CommonHeader; lu_byte nupvalues; GCObject *gclist
+typedef struct CClosure {
+  ClosureHeader;
+  lua_CFunction f;
+  TValue upvalue[1];  /* list of upvalues */
+} CClosure;
+
+typedef struct LClosure {
+  ClosureHeader;
+  struct Proto *p;
+  UpVal *upvals[1];  /* list of upvalues */
+} LClosure;
+
+typedef union Closure {
+  CClosure c;
+  LClosure l;
+} Closure;
+typedef struct Upvaldesc {
+  TString *name;  /* upvalue name (for debug information) */
+  lu_byte instack;  /* whether it is in stack (register) */
+  lu_byte idx;  /* index of upvalue (in stack or in outer function's list) */
+} Upvaldesc;
+
+typedef struct LocVar {
+  TString *varname;
+  int startpc;  /* first point where variable is active */
+  int endpc;    /* first point where variable is dead */
+} LocVar;
+
+typedef struct Proto {
+  CommonHeader;
+  lu_byte numparams;  /* number of fixed parameters */
+  lu_byte is_vararg;
+  lu_byte maxstacksize;  /* number of registers needed by this function */
+  int sizeupvalues;  /* size of 'upvalues' */
+  int sizek;  /* size of 'k' */
+  int sizecode;
+  int sizelineinfo;
+  int sizep;  /* size of 'p' */
+  int sizelocvars;
+  int linedefined;  /* debug information  */
+  int lastlinedefined;  /* debug information  */
+  TValue *k;  /* constants used by the function */
+  Instruction *code;  /* opcodes */
+  struct Proto **p;  /* functions defined inside the function */
+  int *lineinfo;  /* map from opcodes to source lines (debug information) */
+  LocVar *locvars;  /* information about local variables (debug information) */
+  Upvaldesc *upvalues;  /* upvalue information */
+  struct LClosure *cache;  /* last-created closure with this prototype */
+  TString  *source;  /* used for debug information */
+  GCObject *gclist;
+} Proto;
+
+如果 instack 标记置为 1
+创建当前函数的 closure 对象时，没有地方可以直接索引，处理起来要复杂一点
+此时 upvalue 对应外层调用 closure 栈上的某个位置的变量
+需要从该线程的 L->openupval 链表中搜索有没有对应这个位置的 UpVal 对象，如果找到则直接返回
+找不到的情况下，指针 pp 指向 L->openupval 的前一个最近的位置，之后将新节点挂到 pp 可以保证 L->openupval 是按位置排序的
+则创建一个新的对应该位置的 UpVal 对象，挂到 pp 并挂到全局状态的双向链表 g->uvhead 上
+注意这里调用 luaC_newobj 时指定了 list 参数为 pp，也就是说新创建的 UpVal 对象不会挂到全局的 g->allgc 链表，而是挂到 L->openupval 的特定位置
+
+等到当前函数执行结束时，luaF_close 会将当前函数使用的所有 UpVal 对象 从 L->openupval 中去掉
+此时如果 UpVal 对象已经被 gc 判定为死亡，则直接释放
+否则从 g->uvhead 链表中去除，并将引用的 Lua object 从栈上移到 UpVal 对象中，并将 UpVal 对象挂到 g->allgc
+
+因为函数结束之前 UpVal 在 L->openupval 和 g->uvhead 链表，而不在 g->allgc 上，所以 GC 的 sweep 阶段要注意特殊处理
+对 open 的 upvalue，Lua GC 是使用 g->uvhead 链表来进行标记，L->openupval 链表来进行 sweep 的
+
