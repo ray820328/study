@@ -174,7 +174,7 @@ cd gcc-9.2.0
 mkdir build    #不能在source目录下configure必须在上一层的目录下
 cd build
 ../configure --prefix=/usr/local/gcc-9.2.0 --enable-bootstrap --enable-checking=release --enable-languages=c,c++ --disable-multilib
-make install
+make -j 16 && make install
 gcc -v
 echo -e '\nexport PATH=/usr/local/gcc-9.2.0/bin:$PATH\n' >> /etc/profile.d/gcc.sh && source /etc/profile.d/gcc.sh
 #导出头文件
