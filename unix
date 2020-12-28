@@ -156,6 +156,14 @@ netstat -ano|grep 80|grep -V EST|less
 ln -s file1 file1soft
 rm -rf file1soft
 
+flock -n /tmp/rsync.lock -c rsync --inplace -rltDvz /data/logserver/logs/ rsync:/xxx.com/
+rsync --inplace -rltDvz /data/logserver/logs/ rsync://xxx.com/
+
+chached释放方法有三种（系统默认值是0，释放之后你可以再改回0值）：
+To free pagecache: echo 1 > /proc/sys/vm/drop_caches
+To free dentries and inodes: echo 2 > /proc/sys/vm/drop_caches
+To free pagecache, dentries and inodes: echo 3 > /proc/sys/vm/drop_caches
+
 ansible self -m shell -a 'cd /home/RUNDIR; sh all.sh restart'
 
 端口服务状态查看
