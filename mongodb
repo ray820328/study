@@ -312,3 +312,62 @@ If there are 3 processes using libxml2.so, the shared library will be counted in
 so the sum of their RSS will be more than the actual memory used. –  nfm Apr 30 '14 at 0:30 
   	 	
 That is correct. I have fixed my answer, thanks for the heads up. –  jmh Apr 30 '14 at 16:08
+
+
+
+
+--------------------------- MongoDB 4.2 ---------------------------
+
+vi /etc/yum.repos.d/mongodb.repo
+
+[MongoDB]
+name=MongoDB Repository
+baseurl=http://repo.mongodb.org/yum/redhat/7Server/mongodb-org/4.2/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-4.2.asc
+
+yum repolist
+
+yum install –y mongodb-org
+
+/etc/mongod.conf
+
+chown mongod:mongod /data/tools/mongodb/log -R
+chown mongod:mongod /data/tools/mongodb/data -R
+chown mongod:mongod /data/tools/mongodb
+
+systemctl start mongod.service
+
+tail /data/tools/mongodb/log/mongod.log
+
+systemctl enable mongod.service
+
+mongod –version
+
+systemctl status mongod.service
+
+sudo systemctl reload mongod
+
+mongo
+
+systemctl stop mongod
+
+3. 创建超级管理员
+# 切换到admin数据库
+use admin
+# 创建root用户赋予root角色
+db.createUser({user:"root", pwd: "123456", roles: ["root"]})
+# 验证创建的用户
+db.auth("root", "123456") 
+
+4. 创建自己数据的管理员
+# 切换/创建自己的数据库
+use bigdata
+# dbOwner：表示在当前数据库中可以执行任意操作
+# 这里创建的clancy用户只对mall这个数据库有用
+# 当然也可以在admin数据库创建用户，然后登录的时候需要admin数据库认证
+# 这里我们是在bigdata数据库创建的用户，所以后面登录的时候认证的数据库是bigdata
+db.createUser({user: "nextclass", pwd: "123456", roles: [{ role: "dbOwner", db: "bigdata" }]})
+
+5. 修改配置文件，开启权限认证
