@@ -45,3 +45,42 @@ http://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-
 
 大数据安全
 http://hadoop.apache.org/docs/r2.8.0/hadoop-project-dist/hadoop-common/SecureMode.html
+
+数据收集
+rsync
+flock -n /tmp/rsync.lock -c "rsync --inplace -rltDvz /data/logserver/logserver/logs/
+rsync://app_xxx@rsync.xxx.com/app_xxx/$1/"
+
+telegraf
+/etc/telegraf/telegraf.conf
+[agent]
+  interval = "5s"
+  round_interval = true
+  metric_batch_size = 5000
+  metric_buffer_limit = 200000
+  collection_jitter = "0s"
+  flush_interval = "5s"
+  flush_jitter = "0s"
+  precision = ""
+  debug = false
+  quiet = false
+  logfile = "/var/log/telegraf/app_xxxx.log"
+  hostname = ""
+  omit_hostname = true
+
+[global_tags]
+  ip = "xx.xx.xx.116"
+  time_field = [["/data/logserver/logs","log_ts", "2006-01-02 15:04:05.999", '''\d+-\d+-\d+ \d+:\d+:\d+''']]
+  log_name = [["/data/logserver/logs", "main"]]
+
+[[inputs.tail]]
+   files = ["/data/logserver/logserver/logs/**.log"]
+   from_beginning = false
+   pipe = false
+   data_format = "sssengine"
+
+[[outputs.http]]
+  url = "http://app_xxx.com/gzip/app_xxx/"
+  method = "POST"
+  data_format = "das_json"
+  content_encoding = "gzip"
