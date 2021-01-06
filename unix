@@ -50,6 +50,9 @@ centos修改主机名命令
 LINUX下查看CPU使用率的命令
 vmstat，top，dstat，mpstat
 
+目录文件数
+ls -lR|grep "^-"| wc -l
+
 zip -r wwwroot.zip wwwroot
 unzip wwwroot.zip -d wwwroot
 function unzip_wwwroot()
