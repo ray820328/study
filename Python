@@ -1,0 +1,3 @@
+
+3.7 win mongo驱动
+python -m pip install pymongo
