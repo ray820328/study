@@ -17,4 +17,14 @@ FileStream fs = File.Create(outputFile);
                 bf.Serialize(fs, stream);
                 fs.Close();
                 
+var patterns = new string[] { "android:icon=\\\".*?\\\"", "android:label=\\\".*?\\\"" };
+                foreach (var pattern in patterns)
+                {
+                    var match = Regex.Matches(content, pattern);
+                    if (match != null && match.Count > 0)
+                    {
+                        var s = match[0].Groups[0].Value;
+                        content = content.Replace(s, "");
+                    }
+                }
                 
