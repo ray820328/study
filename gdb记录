@@ -1,3 +1,5 @@
+强制软件观察断点，避免调试寄存器个数和变量字节个数限制
+set can-use-hw-watchpoints 0
 layout split
 focus cmd/asm/cmd
 bt n
@@ -12,6 +14,8 @@ info f 2 ( n )
 确认程序发生过崩溃
 cat /var/log/messages
 coredump文件设置无大小限制，避免被自动删除
+手动coredump
+kill -6 
 查看
 ulimit -c
 设置
