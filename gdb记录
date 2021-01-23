@@ -439,6 +439,49 @@ set disable‐randomization off
 查看ASLR状态：
 show disable‐randomization
 默认是关闭随机化的，也就是on状态。
+
+gcc关闭编译优化
+-gstabs
+数组arrayName长度
+p *arrayName@len
+examine（简写是x）查看内存地址中的值
+x/3uh 0x54320 表示，从内存地址0x54320读取内容，h表示以双字节为一个单位，3表示三个单位，u表示按十六进制显示
+自动显示
+display/i $pc
+info display
+设置显示选项
+set print address
+set print address on
+打开地址输出，当程序显示函数信息时，GDB会显出函数的参数地址。系统默认为打开的，如：
+(gdb) f
+show print address
+查看当前地址显示选项是否打开。
+打开数组显示，打开后当数组显示时，每个元素占一行，如果不打开的话，每个元素则以逗号分隔
+set print array
+set print array on
+set print elements
+设置数组，如果你的数组太大了，可以指定一个来指定数据显示的最大长度，当到达这个长度时，GDB就不再往下显示了。如果设置为0不限制
+set print null-stop
+打开这个选项，当显示字符串时，遇到结束符则停止显示
+set print pretty on
+show print pretty
+当GDB显示结构体时会比较漂亮
+set print sevenbit-strings
+show print sevenbit-strings
+设置字符显示，是否按“\nnn”的格式显示，如果打开，则字符串或字符数据按\nnn显示，如“65”。
+set print union
+设置显示结构体时，是否显式其内的联合体数据
+show print union
+查看联合体数据的显示方式
+set print object
+在C++中，如果一个对象指针指向其派生类，如果打开这个选项，GDB会自动按照虚方法调用的规则显示输出，如果关闭这个选项的话，GDB就不管虚函数表了。这个选项默认是off。
+show print object
+查看对象选项的设置。
+set print static-members
+这个选项表示，当显示一个C++对象中的内容是，是否显示其中的静态数据成员。默认是on。
+show print static-members
+查看静态数据成员选项设置。
+
 十、调试内核时出现“Remote 'g' packet reply is too long”问题
 gdb源码下载：https://mirrors.ustc.edu.cn/gnu/gdb/
 gdb源码根目录/gdb/remote.c里面，将
