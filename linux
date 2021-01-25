@@ -6,6 +6,8 @@
 共享内存（上）
 https://www.ibm.com/developerworks/cn/linux/l-ipc/part5/index1.html
 
+strace -tt -f  ./serverd
+
 perf、 gprof 等程序的性能分析工具
 性能分析工具几个因素： 
 工具本身消耗的cpu大小：valgrind本身cpu消耗非常大，不适合使用于服务器负载较大时的性能分析，只适合于性能是线性增长的情况并作低负载测试。Oprofile、perf等系统内核支持的一般cpu消耗较低。 
