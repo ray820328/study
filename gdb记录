@@ -11,6 +11,17 @@ info f 2 ( n )
 寄存器 ebp 指向当前栈帧的底部 (高地址)，寄存器 esp 指向当前栈帧的顶部 (低地址)。
 查看全局变量（file::variable/function::variable; 如：p 'file1.c'::x）
 
+info threads
+thread 1
+thread apply 2 next
+break location thread id
+show scheduler-locking
+set scheduler-locking mode
+其中，参数 mode 的值有 3 个，分别为 off、on 和 step，它们的含义分别是：
+off：不锁定线程，任何线程都可以随时执行；
+on：锁定线程，只有当前线程或指定线程可以运行；
+step：当单步执行某一线程时，其它线程不会执行，同时保证在调试过程中当前线程不会发生改变。但如果该模式下执行 continue、until、finish 命令，则其它线程也会执行，并且如果某一线程执行过程遇到断点，则 GDB 调试器会将该线程作为当前线程。
+
 确认程序发生过崩溃
 cat /var/log/messages
 coredump文件设置无大小限制，避免被自动删除
