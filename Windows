@@ -1,3 +1,5 @@
+run
+mstsc
 
 netstat -aon|findstr "6000"
 tasklist|findstr "12112"
