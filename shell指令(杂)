@@ -29,6 +29,9 @@ date +%Y%m%d_%H%M%S
 下载sh直接执行
 curl -H "X-PROJECT-ID: xxx" http://xxx/install | bash
 
+循环显示进程xxx内存信息最后1行，间隔3秒
+while true; do pmap -d  xxx | tail -1; sleep 3; done
+
 git hooks提交检测
 #!/usr/bin/env bash
 lua_files=$(git status -s|awk '{if (($1=="M"||$1=="A") && $2 ~ /.lua$/)print $2;}')
