@@ -29,6 +29,9 @@ date +%Y%m%d_%H%M%S
 下载sh直接执行
 curl -H "X-PROJECT-ID: xxx" http://xxx/install | bash
 
+内存不够被kill的系统日志
+grep "Out of memory" /var/log/messages
+
 循环显示进程xxx内存信息最后1行，间隔3秒
 while true; do pmap -d  xxx | tail -1; sleep 3; done
 按照消耗CPU前5排序的进程
