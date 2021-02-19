@@ -31,6 +31,10 @@ curl -H "X-PROJECT-ID: xxx" http://xxx/install | bash
 
 循环显示进程xxx内存信息最后1行，间隔3秒
 while true; do pmap -d  xxx | tail -1; sleep 3; done
+按照消耗CPU前5排序的进程
+ps -aux | sort -k3nr |head -n 5
+网络流量
+iptraf-ng
 
 git hooks提交检测
 #!/usr/bin/env bash
