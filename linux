@@ -112,6 +112,7 @@ malloc/calloc/free基本上都是C函数库实现的,跟OS无关.C函数库内�
 内存进程使用分类查看USS/PSS
 smem
 
+（以下为glibc2.17，ptmalloc2）
 malloc_trim(0);//强制缩堆，堆顶空闲
 mallopt(M_MMAP_THRESHOLD, 0);
 mallopt(M_MMAP_MAX, 1e9);//超大
