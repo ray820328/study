@@ -85,7 +85,7 @@ cstime=0                            所有已死在核心态运行的时间，�
 结论3：进程的总Cpu时间processCpuTime = utime +stime + cutime + cstime，该值包括其所有线程的cpu时间。
 
 
-Linux内存管理
+--------------------------------------------内存
 sbrk不是系统调用，是C库函数。系统调用通常提供一种最小功能，而库函数通常提供比较复杂的功能。
 在Linux系统上，程序被载入内存时，内核为用户进程地址空间建立了代码段、数据段和堆栈段，在数据段与堆栈段之间的空闲区域用于动态内存分配。
 内核数据结构mm_struct中的成员变量start_code和end_code是进程代码段的起始和终止地址，start_data和 end_data是进程数据段的起始和终止地址，start_stack是进程堆栈段起始地址，start_brk是进程动态内存分配起始地址（堆的起始地址），还有一个 brk（堆的当前最后地址），就是动态内存分配当前的终止地址。
@@ -108,6 +108,91 @@ malloc/calloc/free基本上都是C函数库实现的,跟OS无关.C函数库内�
      如果调用成功，函数malloc()和calloc()都将返回所分配的内存空间的首地址。
      malloc() 函数和calloc()函数的主要区别是前者不能初始化所分配的内存空间，而后者能。如果由malloc()函数分配的内存空间原来没有被使用过，则其中的每一位可能都是0；反之，如果这部分内存空间曾经被分配、释放和重新分配，则其中可能遗留各种各样的数据。也就是说，使用malloc()函数的程序开始时(内存空间还没有被重新分配)能正常运行，但经过一段时间后(内存空间已被重新分配)可能会出现问题。
      calloc() 函数会将所分配的内存空间中的每一位都初始化为零，也就是说，如果你是为字符类型或整数类型的元素分配内存，那么这些元素将保证会被初始化为零；如果你是为指针类型的元素分配内存，那么这些元素通常(但无法保证)会被初始化为空指针；如果你是为实数类型的元素分配内存，那么这些元素可能(只在某些计算机中)会被初始化为浮点型的零。
+
+内存进程使用分类查看USS/PSS
+smem
+
+malloc_trim(0);//强制缩堆，堆顶空闲
+mallopt(M_MMAP_THRESHOLD, 0);
+mallopt(M_MMAP_MAX, 1e9);//超大
+
+cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Debuginfo.repo
+enable=0改为enable=1，还不行
+yum --nogpgcheck --enablerepo=debug install glibc-debuginfo
+yum install yum-utils
+debuginfo-install glibc
+git clone https://github.com/cloudburst/libheap
+pip3 install --user ./libheap/
+wget https://github.com/cloudburst/libheap/archive/master.zip
+cd libheap
+python setup.py install
+vi /usr/lib/python2.7/site-packages/libheap/libheap.cfg
+[Glibc]
+version = 2.17
+glibc版本
+ldd --version
+查得 gitinit 文件的路径：
+/etc/gdb/gitinit
+在该文件中添加如下指令：
+# System-wide GDB initialization file.
+python import sys
+python sys.path.append("/usr/lib/python2.7/site-packages/")
+python from libheap import *
+
+heap -l
+Arena(s) found:
+  arena @ 0x7fc61a9cf760
+  arena @ 0x7fc600000020
+  arena @ 0x7fc608000020
+
+p *(mchunkptr) 0x7fc61a9cf760
+$1 = struct malloc_chunk {
+prev_size   = 0x0
+size        = 0x49124790
+fd          = 0x0
+bk          = 0x0
+fd_nextsize = 0x0
+bk_nextsize = 0x54c039e0
+
+p *(mchunkptr) 0x7fc600000020
+$2 = struct malloc_chunk {
+prev_size   = 0x200000000
+size        = 0x7fc600003350
+fd          = 0x7fc600002a70
+bk          = 0x0
+fd_nextsize = 0x7fc600002a20
+bk_nextsize = 0x7fc600002de0
+
+p main_arena
+$3 = struct malloc_state {
+mutex            = 0x0
+flags            = 0x0
+fastbinsY        = {...}
+top              = 0x68db6130   //指向top chunk
+last_remainder   = 0x35b0b110   //指向切割后剩下的last reminder
+bins             = {...}
+binmap           = {...}
+next             = 0x7fc600000020
+next_free        = 0x0
+attached_threads = 0x1          //引用当前arena的线程数量
+system_mem       = 0x668ae000   //记录当前获取的系统内存
+max_system_mem   = 0x668ae000
+(gdb) p mp_
+$4 = struct malloc_par {
+trim_threshold   = 0x602000 //设置topchunk的最大值，超过这个值就要把top chunk返还给操作系统
+top_pad          = 0x20000
+mmap_threshold   = 0x301000 //申请的内存超过这个值，就要使用mmap分配内存
+arena_test       = 0x8
+arena_max        = 0x0
+n_mmaps          = 0x1c     //当前mmap的数量
+n_mmaps_max      = 0x10000  //mmap数量的最大值
+max_n_mmaps      = 0x1e
+no_dyn_threshold = 0x0
+mmapped_mem      = 0x6259000 //当前mmap的总大小
+max_mmapped_mem  = 0x685b000
+max_total_mem    = 0x0
+sbrk_base        = 0x254b000
+
 
 
 
