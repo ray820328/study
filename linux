@@ -112,10 +112,17 @@ malloc/calloc/free基本上都是C函数库实现的,跟OS无关.C函数库内�
 内存进程使用分类查看USS/PSS
 smem
 
-（以下为glibc2.17，ptmalloc2）
-malloc_trim(0);//强制缩堆，堆顶空闲
 mallopt(M_MMAP_THRESHOLD, 0);
 mallopt(M_MMAP_MAX, 1e9);//超大
+malloc_stats();
+malloc_trim(0);
+
+bin链中的chunk均为free chunk
+Fast Bin
+概念：chunk的大小在32字节~128字节（0x20~0x80）的chunk称为“fast chunk”（大小不是malloc时的大小，而是在内存中struct malloc_chunk的大小，包含前2个成员）
+fast bin链表的个数为10个
+不会对free chunk进行合并：鉴于设计fast bin的初衷就是进行快速的小内存分配和释放，因此系统将属于fast bin的chunk的PREV_INUSE位总是设置为1，这样即使当fast bin中有某个chunk同一个free chunk相邻的时候，系统也不会进行自动合并操作，而是保留两者。这样做可能会造成额外的碎片化问题
+fast bin是单链表，Unsorted/Small/Large 都是双向链表
 
 cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Debuginfo.repo
 enable=0改为enable=1，还不行
@@ -147,7 +154,7 @@ Arena(s) found:
   arena @ 0x7fc608000020
 
 p *(mchunkptr) 0x7fc61a9cf760
-$1 = struct malloc_chunk {
+$1 = struct malloc_chunk {      //存储堆数据信息的结构体, 主Arena没有多个堆，因此没有heap_info结构
 prev_size   = 0x0
 size        = 0x49124790
 fd          = 0x0
@@ -171,8 +178,8 @@ flags            = 0x0
 fastbinsY        = {...}
 top              = 0x68db6130   //指向top chunk
 last_remainder   = 0x35b0b110   //指向切割后剩下的last reminder
-bins             = {...}
-binmap           = {...}
+bins             = {...}        //smallbins，unsortedbin，largebins
+binmap           = {...}        //系统查看有哪些箱链中有块时，不去fastbinsY和箱数组一个一个的遍历, 通过binmap变量，采用二进制存储，将二进制位与数组的索引相对
 next             = 0x7fc600000020
 next_free        = 0x0
 attached_threads = 0x1          //引用当前arena的线程数量
