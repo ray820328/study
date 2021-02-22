@@ -381,7 +381,7 @@ You might think your program doesn't need to worry about this because it doesn't
 but locale support uses iconv internally, which means any stdio.h function might trigger a call to dlopen, and you don't control this, 
 the user's environment variable settings do.
 
-如果有多份libc的拷贝，程序将不使用brk，直接用mmap分配main arena
+默认没有自定义_dl_open_hook情况下，如果有多份libc的拷贝，程序将不使用brk，直接用mmap分配main arena
 
 ### fork要特别小心，特别是多线程环境，有互斥量的情况
 
