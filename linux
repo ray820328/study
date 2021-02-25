@@ -397,3 +397,13 @@ arena.c【ptmalloc】
 
 ### fork要特别小心，特别是多线程环境，有互斥量的情况
 
+
+-----------------------------------------------------问题
+cannot open shared object file: No such file or directory
+1：
+export LD_LIBRARY_PATH=/usr/local/jemalloc
+2：
+find / -name libjemalloc.so.2    // 1.先找是否存在该库
+cat /etc/ld.so.conf              // 2.如果有，查看.conf
+ls /etc/ld.so.conf.d             // 3.列出配置信息，如果没有你需要的.conf，自己创建一个，添上自己路径
+sudo /sbin/ldconfig             // 4.使你的文件生效。必须执行
