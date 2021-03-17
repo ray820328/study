@@ -37,7 +37,7 @@ bin/mongo -port 20000
 > db.shutdownServer(); 
 
 
-如何查看锁的状态
+查看锁的状态
 db.serverStatus()
 db.currentOp()
 mongotop
@@ -64,6 +64,23 @@ db.platform.find({uid: '125447'});
 
 db.gm.find({y: /^biggm/i}, {y:1, o:1});
 db.rankInfo.find({"value.RobotId": {$exists: false}}).sort({"value.level":-1, "value.vip":-1}).explain();
+
+mongo记录存储空间
+let max = 10000;
+db.users.find().forEach(function(obj)
+{
+  var size = Object.bsonsize(obj);
+  if (size > max) {
+  var stats =
+  {
+    'AccountID': obj.AccountID, 
+    'bytes': size, 
+    'KB': Math.round(size/(1024)), 
+  };
+  print(stats);
+  max = size;
+  }
+});
 
 http://www.cnblogs.com/zhoujinyi/p/3566773.html
 激活Profiler记录慢操作：
